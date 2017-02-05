@@ -1,0 +1,14 @@
+{
+  "name": "feedbackfruits-knowledge",
+  "version": "1.0.0",
+  "description": "Affiliations\r 1\tAffiliation ID\r 2\tAffiliation name",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^1.6.3"
+  }
+}
