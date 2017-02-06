@@ -1,9 +1,10 @@
+require('dotenv').load({ silent: true });
+
 const fetch = require('node-fetch');
 
+const MAG_API_KEY = process.env.MAG_API_KEY;
+const MAG_API_ENDPOINT = 'https://westus.api.cognitive.microsoft.com/academic/v1.0/evaluate';
 const BETTER_ENDPOINT = 'https://academic.microsoft.com/api/browse/GetEntityDetails';
-
-const API_KEY = '767e03f742ea490ba7e875a0fed202b6';
-const API_ENDPOINT = 'https://westus.api.cognitive.microsoft.com/academic/v1.0/evaluate';
 
 const FID = 'FId';
 const ID = 'Id';
@@ -16,9 +17,9 @@ const log = console.log.bind(console);
 function evaluate(expression, attributes) {
   const count = 1000;
   const offset = 0;
-  const url = `${API_ENDPOINT}?expr=${expression}&model=latest&count=${count}&offset=${offset}&attributes=${attributes.join(',')}`;
+  const url = `${MAG_API_ENDPOINT}?expr=${expression}&model=latest&count=${count}&offset=${offset}&attributes=${attributes.join(',')}`;
   const headers = {
-    'Ocp-Apim-Subscription-Key': API_KEY
+    'Ocp-Apim-Subscription-Key': MAG_API_KEY
   };
 
   return fetch(url, { headers }).then(response => response.json());
