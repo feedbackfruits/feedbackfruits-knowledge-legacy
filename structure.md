@@ -60,6 +60,8 @@ GraphQL will serve as an API to the graph database.
   - Id (dbpedia id)
   - Name
   - Description
+  - Subtopics
+  - Supertopics
 - Person (based on MAG authors and dbpedia entities)
   - Id (dbpedia id)
   - Name
