@@ -2,14 +2,23 @@
   "name": "feedbackfruits-knowledge",
   "version": "1.0.0",
   "description": "Affiliations\r 1\tAffiliation ID\r 2\tAffiliation name",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/graphql": "^0.8.6",
+    "@types/node": "^7.0.5",
+    "cayley": "^0.2.1",
+    "cayley-node": "^0.1.0",
     "dotenv": "^4.0.0",
-    "node-fetch": "^1.6.3"
+    "graphql": "^0.9.1",
+    "jsonld": "^0.4.11",
+    "memux": "^0.2.0",
+    "node-cayley": "^0.1.5",
+    "node-fetch": "^1.6.3",
+    "p-queue": "^0.2.0"
   }
 }
