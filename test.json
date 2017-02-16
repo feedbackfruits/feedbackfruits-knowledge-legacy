@@ -1,0 +1,247 @@
+{
+  "@graph": [
+    {
+      "@id": "http://dbpedia.org/resource/Reproduction",
+      "@type": "http://www.w3.org/2002/07/owl#Thing",
+      "http://www.w3.org/2000/01/rdf-schema#label": [
+        {
+          "@value": "Rozmnażanie",
+          "@language": "pl"
+        },
+        {
+          "@value": "Reproduction",
+          "@language": "en"
+        },
+        {
+          "@value": "Riproduzione",
+          "@language": "it"
+        },
+        {
+          "@value": "生殖",
+          "@language": "ja"
+        },
+        {
+          "@value": "Размножение",
+          "@language": "ru"
+        },
+        {
+          "@value": "繁殖",
+          "@language": "zh"
+        },
+        {
+          "@value": "Reprodução",
+          "@language": "pt"
+        },
+        {
+          "@value": "تكاثر",
+          "@language": "ar"
+        },
+        {
+          "@value": "Fortpflanzung",
+          "@language": "de"
+        },
+        {
+          "@value": "Reproduction (biologie)",
+          "@language": "fr"
+        },
+        {
+          "@value": "Reproducción",
+          "@language": "es"
+        },
+        {
+          "@value": "Voortplanting (biologie)",
+          "@language": "nl"
+        }
+      ],
+      "http://www.w3.org/2000/01/rdf-schema#comment": [
+        {
+          "@value": "التكاثر هو إحدى العمليات الحيوية التي تؤمن إنتاج متعضيات جديدة تؤمن استمرار النوع الحي. التكاثر إحدى الصفات الأساسية التي تترافق مع الحياة فكل كائن حي يجب أن يتكاثر بطريقة أو أخرى. الطرق المعروفة للتكاثر هي التكاثر الجنسي واللاجنسي.في التكاثر اللاجنسي : يمكن لمتعضية وحيدة بدون تدخل أي متعضية أخرى أن تقوم بالانقسام لإعطاء متعضيات جديدة. فالبكتريا مثلا تنقسم إلى خليتين ابنتين كمثال عن التكاثر اللاجنسي.",
+          "@language": "ar"
+        },
+        {
+          "@value": "生殖（せいしょく、英: Reproduction）とは、生物が自らと同じ種に属する個体をつくることを言う。作り出した生物は親、作られた個体は子という関係となり、この単位は世代という種の継続状態を形成する。生殖には、大きく分けて無性生殖 (Asexual reproduction) と有性生殖 (Sexual reproduction) がある。生殖の基本は個体が持つ固有のDNAを継承することであり、それを端に発する細胞の各小器官（染色体・細胞核・ミトコンドリアなど）の複製が生じ、細胞分裂へと導かれる。そしてこれが積み重なり個体単位の発生に繋がる。",
+          "@language": "ja"
+        },
+        {
+          "@value": "Reproduction (or procreation, breeding) is the biological process by which new individual organisms – \"offspring\" – are produced from their \"parents\". Reproduction is a fundamental feature of all known life; each individual organism exists as the result of reproduction. There are two forms of reproduction: asexual and sexual.",
+          "@language": "en"
+        },
+        {
+          "@value": "繁殖，或生殖，是透過生物的方法製造生物個體的過程。繁殖是所有生命都有的基本現象之一。每個現存的個體都是上一代繁殖所得來的結果。已知的繁殖方法可分為兩大類：有性生殖以及無性生殖。無性繁殖的過程只牽涉一個個體，例如細菌用細胞分裂的方法進行無性繁殖。無性繁殖並不局限於單細胞生物。多數的植物都可進行無性繁殖。常见的无性繁殖有營養繁殖、出芽生殖、断裂生殖、孢子生殖等。通过离体植物组织培养，也是一种无性繁殖的手段。一種學名為Mycocepurus smithii的螞蟻也是用無性繁殖的方式繁殖後代。而有性繁殖則與配子之結合有關。例如人類的繁殖就是一種有性繁殖。",
+          "@language": "zh"
+        },
+        {
+          "@value": "Voortplanting (of reproductie) bij eukaryote organismen is het proces waarbij organismen zorgen voor nageslacht, met als gevolg het voortbestaan van de populatie en de soort. Bij meercellige organismen wordt voortplanting afgewisseld met fasen van groei en ontwikkeling.De twee belangrijkste vormen van voortplanting zijn geslachtelijke of seksuele voortplanting en ongeslachtelijke voortplanting of aseksuele voortplanting.",
+          "@language": "nl"
+        },
+        {
+          "@value": "La reproduction est l'ensemble des processus par lesquels une espèce se perpétue, en suscitant la naissance de nouveaux organismes. C'est une des activités fondamentales, avec la nutrition et la croissance, partagées par toutes les espèces vivantes. En effet, toute espèce doit posséder un système de reproduction efficace, sans quoi elle serait menacée d'extinction. La reproduction est donc nécessaire à la perpétuation des espèces dans le temps. Elle peut être couplée à un système de dispersion dans l'espace. Il s'agit de systèmes permettant de coloniser de nouveaux biotopes, et d'augmenter les chances de survie des espèces.",
+          "@language": "fr"
+        },
+        {
+          "@value": "Размножение — присущее всем живым организмам свойство воспроизведения себе подобных, обеспечивающее непрерывность и преемственность жизни. Разные способы размножения подразделяются на два основных типа: бесполое и половое.Для организмов, обладающих клеточным строением, в основе всех форм размножения лежит деление клетки.",
+          "@language": "ru"
+        },
+        {
+          "@value": "La reproducción es un proceso biológico que permite la creación de nuevos organismos, siendo una característica común de todas las formas de vida conocidas. Las modalidades básicas de reproducción se agrupan en dos tipos, que reciben los nombres de asexual o vegetativa y de sexual o generativa.",
+          "@language": "es"
+        },
+        {
+          "@value": "Rozmnażanie, reprodukcja – właściwy wszystkim organizmom proces życiowy polegający na wytwarzaniu potomstwa przez organizmy rodzicielskie.Jako synonim rozmnażania podaje się czasem rozród jednak pojęcia te bywają rozróżniane.Organizmy wytwarzają specjalne narządy służące do rozmnażania takie jak:zarodnie, gametangia, gonady.Wyróżniane są dwa zasadnicze rodzaje rozmnażania, w zależności od pochodzenia komórek rodzicielskich:",
+          "@language": "pl"
+        },
+        {
+          "@value": "La riproduzione (o procreazione), in biologia, è il processo attraverso il quale organismi viventi (chiamati genitori) generano altri individui della stessa specie (chiamati discendenti). È il punto cruciale dell'esistenza di un individuo perché permette la trasmissione delle informazioni genetiche da una generazione a quella successiva.",
+          "@language": "it"
+        },
+        {
+          "@value": "Reprodução, em biologia, refere-se à função através da qual os seres vivos produzem descendentes, dando continuidade à sua espécie.Todos os organismos vivos resultam da reprodução a partir de organismos vivos pré-existentes, ao contrário do postulado pela teoria da geração espontânea. Os métodos conhecidos de reprodução podem agrupar-se, genericamente, em dois tipos: reprodução assexuada e reprodução sexuada. No primeiro caso, um indivíduo reproduz-se sem que exista a necessidade de qualquer partilha de material genético entre organismos. A divisão de uma célula em duas é um exemplo comum, ainda que o processo não se limite a organismos unicelulares. A maior parte das plantas tem a capacidade de se reproduzir assexuadamente, tal como alguns animais (ainda que seja menos comum). A reproduçã",
+          "@language": "pt"
+        },
+        {
+          "@value": "Die Fortpflanzung von Lebewesen ist die Reproduktion von genetisch identischen oder sonstwie artgleichen Individuen. Elternorganismen produzieren dabei Nachkommen. Sie stellt sicher, dass Individuen einer neuen Generation entstehen (Nachwuchs, Nachkommenschaft) und gehört zu den Grundeigenschaften lebender Organismen. Fortpflanzung ist oft mit Vermehrung innerhalb der Art verbunden und ist für die Erhaltung der Art notwendig. In den Reichen der Lebewelt gibt es sehr unterschiedliche Formen der Fortpflanzung. Bestimmte grundlegende Vorgänge sind allen gemeinsam.",
+          "@language": "de"
+        }
+      ],
+      "http://www.w3.org/2000/01/rdf-schema#seeAlso": {
+        "@id": "http://dbpedia.org/resource/Human_reproduction"
+      },
+      "http://www.w3.org/2002/07/owl#sameAs": [
+        {
+          "@id": "http://fr.dbpedia.org/resource/Reproduction_(biologie)"
+        },
+        {
+          "@id": "http://el.dbpedia.org/resource/Αναπαραγωγή"
+        },
+        {
+          "@id": "http://id.dbpedia.org/resource/Reproduksi"
+        },
+        {
+          "@id": "http://ko.dbpedia.org/resource/생식"
+        },
+        {
+          "@id": "http://cs.dbpedia.org/resource/Rozmnožování"
+        },
+        {
+          "@id": "http://it.dbpedia.org/resource/Riproduzione"
+        },
+        {
+          "@id": "http://nl.dbpedia.org/resource/Voortplanting_(biologie)"
+        },
+        {
+          "@id": "http://ja.dbpedia.org/resource/生殖"
+        },
+        {
+          "@id": "http://www.wikidata.org/entity/Q11990"
+        },
+        {
+          "@id": "http://rdf.freebase.com/ns/m.06kcv"
+        },
+        {
+          "@id": "http://wikidata.dbpedia.org/resource/Q11990"
+        },
+        {
+          "@id": "http://pl.dbpedia.org/resource/Rozmnażanie"
+        },
+        {
+          "@id": "http://de.dbpedia.org/resource/Fortpflanzung"
+        },
+        {
+          "@id": "http://pt.dbpedia.org/resource/Reprodução"
+        },
+        {
+          "@id": "http://eu.dbpedia.org/resource/Ugalketa"
+        },
+        {
+          "@id": "http://es.dbpedia.org/resource/Reproducción"
+        }
+      ],
+      "http://www.w3.org/ns/prov#wasDerivedFrom": {
+        "@id": "http://en.wikipedia.org/wiki/Reproduction?oldid=708306845"
+      },
+      "http://xmlns.com/foaf/0.1/depiction": {
+        "@id": "http://commons.wikimedia.org/wiki/Special:FilePath/Kalanchoe_veg.jpg"
+      },
+      "http://xmlns.com/foaf/0.1/isPrimaryTopicOf": {
+        "@id": "http://en.wikipedia.org/wiki/Reproduction"
+      },
+      "http://purl.org/dc/terms/subject": [
+        {
+          "@id": "http://dbpedia.org/resource/Category:Reproduction"
+        },
+        {
+          "@id": "http://dbpedia.org/resource/Category:Articles_in_Wikipedia_Primary_School_Project_SSAJRP"
+        },
+        {
+          "@id": "http://dbpedia.org/resource/Category:Fertility"
+        }
+      ],
+      "http://dbpedia.org/ontology/abstract": [
+        {
+          "@value": "التكاثر هو إحدى العمليات الحيوية التي تؤمن إنتاج متعضيات جديدة تؤمن استمرار النوع الحي. التكاثر إحدى الصفات الأساسية التي تترافق مع الحياة فكل كائن حي يجب أن يتكاثر بطريقة أو أخرى. الطرق المعروفة للتكاثر هي التكاثر الجنسي واللاجنسي.في التكاثر اللاجنسي : يمكن لمتعضية وحيدة بدون تدخل أي متعضية أخرى أن تقوم بالانقسام لإعطاء متعضيات جديدة. فالبكتريا مثلا تنقسم إلى خليتين ابنتين كمثال عن التكاثر اللاجنسي. ينحصر التكاثر اللاجنسي في الكائنات وحيدة الخلية في حين تحتفظ معظم النباتات بقدرة على التكاثر اللاجنسي.في التكاثر الجنسي : تتطلب العملية مشاركة متعضيتين واحدة من كل جنس حيث تتميز أفراد الكثير من النباتات ومعظم الحيوانات الراقية إلى ذكور واناث، حيث تنتج الذكور خلايا جرثومية ذكرية هي الحيامن (Sperms) وتنتج الإناث خلايا جرثومية أنثوية هي البيوض (Ova). وفي مثل هذه الحالة تكون هذه الكائنات مميزة عن بعضها بالشكل والمظهر الخارجي والتركيب الداخلي لأعضائها التناسلية. وعملية التكاثر الجنسي تتم بإتخاذ نواتي النطفة والبيضة بعملية تدعى الإخصاب (Fertilisation) وينتج عن ذلك اختلاطاً للمادة الوراثية فيتوارث الأبناء صفات تجمع بين الأبوين.تكوين النطف (الحيوانات المنوية)بالإنكليزية (Spermatogenesis) يتكون الحيوان المنوي في الخصية (Testis) التي تتألف من اعداد كبيرة من نبيبات منوية (Seminiferous Tubules) ملتوية. تبطن هذه النبيبات بخلايا جرثومية أولية تنقسم انقسامات غير مباشرة متعددة ومتعاقبة وينتج عنها خلايا جديدة تدعى سليفات النطف (Spermatogonia) وهي تكون ثنائية المجموعة الكروموسومية (2س). تنقسم سليفات النطف انقسامات اعتيادية ينتج عنها تضاعف في أعدادها، تمر سليفات النطف بمرحلة نمو بعد توقف انقساماتها ويكبر حجمها وتسمى الخلايا النطفية الأولية (primary spermatocytes). تمر الخلايا النطفية الأولية بمرحلة انقسام اختزالي اول ينتج عنه خليتين متساويتين في الحجم احاديتي المجموعة الكروموسومية (س) وتسمى كل منهما بالخلية النطفية الثانوية (Secondary spermatocyte).تمر الخليتين النطفيتين الثانويتين بمرحلة إنقسام اختزالي الثاني وتنتج عنه أربعة خلايا متساوية في الحجم أحادية المجموعة الكروموسومية (س)، وتدعى هذه الخلايا الأربع بأرومات النطف (Spermatids). تعاني ارومات النطف تغيرات في شكلها وتركيبها مؤدية إلى تكوين النطفة الناضجة (Mature Sperm).تكوين البيوضبالإنكليزية (Oogenesis), تتكون البيوض في المبيض حيث تمر الخلايا الجرثومية داخل المبيض بعمليات انقسام غير مباشرة ينتج عنها مجاميع من خلايا تدعى سليفات البيوض (Oogonia). تعاني سليفات البيوض انقسامات اعتيادية متعاقبة لينتج عنها سليفات بيوض إضافية تكون جميعها ثنائية المجموعة الكروموسومية (2س). يبدأ قسم من هذه الخلايا بالنمو فيكبر حجمها وتدعى عندئذٍ بالخلايا البيضية الأولية أو الابتدائية (Primary Oocytes) والتي تكون ثنائية المجموعة الكروموسومية (2س)، وتكون هذه الخلايا في الكثير من الحيوانات وبشكل خاص الفقريات منها محاطة بخلايا صغيرة الحجم تدعى الخلايا الحوصلية (Follicle Cells).وتشكل الخلية البيضية الأولية مع الخلايا الحوصلية المحيطة بها ما يعرف بـالحوصلة المبيضية. تمر الخلايا البيضية الأولية بمرحلة الانقسام الاختزالي الأول الذي تنتج عنه خليتان غير متساويتين بالحجم بسبب الانقسام السايتوبلازمي غير المتساوي وتكون كلا الخليتين أحادية المجموعة الكروموسومية (س). تدعى الخلية الكبيرة الحجم بالخلية البيضية الثانوية (Secondary Oocyte) في حين تدعى الخلية صغيرة الحجم بالجسم القطبي الأول. تمر الخلية البيضية الثانوية بمرحلة الانقسام الاختزالي الثاني الذي تنتج عنه خليتان غير متساويتين في الحجم أيضاً، الكبيرة تدعى ارومة البيضة، والتي تنمو لتكون البيضة الناضجة، أما الخلية الصغيرة فتمثل الجسم القطبي الثاني، وكلاهما أحادي المجموعة الكروموسومية (س)، وقد ينقسم الجسم القطبي الاول فيكون جسمين قطبيين آخرين، اين ان النتيجة النهائية لهذه العملية هي بيضة ناضجة مع ثلاثة اجسام قطبية وتنحل الأجسام القطبية فيما بعد.32x28pxبوابة علم الأحياء",
+          "@language": "ar"
+        },
+        {
+          "@value": "Rozmnażanie, reprodukcja – właściwy wszystkim organizmom proces życiowy polegający na wytwarzaniu potomstwa przez organizmy rodzicielskie. Jako synonim rozmnażania podaje się czasem rozród jednak pojęcia te bywają rozróżniane. Organizmy wytwarzają specjalne narządy służące do rozmnażania takie jak:zarodnie, gametangia, gonady. Wyróżniane są dwa zasadnicze rodzaje rozmnażania, w zależności od pochodzenia komórek rodzicielskich:",
+          "@language": "pl"
+        },
+        {
+          "@value": "Die Fortpflanzung von Lebewesen ist die Reproduktion von genetisch identischen oder sonstwie artgleichen Individuen. Elternorganismen produzieren dabei Nachkommen. Sie stellt sicher, dass Individuen einer neuen Generation entstehen (Nachwuchs, Nachkommenschaft) und gehört zu den Grundeigenschaften lebender Organismen. Fortpflanzung ist oft mit Vermehrung innerhalb der Art verbunden und ist für die Erhaltung der Art notwendig. In den Reichen der Lebewelt gibt es sehr unterschiedliche Formen der Fortpflanzung. Bestimmte grundlegende Vorgänge sind allen gemeinsam. Aufgrund der verschiedenen Zellarten, aus denen sich Nachkommen entwickeln können, wird unterschieden zwischen geschlechtlicher Fortpflanzung (und zwar eingeschlechtlicher und sexueller Fortpflanzung) einerseits, welche jeweils aus den Geschlechtszellen erfolgt, also aus Zellen, die nicht durch Mitose sondern durch Meiose entstanden sind, und ungeschlechtlicher Fortpflanzung andererseits, die bei vielen Einzellern, manchen Tieren und vor allem bei Pflanzen vorkommt. Bei Pflanzen ist diese Form der Fortpflanzung mit Vermehrung verbunden und wird als vegetative Vermehrung bezeichnet. Bei der geschlechtlichen Fortpflanzung wird genetisches Material entweder von zwei verschiedengeschlechtlichen Lebewesen der gleichen Art, den Eltern, oder eines einzelnen Lebewesens, bezeichnet als Elter (Parthenogenese), an die Nachkommen weitergegeben, vererbt. Bei geschlechtlicher Fortpflanzung mit Geschlechtszellen zweier verschiedener Arten bezeichnet man die Nachkommen als Hybriden.",
+          "@language": "de"
+        },
+        {
+          "@value": "繁殖，或生殖，是透過生物的方法製造生物個體的過程。繁殖是所有生命都有的基本現象之一。每個現存的個體都是上一代繁殖所得來的結果。已知的繁殖方法可分為兩大類：有性生殖以及無性生殖。無性繁殖的過程只牽涉一個個體，例如細菌用細胞分裂的方法進行無性繁殖。無性繁殖並不局限於單細胞生物。多數的植物都可進行無性繁殖。常见的无性繁殖有營養繁殖、出芽生殖、断裂生殖、孢子生殖等。通过离体植物组织培养，也是一种无性繁殖的手段。一種學名為Mycocepurus smithii的螞蟻也是用無性繁殖的方式繁殖後代。而有性繁殖則與配子之結合有關。例如人類的繁殖就是一種有性繁殖。",
+          "@language": "zh"
+        },
+        {
+          "@value": "生殖（せいしょく、英: Reproduction）とは、生物が自らと同じ種に属する個体をつくることを言う。作り出した生物は親、作られた個体は子という関係となり、この単位は世代という種の継続状態を形成する。生殖には、大きく分けて無性生殖 (Asexual reproduction) と有性生殖 (Sexual reproduction) がある。 生殖の基本は個体が持つ固有のDNAを継承することであり、それを端に発する細胞の各小器官（染色体・細胞核・ミトコンドリアなど）の複製が生じ、細胞分裂へと導かれる。そしてこれが積み重なり個体単位の発生に繋がる。",
+          "@language": "ja"
+        },
+        {
+          "@value": "La reproduction est l'ensemble des processus par lesquels une espèce se perpétue, en suscitant la naissance de nouveaux organismes. C'est une des activités fondamentales, avec la nutrition et la croissance, partagées par toutes les espèces vivantes. En effet, toute espèce doit posséder un système de reproduction efficace, sans quoi elle serait menacée d'extinction. La reproduction est donc nécessaire à la perpétuation des espèces dans le temps. Elle peut être couplée à un système de dispersion dans l'espace. Il s'agit de systèmes permettant de coloniser de nouveaux biotopes, et d'augmenter les chances de survie des espèces. Pour certains auteurs, le terme reproduction serait à réserver à la seule reproduction sexuée. Or, dans la littérature, le terme recouvre généralement la reproduction sexuée et la multiplication végétative appelée souvent reproduction asexuée. Avec des variations dépendant du contexte, des individus, populations et espèces (de faune, flore, fonge ou bactéries), il existe un coût de reproduction, correspondant grossièrement aux ressources, énergétiques notamment, que l'individu ou l'espèce alloue à la reproduction. Ces coûts semblent jouer un rôle important dans les processus de sélection naturelle, qu'on peut par exemple analyser selon un modèle coût/avantage. Dans certains cas, les adultes meurent en quelque sorte « au profit » de leur progéniture après avoir produit un grand nombre d'œufs (les saumons après la ponte par exemple). Dans d'autres cas, comme les grands mammifères, les adultes produisent peu de petits, mais consacrent beaucoup d'énergie à les élever et les protéger, au moins dans les premiers temps de leur vie.",
+          "@language": "fr"
+        },
+        {
+          "@value": "La reproducción es un proceso biológico que permite la creación de nuevos organismos, siendo una característica común de todas las formas de vida conocidas. Las modalidades básicas de reproducción se agrupan en dos tipos, que reciben los nombres de asexual o vegetativa y de sexual o generativa.",
+          "@language": "es"
+        },
+        {
+          "@value": "Размножение — присущее всем живым организмам свойство воспроизведения себе подобных, обеспечивающее непрерывность и преемственность жизни. Разные способы размножения подразделяются на два основных типа: бесполое и половое.Для организмов, обладающих клеточным строением, в основе всех форм размножения лежит деление клетки.",
+          "@language": "ru"
+        },
+        {
+          "@value": "Reproduction (or procreation, breeding) is the biological process by which new individual organisms – \"offspring\" – are produced from their \"parents\". Reproduction is a fundamental feature of all known life; each individual organism exists as the result of reproduction. There are two forms of reproduction: asexual and sexual. In asexual reproduction, an organism can reproduce without the involvement of another organism. Asexual reproduction is not limited to single-celled organisms. The cloning of an organism is a form of asexual reproduction. By asexual reproduction, an organism creates a genetically similar or identical copy of itself. The evolution of sexual reproduction is a major puzzle for biologists. The two-fold cost of sex is that only 50% of organisms reproduce and organisms only pass on 50% of their genes. Sexual reproduction typically requires the sexual interaction of two specialized organisms, called gametes, which contain half the number of chromosomes of normal cells and are created by meiosis, with typically a male fertilizing a female of the same species to create a fertilized zygote. This produces offspring organisms whose genetic characteristics are derived from those of the two parental organisms.",
+          "@language": "en"
+        },
+        {
+          "@value": "Reprodução, em biologia, refere-se à função através da qual os seres vivos produzem descendentes, dando continuidade à sua espécie. Todos os organismos vivos resultam da reprodução a partir de organismos vivos pré-existentes, ao contrário do postulado pela teoria da geração espontânea. Os métodos conhecidos de reprodução podem agrupar-se, genericamente, em dois tipos: reprodução assexuada e reprodução sexuada. No primeiro caso, um indivíduo reproduz-se sem que exista a necessidade de qualquer partilha de material genético entre organismos. A divisão de uma célula em duas é um exemplo comum, ainda que o processo não se limite a organismos unicelulares. A maior parte das plantas tem a capacidade de se reproduzir assexuadamente, tal como alguns animais (ainda que seja menos comum). A reprodução sexuada implica a partilha de material genético, geralmente providenciado por organismos da mesma espécie classificados geralmente de \"macho\" e \"fêmea\". Em várias espécies, fêmeas possuem estratégias para controlar a inseminação do ovulo. Algumas endurecem o caminho do esperma, outras espécies desenvolveram um sistema reprodutivo para ajudar o esperma para alcançar seu objetivo, como no caso dos seres humanos.",
+          "@language": "pt"
+        },
+        {
+          "@value": "La riproduzione (o procreazione), in biologia, è il processo attraverso il quale organismi viventi (chiamati genitori) generano altri individui della stessa specie (chiamati discendenti). È il punto cruciale dell'esistenza di un individuo perché permette la trasmissione delle informazioni genetiche da una generazione a quella successiva.",
+          "@language": "it"
+        },
+        {
+          "@value": "Voortplanting (of reproductie) bij eukaryote organismen is het proces waarbij organismen zorgen voor nageslacht, met als gevolg het voortbestaan van de populatie en de soort. Bij meercellige organismen wordt voortplanting afgewisseld met fasen van groei en ontwikkeling. De twee belangrijkste vormen van voortplanting zijn geslachtelijke of seksuele voortplanting en ongeslachtelijke voortplanting of aseksuele voortplanting. Sommige soorten, zoals de mens en olifanten, produceren weinig jongen en hebben een langdurige broedzorg. Andere soorten planten zich veel sneller voort, maar als de nakomelingen niet met een speciale behandeling worden beschermd sterven de meesten van hen voordat ze volwassen worden. De drijvende kracht achter de evolutie naar minder nakomelingen is dat deze organismen meer tijd aan de bescherming van het nageslacht kunnen besteden: minder nakomelingen die sterker zijn garanderen meer het voortbestaan van de soort. De andere mogelijkheid is (zeer) veel jongen, waarvan veel verloren kunnen gaan zonder dat het voortbestaan van de soort in gevaar komt. Bij vissen en inktvissen is er sprake van een alternatieve voortplantingsstrategie met satellietmannetjes, ze lijken uiterlijk op vrouwtjes en trachten ook in gedrag op vrouwtjes te lijken. Zodoende kunnen ze voorbij een mannetje glippen en met zijn vrouwtje(s) paren. Gametogonie is een soort voortplanting waarbij versmelting optreedt van twee geslachtscellen (de bevruchting), meestal afkomstig van verschillende individuen. Dit komt voor bij planten, dieren en de mens. Enkele bijzondere vormen van voortplanting in de natuur zijn maagdelijke voortplanting, waarbij er wel een paring plaatsvindt maar alleen eigen lichaamscellen worden gebruikt door het vrouwtje. Een meer ontwikkelde vorm hiervan is gynandromorfisme, waarbij vrouwtjes op mannetjes lijken en vice versa. Bij veel weekdieren is tweeslachtigheid normaal, zoals bij de slakken.",
+          "@language": "nl"
+        }
+      ],
+      "http://dbpedia.org/ontology/wikiPageRevisionID": 708306845,
+      "http://dbpedia.org/ontology/wikiPageID": 26310,
+      "http://dbpedia.org/ontology/wikiPageExternalLink": [
+        {
+          "@id": "http://www.andrologyjournal.org/"
+        },
+        {
+          "@id": "http://www.biolreprod.org/"
+        },
+        {
+          "@id": "http://users.rcn.com/jkimball.ma.ultranet/BiologyPages/A/AsexualReproduction.html"
+        }
+      ],
+      "http://dbpedia.org/ontology/thumbnail": {
+        "@id": "http://commons.wikimedia.org/wiki/Special:FilePath/Kalanchoe_veg.jpg?width=300"
+      }
+    }
+  ]
+}

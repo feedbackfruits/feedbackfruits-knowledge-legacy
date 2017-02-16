@@ -2,23 +2,35 @@
   "name": "feedbackfruits-knowledge",
   "version": "1.0.0",
   "description": "Affiliations\r 1\tAffiliation ID\r 2\tAffiliation name",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "dist": "tsc",
+    "prestart": "npm run dist",
+    "start": "node dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/cors": "^2.8.0",
+    "@types/express": "^4.0.35",
+    "@types/express-graphql": "0.0.33",
     "@types/graphql": "^0.8.6",
+    "@types/morgan": "^1.7.32",
     "@types/node": "^7.0.5",
     "cayley": "^0.2.1",
     "cayley-node": "^0.1.0",
+    "cors": "^2.8.1",
     "dotenv": "^4.0.0",
+    "express": "^4.14.1",
+    "express-graphql": "^0.6.3",
     "graphql": "^0.9.1",
     "jsonld": "^0.4.11",
     "memux": "^0.2.0",
+    "morgan": "^1.8.0",
     "node-cayley": "^0.1.5",
     "node-fetch": "^1.6.3",
-    "p-queue": "^0.2.0"
+    "p-queue": "^0.2.0",
+    "typescript": "^2.1.6"
   }
 }
