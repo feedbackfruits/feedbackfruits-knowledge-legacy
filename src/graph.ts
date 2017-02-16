@@ -1,12 +1,10 @@
 import fetch from 'node-fetch';
 import cayley = require('cayley-node');
 
-import Config from './config';
-
-const {
+import {
   CAYLEY_ADDRESS,
   MAG_API_ENDPOINT
-} = Config;
+} from './config';
 
 
 // const client = cayley(CAYLEY_ADDRESS, {
@@ -32,8 +30,7 @@ export function getParents(id): Promise<DBPediaPointer[]> {
       .Out("<http://schema.org/sameAs>")
       .Out("<http://academic.microsoft.com/parentFieldOfStudy>")
       .In("<http://schema.org/sameAs>")
-      .All((...args) => {
-        const [ err, res ] = args;
+      .All((err, res) => {
         if (err) return reject(err);
         return resolve(res.result);
       });
@@ -49,8 +46,7 @@ export function getChildren(id): Promise<DBPediaPointer[]> {
       .Out("<http://schema.org/sameAs>")
       .Out("<http://academic.microsoft.com/childFieldOfStudy>")
       .In("<http://schema.org/sameAs>")
-      .All((...args) => {
-        const [ err, res ] = args;
+      .All((err, res) => {
         if (err) return reject(err);
         return resolve(res.result);
       });

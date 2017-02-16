@@ -18,6 +18,7 @@
     "@types/graphql": "^0.8.6",
     "@types/morgan": "^1.7.32",
     "@types/node": "^7.0.5",
+    "@types/qs": "^6.2.30",
     "cayley": "^0.2.1",
     "cayley-node": "^0.1.0",
     "cors": "^2.8.1",
@@ -31,6 +32,7 @@
     "node-cayley": "^0.1.5",
     "node-fetch": "^1.6.3",
     "p-queue": "^0.2.0",
+    "qs": "^6.3.1",
     "typescript": "^2.1.6"
   }
 }

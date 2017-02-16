@@ -1,17 +1,9 @@
 require('dotenv').load({ silent: true });
 
-const {
+export const {
   SERVER_PORT = 4000,
   CAYLEY_ADDRESS = 'http://cayley:64210',
   MAG_API_ENDPOINT = 'https://academic.microsoft.com/api/browse/GetEntityDetails',
   DBPEDIA_ENDPOINT = 'http://dbpedia.org/resource/',
+  DBPEDIA_SPARQL_ENDPOINT = 'http://dbpedia.org/sparql'
 } = process.env;
-
-export const Config = {
-  SERVER_PORT,
-  CAYLEY_ADDRESS,
-  MAG_API_ENDPOINT,
-  DBPEDIA_ENDPOINT,
-};
-
-export default Config;

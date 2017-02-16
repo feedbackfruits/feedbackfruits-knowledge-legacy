@@ -1,4 +1,4 @@
-import Config from './config';
+import { SERVER_PORT } from './config';
 import Server from './server';
 import Schema from './schema';
 
@@ -7,20 +7,17 @@ declare const require: any;
 if (require.main === module) {
   console.log('Running as script.');
 
-  let { SERVER_PORT: port } = Config;
-
   // Create http server
   let server = Server.create();
 
-  console.log("Server started, listening on", port);
-  server.listen(port);
+  console.log("Server started, listening on", SERVER_PORT);
+  server.listen(SERVER_PORT);
 
   // Export globally
   global['Knowledge'] = module.exports;
 }
 
 export default {
-  Config,
   Server,
   Schema
 }

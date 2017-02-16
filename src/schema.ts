@@ -7,14 +7,12 @@ import {
 } from 'graphql';
 
 import fetch from 'node-fetch';
-import cayley from './cayley';
-const PQueue = require('p-queue');
+import * as qs from 'qs';
+import PQueue = require('p-queue');
 
-import Config from './config';
-
-const {
-  DBPEDIA_ENDPOINT
-} = Config;
+import graph from './graph';
+import { DBPEDIA_ENDPOINT } from './config';
+import { getEntity } from './dbpedia';
 
 interface FieldOfStudy {
   name: string,
@@ -26,38 +24,6 @@ interface FieldOfStudy {
 const queue = new PQueue({
   concurrency: 4
 });
-
-var dbpediaContext = {
-  label: 'http://www.w3.org/2000/01/rdf-schema#label',
-  abstract: 'http://dbpedia.org/ontology/abstract'
-};
-
-function getDBPediaEntity(url) {
-  console.log(`Fetching ${url}`);
-  return fetch(url, {
-    headers: {
-      Accept: 'application/ld+json'
-    }
-  }).then(response => response.text()) //.then(json => json['@graph'][0])
-  .then(text => {
-    return new Promise((resolve, reject) => {
-      try {
-        const res = JSON.parse(text)['@graph'][0];
-        return resolve(res);
-      } catch(e) {
-        console.log(text);
-        reject(e);
-      }
-    });
-  })
-  .catch(err => { console.error(err);throw err });
-}
-
-function findEnglishValue(values) {
-  return values.find(value => {
-    return value['@language'] === 'en';
-  })['@value'];
-}
 
 const FieldOfStudyType = new GraphQLObjectType({
   name: 'FieldOfStudyType',
@@ -71,37 +37,44 @@ const FieldOfStudyType = new GraphQLObjectType({
     name: {
       type: GraphQLString,
       resolve(source, args, context, info) {
-        return findEnglishValue(source[dbpediaContext.label]);
+        return source['name'];
       }
     },
     description: {
       type: GraphQLString,
       resolve(source, args, context, info) {
-        return findEnglishValue(source[dbpediaContext.abstract]);
+        return source['description']
+      }
+    },
+    thumbnail: {
+      type: GraphQLString,
+      resolve(source, args, context, info) {
+        return source['thumbnail']
       }
     },
     parents: {
       type: new GraphQLList(FieldOfStudyType),
       resolve(source, args, context, info) {
-        const id = source['@id'];
-        return cayley.getParents(id).then(parents => {
+        const id = source['id'];
+        return graph.getParents(id).then(parents => {
           const urls = parents.map(parent => parent.id.slice(1, parent.id.length - 1));
-          return urls.reduce((memo, value) => {
-            return queue.add(() => getDBPediaEntity(value));
-          }, queue.add(() => Promise.resolve()));
+
+          return Promise.all(urls.map(value => {
+            return queue.add(() => getEntity(value)).catch(() => null);
+          })).then(results => results.filter(x => x));
         });
       }
     },
     children: {
       type: new GraphQLList(FieldOfStudyType),
       resolve(source, args, context, info) {
-        const id = source['@id'];
-        return cayley.getChildren(id).then(children => {
+        const id = source['id'];
+        return graph.getChildren(id).then(children => {
           const urls = children.map(child => child.id.slice(1, child.id.length - 1));
-          return urls.reduce((memo, value) => {
-            return queue.add(() => getDBPediaEntity(value));
-          }, queue.add(() => Promise.resolve()));
-          // return Promise.all(urls.map(getDBPediaEntity));
+
+          return Promise.all(urls.map(value => {
+            return queue.add(() => getEntity(value)).catch(() => null);
+          })).then(results => results.filter(x => x));
         });
       }
     },
@@ -113,30 +86,6 @@ const FieldOfStudyType = new GraphQLObjectType({
     }
   })
 });
-
-// const ResourceType = new GraphQLObjectType({
-//   name: 'ResourceType',
-//   fields: () => ({
-//     id: {
-//       type: GraphQLString,
-//       resolve(source, args, context, info) {
-//         return source.id;
-//       }
-//     },
-//     type: {
-//       type: GraphQLString,
-//       resolve(source, args, context, info) {
-//         return source.type;
-//       }
-//     },
-//     data: {
-//       type: GraphQLString,
-//       resolve(source, args, context, info) {
-//         return source;
-//       }
-//     }
-//   })
-// });
 
 const Schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -151,8 +100,7 @@ const Schema = new GraphQLSchema({
         },
         resolve(source, { id } , context, info) {
           const url = `${DBPEDIA_ENDPOINT}${id}`;
-          return getDBPediaEntity(url);
-          // return cayley.get(id);
+          return getEntity(url);
         }
       }
     }
