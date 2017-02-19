@@ -4,6 +4,8 @@ import * as cors   from 'cors';
 import * as graphqlHTTP from 'express-graphql';
 
 import Schema from './schema';
+import spotlight = require('dbpedia-spotlight');
+
 
 export function create() {
   const server = express();
@@ -20,10 +22,21 @@ export function create() {
   // Disable favicon
   server.get('/favicon.ico', (req, res, next) => res.status(404).end());
 
-  server.use('/', graphqlHTTP({
+  server.all('/', graphqlHTTP({
     schema: Schema,
     graphiql: true
   }));
+
+  server.get('/annotate', (req, res) => {
+    const { text } = req.query;
+
+    console.log(text);
+
+    spotlight.annotate(text, output => {
+      res.send(output);
+    });
+  });
+
 
   return server;
 }

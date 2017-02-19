@@ -2,39 +2,55 @@ import fetch from 'node-fetch';
 import * as qs from 'qs';
 
 import { DBPEDIA_SPARQL_ENDPOINT } from './config';
-import { ABSTRACT, LABEL, THUMBNAIL } from './context';
+import { ABSTRACT, LABEL, THUMBNAIL, REDIRECTS } from './context';
 
-export function getEntity(id) {
-  console.log('getting entity', id)
-  const params = {
-    'default-graph-uri': 'http://dbpedia.org',
-    'format': 'application/sparql-results+json',
-    'query': `
-      SELECT DISTINCT ?abstract ?label ?thumbnail WHERE {
-        ?object <${ABSTRACT}> ?abstract .
-        ?object <${LABEL}> ?label .
-        ?object <${THUMBNAIL}> ?thumbnail .
+type URI = string;
 
-        FILTER (
-          ?object = <${id}> &&
-          langMatches(lang(?abstract), "EN") &&
-          langMatches(lang(?label), "EN")
-        )
+type Mapping = {
+  [key: string]: URI
+};
+
+type Entity<M extends Mapping> = {
+  uri: string
+} & {
+  [K in keyof M]: string
+};
+
+const DEFAULT_MAPPING = {
+  name: LABEL,
+  description: ABSTRACT,
+  thumbnail: THUMBNAIL
+};
+
+type DefaultEntity = Entity<typeof DEFAULT_MAPPING>;
+
+export async function get<M extends Mapping>(uri: URI, mapping: M = <any> DEFAULT_MAPPING): Promise<Entity<M>> {
+  const what = Object.keys(mapping).map(key => `?${key}`).join(' ') + ' ?uri';
+  const where = Object.keys(mapping).map(key => `?uri <${mapping[key]}> ?${key} .`).join("\n");
+  const filter = Object.keys(mapping).map(key => `!isLiteral(?${key}) || lang(?${key}) = "" || langMatches(lang(?${key}), "EN")`).join(" && ");
+
+  const query = `
+    SELECT DISTINCT ${what} WHERE {
+      {
+        values ?uri { <${uri}> }
+        ${where}
+      } UNION {
+        values ?alt_id { <${uri}> }
+        ?alt_id <${REDIRECTS}> ?uri .
+        ${where}
       }
-    `
-  };
 
-  const url = `${DBPEDIA_SPARQL_ENDPOINT}?${qs.stringify(params)}`
+      FILTER(${filter})
+    }
+  `;
+
+  const url = `${DBPEDIA_SPARQL_ENDPOINT}?${qs.stringify({ query })}`;
 
   return fetch(url).then(response => response.json()).then(result => {
-    if (!result.results.bindings.length) throw Error(`Could not find entity ${id}`);
+    if (!result.results.bindings.length) throw Error(`Could not find entity`);
 
-    const { label, abstract, thumbnail } = result.results.bindings[0];
-    return {
-      id,
-      name: label.value,
-      description: abstract.value,
-      thumbnail: thumbnail.value
-    };
+    return Object.keys(mapping).concat('uri').reduce((memo, key) => {
+      return { ...memo, [key]: result.results.bindings[0][key].value };
+    }, {});
   });
 }

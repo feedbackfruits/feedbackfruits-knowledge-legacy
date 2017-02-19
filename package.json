@@ -7,7 +7,8 @@
     "dist": "tsc",
     "prestart": "npm run dist",
     "start": "node dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon -w src -x \"npm start\""
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "cayley": "^0.2.1",
     "cayley-node": "^0.1.0",
     "cors": "^2.8.1",
+    "dbpedia-spotlight": "^0.5.27",
     "dotenv": "^4.0.0",
     "express": "^4.14.1",
     "express-graphql": "^0.6.3",
@@ -34,5 +36,8 @@
     "p-queue": "^0.2.0",
     "qs": "^6.3.1",
     "typescript": "^2.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
