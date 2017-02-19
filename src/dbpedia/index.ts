@@ -1,7 +1,7 @@
-import fetch from 'node-fetch';
 import * as qs from 'qs';
+import fetch from '../helpers/fetch';
 
-import { DBPEDIA_SPARQL_ENDPOINT } from './config';
+import { DBPEDIA_SPARQL_ENDPOINT } from '../config';
 import { ABSTRACT, LABEL, THUMBNAIL, REDIRECTS } from './context';
 
 type URI = string;
@@ -24,6 +24,13 @@ const DEFAULT_MAPPING = {
 
 type DefaultEntity = Entity<typeof DEFAULT_MAPPING>;
 
+type DBPediaResponse = {
+  results: {
+    bindings: Array<{}>
+  }
+}
+
+export async function get(uri: URI): Promise<DefaultEntity>;
 export async function get<M extends Mapping>(uri: URI, mapping: M = <any> DEFAULT_MAPPING): Promise<Entity<M>> {
   const what = Object.keys(mapping).map(key => `?${key}`).join(' ') + ' ?uri';
   const where = Object.keys(mapping).map(key => `?uri <${mapping[key]}> ?${key} .`).join("\n");
@@ -34,23 +41,31 @@ export async function get<M extends Mapping>(uri: URI, mapping: M = <any> DEFAUL
       {
         values ?uri { <${uri}> }
         ${where}
-      } UNION {
-        values ?alt_id { <${uri}> }
-        ?alt_id <${REDIRECTS}> ?uri .
-        ${where}
       }
 
       FILTER(${filter})
     }
   `;
 
-  const url = `${DBPEDIA_SPARQL_ENDPOINT}?${qs.stringify({ query })}`;
+  const url = `${DBPEDIA_SPARQL_ENDPOINT}?${qs.stringify({ query, output: 'json' })}`;
 
-  return fetch(url).then(response => response.json()).then(result => {
+  return fetch(url)
+  // .then(response => response.text())
+  // .then(text => {
+  //   // debugger;
+  //   console.log(text);
+  //   return JSON.parse(text);
+  // })
+  .then(response => response.json<DBPediaResponse>())
+  .then(result => {
     if (!result.results.bindings.length) throw Error(`Could not find entity`);
 
-    return Object.keys(mapping).concat('uri').reduce((memo, key) => {
+    return <Entity<M>>Object.keys(mapping).concat('uri').reduce((memo, key) => {
       return { ...memo, [key]: result.results.bindings[0][key].value };
     }, {});
   });
+}
+
+export default {
+  get
 }
