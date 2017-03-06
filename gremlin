@@ -1,0 +1,50 @@
+# Gremlin
+
+## Example Gremlin queries
+
+```gremlin
+// Map from name to node
+g.V("geometry", "euclidean geometry", "calculus")
+	.In("<http://schema.org/name>")
+
+	// Check type
+	.Has("<http://schema.org/name>")
+	.Has("<http://schema.org/description>")
+	.Has("<http://schema.org/image>")
+
+	// Store name and id
+	.Save("<http://schema.org/name>", "name")
+	.Tag("start")
+
+	// Traverse graph to children and store child name and id
+	.Out("<http://academic.microsoft.com/childFieldOfStudy>", "child_id")
+	.Save("<http://schema.org/name>", "child_name")
+	.Tag("child_id")
+
+	// Resolve query
+	.All()
+```
+
+```gremlin
+g.V("linguistics", "mathematics")
+	.Has("<http://schema.org/name>")
+	.Tag("start")
+	.In("<http://schema.org/name>")
+	.Save("<http://schema.org/name>", "parent_name")
+	.Save("<http://schema.org/description>", "parent_description")
+	.Out("<http://academic.microsoft.com/childFieldOfStudy>")
+	.Save("<http://schema.org/name>", "name")
+	.Save("<http://schema.org/description>", "description")
+	.All()
+```
+
+```gremlin
+g.V()
+	.Has("<http://academic.microsoft.com/parentFieldOfStudy>", "<http://academic.microsoft.com/#/detail/33923547>")
+	.Has("<http://schema.org/name>", "algebra")
+	.Save("<http://schema.org/name>", "name")
+	.Tag("start")
+	.Save("<http://academic.microsoft.com/childFieldOfStudy>", "child_id")
+	.Save("<http://schema.org/name>", "child_name")
+	.All()
+```

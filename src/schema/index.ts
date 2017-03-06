@@ -6,10 +6,10 @@ import {
   GraphQLString
 } from 'graphql';
 
-import Topic from '../topic';
 import { TopicType } from './topic';
-import { DBPEDIA_ENDPOINT } from '../config';
-import { get as getEntity } from '../dbpedia';
+import { ResourceType } from './resource';
+
+import Topic from '../topic';
 
 export const Schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -23,9 +23,23 @@ export const Schema = new GraphQLSchema({
           }
         },
         resolve(source, { id } , context, info) {
+          console.log("PATH", JSON.stringify(<any>info.path));
           return Topic.get(id);
-          // const url = `${DBPEDIA_ENDPOINT}${id}`;
-          // return getEntity(url).then(entity => Object.assign({}, entity, { id: entity.name }));
+        }
+      },
+      resource: {
+        type: ResourceType,
+        args: {
+          id: {
+            type: GraphQLString
+          }
+        },
+        resolve(source, { id }, context, info) {
+          return {
+            id: 'bla',
+            type: 'bla',
+            topics: [ { id: 'mathematics' } ]
+          }
         }
       }
     }

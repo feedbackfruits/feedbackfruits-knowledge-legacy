@@ -34,24 +34,28 @@ export const TopicType = new GraphQLObjectType(<GraphQLObjectTypeConfig<Topic, a
     name: {
       type: GraphQLString,
       resolve(source, args, context, info) {
+        console.log("PATH", JSON.stringify(<any>info.path));
         return source.name;
       }
     },
     description: {
       type: GraphQLString,
       resolve(source, args, context, info) {
+        console.log("PATH", JSON.stringify(<any>info.path));
         return source.description;
       }
     },
     thumbnail: {
       type: GraphQLString,
       resolve(source, args, context, info) {
+        console.log("PATH", JSON.stringify(<any>info.path));
         return source.thumbnail;
       }
     },
     parents: {
       type: new GraphQLList(TopicType),
       resolve(source, args, context, info) {
+        console.log("PATH", JSON.stringify(<any>info.path));
         if ('id' in args && Object.keys(args).length == 1) return Promise.resolve(source.parents);
         return Topic.getParents(source);
       }
@@ -59,6 +63,7 @@ export const TopicType = new GraphQLObjectType(<GraphQLObjectTypeConfig<Topic, a
     children: {
       type: new GraphQLList(TopicType),
       resolve(source, args, context, info) {
+        console.log("PATH", JSON.stringify(<any>info.path));
         if ('id' in args && Object.keys(args).length == 1) return Promise.resolve(source.children);
         return Topic.getChildren(source);      }
     }

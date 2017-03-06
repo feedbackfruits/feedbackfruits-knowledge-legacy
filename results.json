@@ -1,0 +1,753 @@
+{
+ "result": [
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/139080492>",
+   "child_name": "differential algebra",
+   "id": "<http://academic.microsoft.com/#/detail/139080492>",
+   "name": "calculus",
+   "start": "<http://academic.microsoft.com/#/detail/33577790>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/205147927>",
+   "child_name": "asymptotic analysis",
+   "id": "<http://academic.microsoft.com/#/detail/205147927>",
+   "name": "calculus",
+   "start": "<http://academic.microsoft.com/#/detail/33577790>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/3515459>",
+   "child_name": "asymptotology",
+   "id": "<http://academic.microsoft.com/#/detail/3515459>",
+   "name": "calculus",
+   "start": "<http://academic.microsoft.com/#/detail/33577790>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/63331456>",
+   "child_name": "stochastic calculus",
+   "id": "<http://academic.microsoft.com/#/detail/63331456>",
+   "name": "calculus",
+   "start": "<http://academic.microsoft.com/#/detail/33577790>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/554573382>",
+   "child_name": "algebraic analysis",
+   "id": "<http://academic.microsoft.com/#/detail/554573382>",
+   "name": "calculus",
+   "start": "<http://academic.microsoft.com/#/detail/33577790>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/129782007>",
+   "child_name": "euclidean geometry",
+   "id": "<http://academic.microsoft.com/#/detail/129782007>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/173036546>",
+   "child_name": "integrated mathematics",
+   "id": "<http://academic.microsoft.com/#/detail/173036546>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/29001434>",
+   "child_name": "trigonometry",
+   "id": "<http://academic.microsoft.com/#/detail/29001434>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/206619068>",
+   "child_name": "world history",
+   "id": "<http://academic.microsoft.com/#/detail/206619068>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/10784197>",
+   "child_name": "non euclidean geometry",
+   "id": "<http://academic.microsoft.com/#/detail/10784197>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/25653684>",
+   "child_name": "solid geometry",
+   "id": "<http://academic.microsoft.com/#/detail/25653684>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/132478621>",
+   "child_name": "recreational mathematics",
+   "id": "<http://academic.microsoft.com/#/detail/132478621>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/158592959>",
+   "child_name": "blended learning",
+   "id": "<http://academic.microsoft.com/#/detail/158592959>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/46175816>",
+   "child_name": "analytic geometry",
+   "id": "<http://academic.microsoft.com/#/detail/46175816>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/23684344>",
+   "child_name": "affine geometry",
+   "id": "<http://academic.microsoft.com/#/detail/23684344>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/54643580>",
+   "child_name": "algebraic combinatorics",
+   "id": "<http://academic.microsoft.com/#/detail/54643580>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/185362025>",
+   "child_name": "projective geometry",
+   "id": "<http://academic.microsoft.com/#/detail/185362025>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/40319758>",
+   "child_name": "geometric design",
+   "id": "<http://academic.microsoft.com/#/detail/40319758>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/133347240>",
+   "child_name": "synthetic geometry",
+   "id": "<http://academic.microsoft.com/#/detail/133347240>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/68363185>",
+   "child_name": "algebraic geometry",
+   "id": "<http://academic.microsoft.com/#/detail/68363185>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/44139724>",
+   "child_name": "finite geometry",
+   "id": "<http://academic.microsoft.com/#/detail/44139724>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/49905341>",
+   "child_name": "comparative history",
+   "id": "<http://academic.microsoft.com/#/detail/49905341>",
+   "name": "geometry",
+   "start": "<http://academic.microsoft.com/#/detail/2524010>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/77730005>",
+   "child_name": "spherical geometry",
+   "id": "<http://academic.microsoft.com/#/detail/77730005>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/206352148>",
+   "child_name": "hyperbolic geometry",
+   "id": "<http://academic.microsoft.com/#/detail/206352148>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/185877587>",
+   "child_name": "medial axis",
+   "id": "<http://academic.microsoft.com/#/detail/185877587>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/119249546>",
+   "child_name": "first principle",
+   "id": "<http://academic.microsoft.com/#/detail/119249546>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/173676659>",
+   "child_name": "cathetus",
+   "id": "<http://academic.microsoft.com/#/detail/173676659>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/33026886>",
+   "child_name": "rotational symmetry",
+   "id": "<http://academic.microsoft.com/#/detail/33026886>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/198819137>",
+   "child_name": "octahedron",
+   "id": "<http://academic.microsoft.com/#/detail/198819137>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/198352243>",
+   "child_name": "line",
+   "id": "<http://academic.microsoft.com/#/detail/198352243>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/94128814>",
+   "child_name": "right angle",
+   "id": "<http://academic.microsoft.com/#/detail/94128814>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/40238689>",
+   "child_name": "philosophy of mathematics",
+   "id": "<http://academic.microsoft.com/#/detail/40238689>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/26320393>",
+   "child_name": "functional dependency",
+   "id": "<http://academic.microsoft.com/#/detail/26320393>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/110943637>",
+   "child_name": "convex polytope",
+   "id": "<http://academic.microsoft.com/#/detail/110943637>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/50820777>",
+   "child_name": "hypercube",
+   "id": "<http://academic.microsoft.com/#/detail/50820777>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/132074034>",
+   "child_name": "congruence",
+   "id": "<http://academic.microsoft.com/#/detail/132074034>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/97002563>",
+   "child_name": "tessellation",
+   "id": "<http://academic.microsoft.com/#/detail/97002563>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/197949415>",
+   "child_name": "simple polygon",
+   "id": "<http://academic.microsoft.com/#/detail/197949415>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/31599958>",
+   "child_name": "bisection",
+   "id": "<http://academic.microsoft.com/#/detail/31599958>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/152182844>",
+   "child_name": "lemma",
+   "id": "<http://academic.microsoft.com/#/detail/152182844>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/205068>",
+   "child_name": "face",
+   "id": "<http://academic.microsoft.com/#/detail/205068>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/64558301>",
+   "child_name": "radian",
+   "id": "<http://academic.microsoft.com/#/detail/64558301>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/189265371>",
+   "child_name": "q e d",
+   "id": "<http://academic.microsoft.com/#/detail/189265371>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/37542590>",
+   "child_name": "diameter",
+   "id": "<http://academic.microsoft.com/#/detail/37542590>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/46002644>",
+   "child_name": "law of cosines",
+   "id": "<http://academic.microsoft.com/#/detail/46002644>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/199631012>",
+   "child_name": "perpendicular",
+   "id": "<http://academic.microsoft.com/#/detail/199631012>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/140142295>",
+   "child_name": "isoperimetric inequality",
+   "id": "<http://academic.microsoft.com/#/detail/140142295>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/166504685>",
+   "child_name": "circumference",
+   "id": "<http://academic.microsoft.com/#/detail/166504685>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/112680207>",
+   "child_name": "regular polygon",
+   "id": "<http://academic.microsoft.com/#/detail/112680207>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/156460124>",
+   "child_name": "median",
+   "id": "<http://academic.microsoft.com/#/detail/156460124>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/76561870>",
+   "child_name": "squaring the square",
+   "id": "<http://academic.microsoft.com/#/detail/76561870>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/7305733>",
+   "child_name": "geometric shape",
+   "id": "<http://academic.microsoft.com/#/detail/7305733>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/93608145>",
+   "child_name": "volume",
+   "id": "<http://academic.microsoft.com/#/detail/93608145>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/54829058>",
+   "child_name": "polyhedron",
+   "id": "<http://academic.microsoft.com/#/detail/54829058>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/191764987>",
+   "child_name": "rep tile",
+   "id": "<http://academic.microsoft.com/#/detail/191764987>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/16684505>",
+   "child_name": "current",
+   "id": "<http://academic.microsoft.com/#/detail/16684505>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/202854965>",
+   "child_name": "constructive proof",
+   "id": "<http://academic.microsoft.com/#/detail/202854965>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/92515797>",
+   "child_name": "regular polyhedron",
+   "id": "<http://academic.microsoft.com/#/detail/92515797>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/204557972>",
+   "child_name": "set square",
+   "id": "<http://academic.microsoft.com/#/detail/204557972>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/106192678>",
+   "child_name": "collinearity",
+   "id": "<http://academic.microsoft.com/#/detail/106192678>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/69710193>",
+   "child_name": "vernier scale",
+   "id": "<http://academic.microsoft.com/#/detail/69710193>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/43594585>",
+   "child_name": "hyperrectangle",
+   "id": "<http://academic.microsoft.com/#/detail/43594585>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/69363865>",
+   "child_name": "distance from a point to a line",
+   "id": "<http://academic.microsoft.com/#/detail/69363865>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/88740403>",
+   "child_name": "parallel",
+   "id": "<http://academic.microsoft.com/#/detail/88740403>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/133978748>",
+   "child_name": "reflection symmetry",
+   "id": "<http://academic.microsoft.com/#/detail/133978748>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/103278499>",
+   "child_name": "similarity",
+   "id": "<http://academic.microsoft.com/#/detail/103278499>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/46984397>",
+   "child_name": "ptolemy s table of chords",
+   "id": "<http://academic.microsoft.com/#/detail/46984397>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/174597996>",
+   "child_name": "harmonic progression",
+   "id": "<http://academic.microsoft.com/#/detail/174597996>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/145194963>",
+   "child_name": "regular icosahedron",
+   "id": "<http://academic.microsoft.com/#/detail/145194963>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/63553920>",
+   "child_name": "sagitta",
+   "id": "<http://academic.microsoft.com/#/detail/63553920>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/108710211>",
+   "child_name": "mathematical proof",
+   "id": "<http://academic.microsoft.com/#/detail/108710211>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/69919132>",
+   "child_name": "polyomino",
+   "id": "<http://academic.microsoft.com/#/detail/69919132>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/179835439>",
+   "child_name": "tangent lines to circles",
+   "id": "<http://academic.microsoft.com/#/detail/179835439>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/45782184>",
+   "child_name": "area",
+   "id": "<http://academic.microsoft.com/#/detail/45782184>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/40222840>",
+   "child_name": "geometric mean",
+   "id": "<http://academic.microsoft.com/#/detail/40222840>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/10194927>",
+   "child_name": "lune",
+   "id": "<http://academic.microsoft.com/#/detail/10194927>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/83415579>",
+   "child_name": "arc",
+   "id": "<http://academic.microsoft.com/#/detail/83415579>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/22411076>",
+   "child_name": "hexahedron",
+   "id": "<http://academic.microsoft.com/#/detail/22411076>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/82738788>",
+   "child_name": "ptolemy s theorem",
+   "id": "<http://academic.microsoft.com/#/detail/82738788>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/146599234>",
+   "child_name": "centroid",
+   "id": "<http://academic.microsoft.com/#/detail/146599234>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/35908053>",
+   "child_name": "hexagonal tiling",
+   "id": "<http://academic.microsoft.com/#/detail/35908053>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/90296322>",
+   "child_name": "concentric",
+   "id": "<http://academic.microsoft.com/#/detail/90296322>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/144701195>",
+   "child_name": "theory",
+   "id": "<http://academic.microsoft.com/#/detail/144701195>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/34130140>",
+   "child_name": "midpoint",
+   "id": "<http://academic.microsoft.com/#/detail/34130140>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/83053163>",
+   "child_name": "radius",
+   "id": "<http://academic.microsoft.com/#/detail/83053163>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/98503990>",
+   "child_name": "perimeter",
+   "id": "<http://academic.microsoft.com/#/detail/98503990>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/124772163>",
+   "child_name": "plotter",
+   "id": "<http://academic.microsoft.com/#/detail/124772163>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/207467116>",
+   "child_name": "inverse",
+   "id": "<http://academic.microsoft.com/#/detail/207467116>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/198513863>",
+   "child_name": "polygon",
+   "id": "<http://academic.microsoft.com/#/detail/198513863>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/142575187>",
+   "child_name": "pyramid",
+   "id": "<http://academic.microsoft.com/#/detail/142575187>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/105239961>",
+   "child_name": "tetrahedron",
+   "id": "<http://academic.microsoft.com/#/detail/105239961>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/203527163>",
+   "child_name": "cuboid",
+   "id": "<http://academic.microsoft.com/#/detail/203527163>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/151756577>",
+   "child_name": "quadrilateral",
+   "id": "<http://academic.microsoft.com/#/detail/151756577>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/50729890>",
+   "child_name": "rhomboid",
+   "id": "<http://academic.microsoft.com/#/detail/50729890>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/74992188>",
+   "child_name": "non classical logic",
+   "id": "<http://academic.microsoft.com/#/detail/74992188>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/58552647>",
+   "child_name": "chord",
+   "id": "<http://academic.microsoft.com/#/detail/58552647>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/49788899>",
+   "child_name": "angular defect",
+   "id": "<http://academic.microsoft.com/#/detail/49788899>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/81443846>",
+   "child_name": "angle",
+   "id": "<http://academic.microsoft.com/#/detail/81443846>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/68818866>",
+   "child_name": "transversal",
+   "id": "<http://academic.microsoft.com/#/detail/68818866>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/200103705>",
+   "child_name": "trihexagonal tiling",
+   "id": "<http://academic.microsoft.com/#/detail/200103705>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/130367717>",
+   "child_name": "diagonal",
+   "id": "<http://academic.microsoft.com/#/detail/130367717>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/161903591>",
+   "child_name": "rhombus",
+   "id": "<http://academic.microsoft.com/#/detail/161903591>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/170088968>",
+   "child_name": "axiom independence",
+   "id": "<http://academic.microsoft.com/#/detail/170088968>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/125773388>",
+   "child_name": "axiomatic system",
+   "id": "<http://academic.microsoft.com/#/detail/125773388>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/20790398>",
+   "child_name": "taxicab geometry",
+   "id": "<http://academic.microsoft.com/#/detail/20790398>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/83677898>",
+   "child_name": "hyperbolic space",
+   "id": "<http://academic.microsoft.com/#/detail/83677898>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  },
+  {
+   "child_id": "<http://academic.microsoft.com/#/detail/182124507>",
+   "child_name": "line segment",
+   "id": "<http://academic.microsoft.com/#/detail/182124507>",
+   "name": "euclidean geometry",
+   "start": "<http://academic.microsoft.com/#/detail/129782007>"
+  }
+ ]
+}

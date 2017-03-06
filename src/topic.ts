@@ -1,8 +1,8 @@
-import graph from './graph';
+import { get as getEntity, toTopic} from './graph';
 import PQueue = require('p-queue');
 
 // import { get as getEntity } from './dbpedia';
-import { findEntity, toTopic } from './mag';
+// import { findEntity, toTopic } from './mag';
 
 const queue = new PQueue({
   concurrency: 4
@@ -23,14 +23,16 @@ export type Topic = {
 
 export module Topic {
   export function get(id: TopicId): Promise<Topic> {
-    return findEntity(id).then(toTopic)
-    .then(topic => {
-      // console.log(topic);
-      return topic;
-    }).catch(err => {
-      console.error(err);
-      throw err;
-    });
+    return getEntity(id)
+      .then(toTopic)
+    // return findEntity(id).then(toTopic)
+    // .then(topic => {
+    //   // console.log(topic);
+    //   return topic;
+    // }).catch(err => {
+    //   console.error(err);
+    //   throw err;
+    // });
   }
 
   export function getParents(topic: Topic): Promise<Array<Topic>> {
