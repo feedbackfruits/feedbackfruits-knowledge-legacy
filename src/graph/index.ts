@@ -12,7 +12,7 @@ import * as Context from './context';
 // import * as Morphisms from './morphisms';
 
 const client = cayley(CAYLEY_ADDRESS);
-const graph = client.g;
+export const graph = client.g;
 
 export type DBPediaPointer = {
   id: string
@@ -50,7 +50,7 @@ module Morphisms {
     .Out(Context.childFieldOfStudy)
 }
 
-export function get(name): Promise<Entity> {
+export function get(name): Promise<Array<Entity>> {
   let id = normalizeName(name);
   return new Promise((resolve, reject) => {
     graph

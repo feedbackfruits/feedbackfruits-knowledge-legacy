@@ -17,8 +17,8 @@ export type Topic = {
   name: string,
   description: string,
   thumbnail: string,
-  parents: Array<TopicReference | Topic>,
-  children: Array<TopicReference | Topic>
+  parents: Array<Topic>,
+  children: Array<Topic>
 };
 
 export module Topic {
