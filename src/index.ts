@@ -1,4 +1,4 @@
-import { SERVER_PORT } from './config';
+import { PORT } from './config';
 import Server from './server';
 import Schema from './schema';
 
@@ -10,8 +10,8 @@ if (require.main === module) {
   // Create http server
   let server = Server.create();
 
-  console.log("Server started, listening on", SERVER_PORT);
-  server.listen(SERVER_PORT);
+  console.log("Server started, listening on", PORT);
+  server.listen(PORT);
 
   // Export globally
   global['Knowledge'] = module.exports;
