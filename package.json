@@ -35,7 +35,7 @@
     "jsonld": "^0.4.11",
     "memux": "^0.2.0",
     "morgan": "^1.8.0",
-    "node-cayley": "^0.1.5",
+    "node-cayley": "^0.1.13",
     "node-fetch": "^1.6.3",
     "p-queue": "^0.2.0",
     "qs": "^6.3.1",

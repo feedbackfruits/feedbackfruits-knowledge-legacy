@@ -1,5 +1,7 @@
 import fetch from 'node-fetch';
-import cayley = require('cayley-node');
+import cayley = require('node-cayley');
+
+import _unflatten from './unflatten';
 
 import {
   CAYLEY_ADDRESS,
@@ -141,9 +143,12 @@ export function getChildren(id): Promise<DBPediaPointer[]> {
 
 };
 
+export const unflatten = _unflatten;
+
 export default {
   get,
   getParents,
   getChildren,
-  toTopic
+  toTopic,
+  unflatten: _unflatten
 }

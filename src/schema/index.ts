@@ -11,7 +11,7 @@ import { TopicType } from './topic';
 import { ResourceType } from './resource';
 import { build, BuilderObjectType } from './builder'
 
-import { parseResults, toTopic, graph } from '../graph';
+import { parseResults, toTopic, graph, unflatten } from '../graph';
 import * as Context from '../graph/context';
 
 import Topic from '../topic';
@@ -27,10 +27,10 @@ export const Schema = new GraphQLSchema({
             type: GraphQLString,
           }
         },
-        build(builder, args: { [argName: string]: any }, path) {
-          return graph.V('linguistics').In(Context.name);
+        build(builder, { id }, path) {
+          return graph.V(id).In(Context.name);
         },
-        resolve(source, { id }, context, info) {
+        resolve(source, { name }, context, info) {
           // debugger;
           // TopicType.getFields()['id'].build()
           //
@@ -59,9 +59,12 @@ export const Schema = new GraphQLSchema({
             builder.All((err, res) => {
               console.log(`Build result:`, err, res);
               if (err) return reject(err);
-              if (!res.result) throw new Error('No results.');
-              return resolve(res.result[0]);
+              if (!res.result) reject(new Error('No results.'));
+              return resolve(unflatten(res.result));
             });
+          }).then((result: any) => {
+            console.log('Unflatten result:', result);
+            return result[0].topic;
           });
 
 

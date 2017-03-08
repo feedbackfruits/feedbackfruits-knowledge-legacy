@@ -28,7 +28,7 @@ export const TopicType: BuilderObjectType<any> = new BuilderObjectType<any>({
         return builder.Tag(`${path}`);
       },
       resolve(source, args, context, info) {
-        return source.id;
+        return source.name;
       }
     },
     name: {
@@ -64,7 +64,7 @@ export const TopicType: BuilderObjectType<any> = new BuilderObjectType<any>({
         return builder.Follow(Morphisms.parents());
       },
       resolve(source, args, context, info) {
-        return source.parents;
+        return [].concat(source.parents);
         // if ('id' in args && Object.keys(args).length == 1) return Promise.resolve(source.parents);
         // return Topic.getParents(source);
       }
@@ -75,7 +75,7 @@ export const TopicType: BuilderObjectType<any> = new BuilderObjectType<any>({
         return builder.Follow(Morphisms.children());
       },
       resolve(source, args, context, info) {
-        return source.children;
+        return [].concat(source.children);
         // if ('id' in args && Object.keys(args).length == 1) return Promise.resolve(source.children);
         // return Topic.getChildren(source);
       }
