@@ -57,29 +57,29 @@ export function findEntity(name: TopicId): Promise<MagEntity> {
 }
 
 
-export function toTopic(entity: MagEntity): Topic {
-  const {
-    entityTitle: name,
-    description,
-    image: thumbnail,
-    parentFieldsOfStudy,
-    childFieldsOfStudy
-  } = entity;
-
-  const parents: Array<TopicReference | Topic > = parentFieldsOfStudy ? parentFieldsOfStudy.map(field => ({ id: field.lt })) : [];
-  const children: Array<TopicReference | Topic > = childFieldsOfStudy ? childFieldsOfStudy.map(field => ({ id: field.lt })) : [];
-
-  return {
-    id: normalizeName(name),
-    name,
-    description,
-    thumbnail,
-    parents,
-    children
-  };
-}
+// export function toTopic(entity: MagEntity): Topic {
+//   const {
+//     entityTitle: name,
+//     description,
+//     image: thumbnail,
+//     parentFieldsOfStudy,
+//     childFieldsOfStudy
+//   } = entity;
+//
+//   const parents: Array<TopicReference | Topic > = parentFieldsOfStudy ? parentFieldsOfStudy.map(field => ({ id: field.lt })) : [];
+//   const children: Array<TopicReference | Topic > = childFieldsOfStudy ? childFieldsOfStudy.map(field => ({ id: field.lt })) : [];
+//
+//   return {
+//     id: normalizeName(name),
+//     name,
+//     description,
+//     thumbnail,
+//     parents,
+//     children
+//   };
+// }
 
 export default {
   findEntity,
-  toTopic
+  // toTopic
 }

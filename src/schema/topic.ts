@@ -15,6 +15,7 @@ import {
 
 import { BuilderObjectType } from './builder';
 
+import { Morphisms } from '../graph';
 import * as Context from '../graph/context';
 import { TopicReference, Topic } from '../topic';
 
@@ -24,7 +25,7 @@ export const TopicType: BuilderObjectType<any> = new BuilderObjectType<any>({
     id: {
       type: GraphQLString,
       build(builder, args, path) {
-        return builder.Tag(`${path}.id`);
+        return builder.Tag(`${path}`);
       },
       resolve(source, args, context, info) {
         return source.id;
@@ -33,49 +34,52 @@ export const TopicType: BuilderObjectType<any> = new BuilderObjectType<any>({
     name: {
       type: GraphQLString,
       build(builder, args, path) {
-        return builder.Save(Context.name, `${path}.name`);
+        return builder.Save(Context.name, `${path}`);
       },
       resolve(source, args, context, info) {
-        console.log("PATH", JSON.stringify(<any>info.path));
         return source.name;
       }
     },
     description: {
       type: GraphQLString,
       build(builder, args, path) {
-        return builder.Save(Context.description, `${path}.description`);
+        return builder.Save(Context.description, `${path}`);
       },
       resolve(source, args, context, info) {
-        console.log("PATH", JSON.stringify(<any>info.path));
         return source.description;
       }
     },
     thumbnail: {
       type: GraphQLString,
       build(builder, args, path) {
-        return builder.Save(Context.image, `${path}.thumbnail`);
+        return builder.Save(Context.image, `${path}`);
       },
       resolve(source, args, context, info) {
-        console.log("PATH", JSON.stringify(<any>info.path));
         return source.thumbnail;
       }
     },
-    // parents: {
-    //   type: new GraphQLList(TopicType),
-    //   resolve(source, args, context, info) {
-    //     console.log("PATH", JSON.stringify(<any>info.path));
-    //     if ('id' in args && Object.keys(args).length == 1) return Promise.resolve(source.parents);
-    //     return Topic.getParents(source);
-    //   }
-    // },
-    // children: {
-    //   type: new GraphQLList(TopicType),
-    //   resolve(source, args, context, info) {
-    //     console.log("PATH", JSON.stringify(<any>info.path));
-    //     if ('id' in args && Object.keys(args).length == 1) return Promise.resolve(source.children);
-    //     return Topic.getChildren(source);
-    //   }
-    // }
+    parents: {
+      type: new GraphQLList(TopicType),
+      build(builder, args, path) {
+        return builder.Follow(Morphisms.parents());
+      },
+      resolve(source, args, context, info) {
+        return source.parents;
+        // if ('id' in args && Object.keys(args).length == 1) return Promise.resolve(source.parents);
+        // return Topic.getParents(source);
+      }
+    },
+    children: {
+      type: new GraphQLList(TopicType),
+      build(builder, args, path) {
+        return builder.Follow(Morphisms.children());
+      },
+      resolve(source, args, context, info) {
+        return source.children;
+        // if ('id' in args && Object.keys(args).length == 1) return Promise.resolve(source.children);
+        // return Topic.getChildren(source);
+      }
+    }
   })
 });
 

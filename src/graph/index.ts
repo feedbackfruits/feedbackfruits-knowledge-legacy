@@ -35,7 +35,7 @@ function normalizeName(name) {
   return name.toLowerCase().replace(/[\W]/g, ' ').replace(/ +/g, ' ').trim();
 }
 
-module Morphisms {
+export module Morphisms {
   export const topic = (key: string = 'topic') => graph.M()
     .Save(Context.name, `${key}_name`)
     .Save(Context.image, `${key}_image`)
@@ -68,7 +68,7 @@ export function get(name): Promise<Array<Entity>> {
   });
 }
 
-function parseResults(results): Array<Entity> {
+export function parseResults(results): Array<Entity> {
   if (!results) throw new Error('No results.');
   let tree = results.reduce((memo, result) => {
     let keys = Object.keys(result);
