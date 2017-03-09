@@ -7,7 +7,8 @@
     "dist": "tsc",
     "prestart": "npm run dist",
     "start": "node dist",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test npm run dist && nyc tap -R tap test/index.js",
+    "coverage": "nyc report --reporter=text-lcov | codecov",
     "watch": "nodemon -w src -x \"npm start\""
   },
   "author": "",
@@ -43,6 +44,10 @@
     "typescript": "^2.1.6"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "blue-tape": "^0.2.0",
+    "codecov": "^1.0.1",
+    "nodemon": "^1.11.0",
+    "nyc": "^6.0.0",
+    "tap": "^5.7.0"
   }
 }
