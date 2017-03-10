@@ -19,7 +19,7 @@ import {
 } from 'graphql';
 
 export interface BuilderFn<TBuilder> {
-  (builder: TBuilder, args: { [argName: string]: any }, path: string): TBuilder
+  (builder: TBuilder, args: { [argName: string]: any }, path: Array<string>): TBuilder
 }
 
 export class BuilderObjectType<TBuilder> extends GraphQLObjectType {
@@ -50,19 +50,34 @@ export interface BuilderFieldConfigMap<TSource, TContext, TBuilder> {
   [fieldName: string]: BuilderFieldConfig<TSource, TContext, TBuilder>;
 }
 
+export function normalizeName(name) {
+  return name.toLowerCase().replace(/[\W]/g, ' ').replace(/ +/g, ' ').trim();
+}
+
+export interface BuilderUnit<TSource, TContext, TBuilder> {
+  field: BuilderField<TSource, TContext, TBuilder>,
+  selections: Array<FieldNode>
+}
+
+export function mapArguments(args) {
+  return args.reduce((memo, arg: ArgumentNode) => {
+    let { name: { value: name } } = arg;
+    let { value } = (<StringValueNode>arg.value);
+    memo[name] = value;
+    return memo;
+  }, {});
+}
 
 export function mapTypeAndSelections<TBuilder>(type: BuilderObjectType<TBuilder>, selections: FieldNode[]) {
   let fields = type.getFields()
   return selections.map(s => {
-    let field = fields[s.name.value];
-    let args = s.arguments.reduce((memo, arg: ArgumentNode) => {
-      let { name: { value: name } } = arg;
-      let { value } = (<StringValueNode>arg.value);
-      memo[name] = value;
-      return memo;
-    }, {});
+    let { name: { value: name } } = s;
+    let field = fields[name];
+    let args = mapArguments(s.arguments);
+
     return {
       field,
+      name,
       selections: s.selectionSet ? <Array<FieldNode>>s.selectionSet.selections : null,
       args
     };

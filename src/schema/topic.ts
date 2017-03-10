@@ -13,12 +13,13 @@ import {
   Thunk
 } from 'graphql';
 
-import { BuilderObjectType } from './builder';
+import { BuilderObjectType } from '../builder';
+import { GizmoBuilder } from '../builder/gizmo';
 
-import { Morphisms } from '../graph';
-import * as Context from '../graph/context';
+import { Morphisms } from '../builder/gizmo';
+import * as Context from '../builder/context';
 
-export const TopicType: BuilderObjectType<any> = new BuilderObjectType<any>({
+export const TopicType: BuilderObjectType<GizmoBuilder> = new BuilderObjectType<GizmoBuilder>({
   name: 'TopicType',
   fields: () => ({
     id: {

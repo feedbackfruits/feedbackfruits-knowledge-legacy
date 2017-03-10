@@ -1,0 +1,66 @@
+{
+  nodes(id: "<http://academic.microsoft.com/#/detail/41895202>") {
+    id,
+    name: <http://schema.org/name>
+    description: <http://schema.org/description>
+    image: <http://schema.org/image>
+    parents: <http://academic.microsoft.com/parentFieldOfStudy> {
+      id,
+      name: <http://schema.org/name>
+      description: <http://schema.org/description>
+      image: <http://schema.org/image>
+    }
+  }
+}
+
+{
+  nodes(id: "linguistics") {
+    topic: <http://schema.org/name> @rev {
+      id,
+      name: <http://schema.org/name>
+      description: <http://schema.org/description>
+      image: <http://schema.org/image>
+      parents: <http://academic.microsoft.com/parentFieldOfStudy> {
+      	id
+        name: <http://schema.org/name>
+        description: <http://schema.org/description>
+        image: <http://schema.org/image>
+      }
+  	}
+  }
+}
+
+{
+  nodes(id: "linguistics") {
+    topic: <http://schema.org/name> @rev {
+      id,
+      name: <http://schema.org/name>
+      description: <http://schema.org/description>
+      image: <http://schema.org/image>
+      parents: <http://academic.microsoft.com/parentFieldOfStudy> {
+      	id
+        name: <http://schema.org/name>
+        description: <http://schema.org/description>
+        image: <http://schema.org/image>
+        parents: <http://academic.microsoft.com/parentFieldOfStudy> {
+          id
+          name: <http://schema.org/name>
+          description: <http://schema.org/description>
+          image: <http://schema.org/image>
+        }
+      }
+	  children: <http://academic.microsoft.com/childFieldOfStudy> {
+          id
+          name: <http://schema.org/name>
+          description: <http://schema.org/description>
+          image: <http://schema.org/image>
+          children: <http://academic.microsoft.com/childFieldOfStudy> {
+              id
+              name: <http://schema.org/name>
+              description: <http://schema.org/description>
+              image: <http://schema.org/image>
+          }
+	  }
+  	}
+  }
+}
