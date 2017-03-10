@@ -4,7 +4,6 @@ import * as cors   from 'cors';
 import * as graphqlHTTP from 'express-graphql';
 
 import Schema from './schema';
-import spotlight = require('dbpedia-spotlight');
 
 
 export function create() {
@@ -26,17 +25,6 @@ export function create() {
     schema: Schema,
     graphiql: true
   }));
-
-  server.get('/annotate', (req, res) => {
-    const { text } = req.query;
-
-    console.log(text);
-
-    spotlight.annotate(text, output => {
-      res.send(output);
-    });
-  });
-
 
   return server;
 }

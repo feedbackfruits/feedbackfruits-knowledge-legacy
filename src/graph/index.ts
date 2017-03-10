@@ -8,22 +8,10 @@ import {
   MAG_API_ENDPOINT
 } from '../config';
 
-import { Topic } from '../topic';
-
 import * as Context from './context';
-// import * as Morphisms from './morphisms';
 
 const client = cayley(CAYLEY_ADDRESS);
 export const graph = client.g;
-
-export type DBPediaPointer = {
-  id: string
-}
-
-// export function getEntityDetails(id) {
-//   const url = `${MAG_API_ENDPOINT}?entityId=${id}&correlationId=1`;
-//   return fetch(url).then(response => response.json());
-// }
 
 export type Entity = {
   id: string,
@@ -42,32 +30,12 @@ export module Morphisms {
     .Save(Context.name, `${key}_name`)
     .Save(Context.image, `${key}_image`)
     .Tag(`${key}_id`)
-    // .Save(Context.description, `${key}_description`)
 
   export const parents = (key: string = 'parent') => graph.M()
     .Out(Context.parentFieldOfStudy)
-    // .Tag(`${key}_id`)
 
   export const children = (key: string = 'child') => graph.M()
     .Out(Context.childFieldOfStudy)
-}
-
-export function get(name): Promise<Array<Entity>> {
-  let id = normalizeName(name);
-  return new Promise((resolve, reject) => {
-    graph
-      .V(id)
-      .In(Context.name)
-      .Follow(Morphisms.topic())
-      .Follow(Morphisms.children("topic_child"))
-      .Follow(Morphisms.topic("topic_child"))
-      .All((err, res) => {
-        console.log('Graph get:', err, res);
-        if (err) return reject(err);
-        if ('error' in res) return reject(res.error);
-        return resolve(parseResults(res.result));
-      });
-  });
 }
 
 export function parseResults(results): Array<Entity> {
@@ -92,7 +60,7 @@ export function parseResults(results): Array<Entity> {
   return [ tree.topic ];
 }
 
-export function toTopic(entities: Array<Entity>): Topic {
+export function toTopic(entities: Array<Entity>): Object {
   console.log('Converting entity to topic:', entities);
   const {
     id,
@@ -111,44 +79,4 @@ export function toTopic(entities: Array<Entity>): Topic {
   }
 }
 
-export function getParents(id): Promise<DBPediaPointer[]> {
-  console.log(`Getting parents for ${id}`);
-  return new Promise((resolve, reject) => {
-    graph
-      .V(id)
-      .Out(Context.name)
-      .Out(Context.parentFieldOfStudy)
-      .In(Context.name)
-      .All((err, res) => {
-        if (err) return reject(err);
-        return resolve(res.result);
-      });
-  });
-
-};
-
-export function getChildren(id): Promise<DBPediaPointer[]> {
-  console.log(`Getting children for ${id}`);
-  return new Promise((resolve, reject) => {
-    graph
-      .V(id)
-      .Out(Context.name)
-      .Out(Context.childFieldOfStudy)
-      .In(Context.name)
-      .All((err, res) => {
-        if (err) return reject(err);
-        return resolve(res.result);
-      });
-  });
-
-};
-
 export const unflatten = _unflatten;
-
-export default {
-  get,
-  getParents,
-  getChildren,
-  toTopic,
-  unflatten: _unflatten
-}
