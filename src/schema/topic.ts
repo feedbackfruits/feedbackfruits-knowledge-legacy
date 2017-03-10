@@ -17,7 +17,6 @@ import { BuilderObjectType } from './builder';
 
 import { Morphisms } from '../graph';
 import * as Context from '../graph/context';
-import { TopicReference, Topic } from '../topic';
 
 export const TopicType: BuilderObjectType<any> = new BuilderObjectType<any>({
   name: 'TopicType',
@@ -65,8 +64,6 @@ export const TopicType: BuilderObjectType<any> = new BuilderObjectType<any>({
       },
       resolve(source, args, context, info) {
         return [].concat(source.parents);
-        // if ('id' in args && Object.keys(args).length == 1) return Promise.resolve(source.parents);
-        // return Topic.getParents(source);
       }
     },
     children: {
@@ -76,8 +73,6 @@ export const TopicType: BuilderObjectType<any> = new BuilderObjectType<any>({
       },
       resolve(source, args, context, info) {
         return [].concat(source.children);
-        // if ('id' in args && Object.keys(args).length == 1) return Promise.resolve(source.children);
-        // return Topic.getChildren(source);
       }
     }
   })
