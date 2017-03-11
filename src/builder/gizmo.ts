@@ -1,8 +1,9 @@
-import { mapTypeAndSelections, BuilderFn, BuilderField, BuilderUnit } from './index';
+import { mapTypeAndSelections, BuilderFn, BuilderField, BuilderUnit, BuilderObjectType } from './index';
 
 import {
   GraphQLList,
   FieldNode,
+  OperationDefinitionNode
 } from 'graphql';
 
 import cayley = require('node-cayley');
@@ -67,6 +68,6 @@ export function buildGizmo<TSource, TContext>(unit: GizmoUnit<TSource, TContext>
       selections: newSelections ? newSelections : []
     };
 
-    return buildGizmo(newUnit).Back(`${path.join('.')}.id`);
-  }, newBuilder);
+    return buildGizmo(newUnit);
+  }, newBuilder).Back(`${path.join('.')}.id`);
 }

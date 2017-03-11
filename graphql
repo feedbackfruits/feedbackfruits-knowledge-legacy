@@ -42,7 +42,7 @@
         name: <http://schema.org/name>
         description: <http://schema.org/description>
         image: <http://schema.org/image>
-        parents: <http://academic.microsoft.com/parentFieldOfStudy> {
+        children: <http://academic.microsoft.com/childFieldOfStudy> {
           id
           name: <http://schema.org/name>
           description: <http://schema.org/description>
@@ -54,13 +54,7 @@
           name: <http://schema.org/name>
           description: <http://schema.org/description>
           image: <http://schema.org/image>
-          children: <http://academic.microsoft.com/childFieldOfStudy> {
-              id
-              name: <http://schema.org/name>
-              description: <http://schema.org/description>
-              image: <http://schema.org/image>
-          }
-	  }
+	    }
   	}
   }
 }

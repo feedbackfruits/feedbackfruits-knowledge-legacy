@@ -14,27 +14,26 @@ import {
 } from 'graphql';
 
 import { BuilderObjectType } from '../builder';
-import { GizmoBuilder } from '../builder/gizmo';
-
-import { Morphisms } from '../builder/gizmo';
+import { GraphQLBuilder } from '../builder/graphql';
 import * as Context from '../builder/context';
 
-export const TopicType: BuilderObjectType<GizmoBuilder> = new BuilderObjectType<GizmoBuilder>({
+
+export const TopicType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
   name: 'TopicType',
   fields: () => ({
     id: {
       type: GraphQLString,
       build(builder, args, path) {
-        return builder.Tag(`${path}`);
+        return builder.find(Context.GraphQL.ID);
       },
       resolve(source, args, context, info) {
-        return source.name;
+        return source.id;
       }
     },
     name: {
       type: GraphQLString,
       build(builder, args, path) {
-        return builder.Save(Context.name, `${path}`);
+        return builder.find(Context.GraphQL.NAME);
       },
       resolve(source, args, context, info) {
         return source.name;
@@ -43,37 +42,45 @@ export const TopicType: BuilderObjectType<GizmoBuilder> = new BuilderObjectType<
     description: {
       type: GraphQLString,
       build(builder, args, path) {
-        return builder.Save(Context.description, `${path}`);
+        return builder.find(Context.GraphQL.DESCRIPTION);
       },
       resolve(source, args, context, info) {
         return source.description;
       }
     },
-    thumbnail: {
+    image: {
       type: GraphQLString,
       build(builder, args, path) {
-        return builder.Save(Context.image, `${path}`);
+        return builder.find(Context.GraphQL.IMAGE);
       },
       resolve(source, args, context, info) {
-        return source.thumbnail;
+        return source.image;
       }
     },
     parents: {
       type: new GraphQLList(TopicType),
       build(builder, args, path) {
-        return builder.Follow(Morphisms.parents());
+        let parents = new GraphQLBuilder(Context.parentFieldOfStudy);
+
+        builder.find({ parents });
+
+        return parents;
       },
       resolve(source, args, context, info) {
-        return [].concat(source.parents);
+        return source.parents !== null ? [].concat(source.parents) : [];
       }
-    },
+        },
     children: {
       type: new GraphQLList(TopicType),
       build(builder, args, path) {
-        return builder.Follow(Morphisms.children());
+        let children = new GraphQLBuilder(Context.childFieldOfStudy);
+
+        builder.find({ children });
+
+        return children;
       },
       resolve(source, args, context, info) {
-        return [].concat(source.children);
+        return source.children !== null ? [].concat(source.children) : [];
       }
     }
   })

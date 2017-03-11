@@ -18,6 +18,9 @@ import {
   OperationDefinitionNode
 } from 'graphql';
 
+import { buildGizmo, GizmoBuilder } from './gizmo';
+import { buildGraphQL, GraphQLBuilder } from './graphql';
+
 export interface BuilderFn<TBuilder> {
   (builder: TBuilder, args: { [argName: string]: any }, path: Array<string>): TBuilder
 }
@@ -50,10 +53,6 @@ export interface BuilderFieldConfigMap<TSource, TContext, TBuilder> {
   [fieldName: string]: BuilderFieldConfig<TSource, TContext, TBuilder>;
 }
 
-export function normalizeName(name) {
-  return name.toLowerCase().replace(/[\W]/g, ' ').replace(/ +/g, ' ').trim();
-}
-
 export interface BuilderUnit<TSource, TContext, TBuilder> {
   field: BuilderField<TSource, TContext, TBuilder>,
   selections: Array<FieldNode>
@@ -84,36 +83,21 @@ export function mapTypeAndSelections<TBuilder>(type: BuilderObjectType<TBuilder>
   });
 }
 
-export function reduceFieldAndSelections<TBuilder>(builder, { field, selections, args }, path) {
-  let type = field.type instanceof GraphQLList ? field.type.ofType : field.type;
-  let newBuilder = field.build(builder, args, path);
-  return selections.reduce((b, s) => {
-    return build(s, <BuilderObjectType<TBuilder>>type, b, path);
-  }, newBuilder);
-}
+export function build<TBuilder>(node: OperationDefinitionNode | FieldNode, type: BuilderObjectType<TBuilder>, builder: TBuilder): TBuilder {
+  let [ {
+    field,
+    name,
+    args,
+    selections
+  } ] = mapTypeAndSelections<TBuilder>(type, <Array<FieldNode>>node.selectionSet.selections);
 
-export function build<TBuilder>(node: FieldNode | OperationDefinitionNode, type: BuilderObjectType<TBuilder>, builder: TBuilder, path = ''): TBuilder {
-  if (node.kind === 'OperationDefinition') {
-    // This makes sure the graph traversal is initiated properly
-    let fieldMap = mapTypeAndSelections(type, <Array<FieldNode>>node.selectionSet.selections);
-    return fieldMap.reduce((builder, fieldMap) => {
-      return reduceFieldAndSelections(builder, fieldMap, path);
-    }, builder);
-  }
+  let unit = {
+    field,
+    builder,
+    args,
+    path: [ name ],
+    selections
+  };
 
-  if (!node.selectionSet) {
-    // Build leaf node
-    let { name: { value: name } } = node;
-    let field = type.getFields()[name];
-    let newPath = path === '' ? `${name}` : `${path}.${name}`;
-    return reduceFieldAndSelections(builder, { field, selections: [], args: {} }, newPath);
-  }
-  else if (node.selectionSet) {
-    // Build nested node
-    let { name: { value: name } } = node;
-    let newPath = path === '' ? `${name}` : `${path}.${name}`;
-    let field = type.getFields()[name];
-    return reduceFieldAndSelections(builder, { field, selections: <Array<FieldNode>>node.selectionSet.selections, args: {} }, newPath)
-      .Back(`${path}.id`);
-  }
+  return <any>buildGraphQL(<any>unit);
 }
