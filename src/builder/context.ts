@@ -14,3 +14,10 @@ export const WriteAction = "<http://schema.org/WriteAction>";
 export const FieldOfStudy = "<http://academic.microsoft.com/FieldOfStudy>";
 export const parentFieldOfStudy = "<http://academic.microsoft.com/parentFieldOfStudy>";
 export const childFieldOfStudy = "<http://academic.microsoft.com/childFieldOfStudy>";
+
+export module GraphQL {
+  export const ID = "id";
+  export const NAME = {"name":"<http://schema.org/name>"};
+  export const DESCRIPTION = {description: "<http://schema.org/description>"};
+  export const IMAGE = {image: "<http://schema.org/image>"};
+}

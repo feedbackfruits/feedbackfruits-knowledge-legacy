@@ -8,13 +8,15 @@ import {
 } from 'graphql';
 
 import { TopicType } from './topic';
-import { build, BuilderObjectType } from './builder'
+import { build, BuilderObjectType } from '../builder';
+import { GraphQLBuilder } from '../builder/graphql';
 
-import { parseResults, toTopic, graph, unflatten } from '../graph';
-import * as Context from '../graph/context';
+import * as Context from '../builder/context';
+
+import cayley from '../cayley';
 
 export const Schema = new GraphQLSchema({
-  query: new BuilderObjectType({
+  query: new BuilderObjectType<GraphQLBuilder>({
     name: 'RootQueryType',
     fields: {
       topic: {
@@ -25,22 +27,19 @@ export const Schema = new GraphQLSchema({
           }
         },
         build(builder, { id }, path) {
-          return graph.V(id).In(Context.name);
+          let topic = new GraphQLBuilder(`${Context.name} @rev`);
+
+          builder.filter({ id });
+          builder.find({ topic });
+
+          return topic;
         },
-        resolve(source, { name }, context, info) {
+        resolve(source, { }, context, info) {
           let { operation: node, parentType: type } = info;
-          let builder = build(node, <BuilderObjectType<any>>type, null, 'topic')
-          return new Promise((resolve, reject) => {
-            builder.All((err, res) => {
-              console.log(`Build result:`, err, res);
-              if (err) return reject(err);
-              if (!res.result) reject(new Error('No results.'));
-              return resolve(unflatten(res.result));
-            });
-          }).then((result: any) => {
-            console.log('Unflatten result:', result);
-            return result[0].topic;
-          });
+          let base = new GraphQLBuilder("nodes",);
+          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base);
+          let query = builder.toString();
+          return cayley(query).then((res: any) => res.nodes.topic);
         }
       }
     }
