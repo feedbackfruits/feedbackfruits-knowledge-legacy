@@ -1,23 +1,36 @@
-export const type = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
-export const name = "<http://schema.org/name>";
-export const image = "<http://schema.org/image>";
-export const description = "<http://schema.org/description>";
-export const text = "<http://schema.org/text>";
-export const url = "<http://schema.org/url>";
-export const sameAs = "<http://schema.org/sameAs>";
-export const author = "<http://schema.org/author>";
-export const citation = "<http://schema.org/citation>";
-export const CreativeWork = "<http://schema.org/CreativeWork>";
-export const Person = "<http://schema.org/Person>";
-export const ReadAction = "<http://schema.org/ReadAction>";
-export const WriteAction = "<http://schema.org/WriteAction>";
-export const FieldOfStudy = "<http://academic.microsoft.com/FieldOfStudy>";
-export const parentFieldOfStudy = "<http://academic.microsoft.com/parentFieldOfStudy>";
-export const childFieldOfStudy = "<http://academic.microsoft.com/childFieldOfStudy>";
+export const type = '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>';
+export const name = '<http://schema.org/name>';
+export const image = '<http://schema.org/image>';
+export const description = '<http://schema.org/description>';
+export const text = '<http://schema.org/text>';
+export const url = '<http://schema.org/url>';
+export const sameAs = '<http://schema.org/sameAs>';
+export const license = '<http://schema.org/license>';
+export const author = '<http://schema.org/author>';
+export const about = '<http://schema.org/about>';
+export const citation = '<http://schema.org/citation>';
+export const CreativeWork = '<http://schema.org/CreativeWork>';
+export const Person = '<http://schema.org/Person>';
+export const ReadAction = '<http://schema.org/ReadAction>';
+export const WriteAction = '<http://schema.org/WriteAction>';
+
 
 export module GraphQL {
-  export const ID = "id";
-  export const NAME = {"name":"<http://schema.org/name> @opt"};
-  export const DESCRIPTION = {description: "<http://schema.org/description> @opt"};
-  export const IMAGE = {image: "<http://schema.org/image> @opt"};
+  export const ID = 'id';
+  export const NAME = { name: `${name} @opt` };
+  export const DESCRIPTION = { description: `${description} @opt` };
+  export const IMAGE = { image: `${image} @opt` };
+  export const LICENSE = { license: `${license} @opt` };
+}
+
+export module KhanAcademy {
+  export const Topic = '<https://www.khanacademy.org/Topic>';
+  export const childTopic = '<https://www.khanacademy.org/childTopic>';
+  export const parentTopic = '<https://www.khanacademy.org/parentTopic>';
+}
+
+export module AcademicGraph {
+  export const FieldOfStudy = '<http://academic.microsoft.com/FieldOfStudy>';
+  export const parentFieldOfStudy = '<http://academic.microsoft.com/parentFieldOfStudy>';
+  export const childFieldOfStudy = '<http://academic.microsoft.com/childFieldOfStudy>';
 }

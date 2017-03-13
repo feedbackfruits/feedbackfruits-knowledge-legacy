@@ -24,19 +24,25 @@ export const Schema = new GraphQLSchema({
         args: {
           id: {
             type: GraphQLString,
+          },
+          name: {
+            type: GraphQLString
           }
         },
-        build(builder, { id }, path) {
+
+        build(builder, { id, name }, path) {
           let topic = new GraphQLBuilder(`${Context.name} @rev`);
 
-          builder.filter({ id });
+          if (id) builder.filter({ id });
+          if (name) builder.filter({ id: name });
+
           builder.find({ topic });
 
           return topic;
         },
         resolve(source, { }, context, info) {
           let { operation: node, parentType: type } = info;
-          let base = new GraphQLBuilder("nodes",);
+          let base = new GraphQLBuilder('nodes',);
           let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base);
           let query = builder.toString();
           return cayley(query).then((res: any) => res.nodes.topic);
