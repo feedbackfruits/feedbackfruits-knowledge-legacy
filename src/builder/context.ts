@@ -14,6 +14,12 @@ export const Person = '<http://schema.org/Person>';
 export const ReadAction = '<http://schema.org/ReadAction>';
 export const WriteAction = '<http://schema.org/WriteAction>';
 
+export module DBPedia {
+  export const label = 'http://www.w3.org/2000/01/rdf-schema#label';
+  export const abstract = 'http://dbpedia.org/ontology/abstract';
+  export const thumbnail = 'http://xmlns.com/foaf/0.1/depiction';
+  export const redirects = 'http://dbpedia.org/ontology/wikiPageRedirects';
+}
 
 export module GraphQL {
   export const ID = 'id';
@@ -21,6 +27,13 @@ export module GraphQL {
   export const DESCRIPTION = { description: `${description} @opt` };
   export const IMAGE = { image: `${image} @opt` };
   export const LICENSE = { license: `${license} @opt` };
+}
+
+export module SparQL {
+  export const ID = 'id';
+  export const NAME = { name: DBPedia.label };
+  export const DESCRIPTION = { description: DBPedia.abstract };
+  export const IMAGE = { image: DBPedia.thumbnail };
 }
 
 export module KhanAcademy {

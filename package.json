@@ -9,7 +9,7 @@
     "start": "node dist",
     "test": "NODE_ENV=test npm run dist && nyc tap -R tap test/index.js",
     "coverage": "nyc report --reporter=text-lcov | codecov",
-    "watch": "nodemon -w src -x \"npm start\""
+    "watch": "tsc -w & nodemon dist"
   },
   "author": "",
   "license": "ISC",

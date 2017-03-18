@@ -20,6 +20,7 @@ import * as Context from '../builder/context';
 
 export const TopicType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
   name: 'TopicType',
+  builderType: 'graphql',
   fields: () => ({
     id: {
       type: GraphQLString,
