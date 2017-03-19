@@ -17,7 +17,7 @@ export const childFieldOfStudy = "<http://academic.microsoft.com/childFieldOfStu
 
 export module GraphQL {
   export const ID = "id";
-  export const NAME = {"name":"<http://schema.org/name>"};
-  export const DESCRIPTION = {description: "<http://schema.org/description>"};
-  export const IMAGE = {image: "<http://schema.org/image>"};
+  export const NAME = {"name":"<http://schema.org/name> @opt"};
+  export const DESCRIPTION = {description: "<http://schema.org/description> @opt"};
+  export const IMAGE = {image: "<http://schema.org/image> @opt"};
 }
