@@ -20,14 +20,18 @@ import {
 
 import { buildGizmo, GizmoBuilder } from './gizmo';
 import { buildGraphQL, GraphQLBuilder } from './graphql';
+import { buildSparQL, SparQLBuilder } from './sparql';
 
 export interface BuilderFn<TBuilder> {
   (builder: TBuilder, args: { [argName: string]: any }, path: Array<string>): TBuilder
 }
 
 export class BuilderObjectType<TBuilder> extends GraphQLObjectType {
+  public builderType: BuilderType
+
   constructor(config: BuilderObjectTypeConfig<any, any, TBuilder>) {
     super(config);
+    this.builderType = config.builderType;
   }
   getFields(): BuilderFieldMap<any, any, TBuilder> {
     return <BuilderFieldMap<any, any, TBuilder>> super.getFields();
@@ -35,6 +39,7 @@ export class BuilderObjectType<TBuilder> extends GraphQLObjectType {
 }
 
 export interface BuilderObjectTypeConfig<TSource, TContext, TBuilder> extends GraphQLObjectTypeConfig<TSource, TContext> {
+  builderType?: BuilderType
   fields: Thunk<BuilderFieldConfigMap<TSource, TContext, TBuilder>>
 }
 
@@ -83,21 +88,42 @@ export function mapTypeAndSelections<TBuilder>(type: BuilderObjectType<TBuilder>
   });
 }
 
-export function build<TBuilder>(node: OperationDefinitionNode | FieldNode, type: BuilderObjectType<TBuilder>, builder: TBuilder): TBuilder {
-  let [ {
-    field,
-    name,
-    args,
-    selections
-  } ] = mapTypeAndSelections<TBuilder>(type, <Array<FieldNode>>node.selectionSet.selections);
+export type BuilderType = 'graphql' | 'sparql';
+export type FieldType = 'topic' | 'entity';
+export function build<TBuilder>(node: OperationDefinitionNode | FieldNode, type: BuilderObjectType<TBuilder>, builder: TBuilder, fieldName: FieldType): TBuilder {
+  let mapped = mapTypeAndSelections<TBuilder>(type, <Array<FieldNode>>node.selectionSet.selections).map(x => {
+    let {
+      field,
+      name,
+      args,
+      selections
+    } = x;
 
-  let unit = {
-    field,
-    builder,
-    args,
-    path: [ name ],
-    selections
-  };
+    let unit = {
+      field,
+      builder,
+      args,
+      path: [ name ],
+      selections
+    };
 
-  return <any>buildGraphQL(<any>unit);
+    return unit;
+  });
+
+  // if (mapped.length === 1) {
+  // } else {
+  //
+  //   let unit = <any>mapped.find((unit, i): any => {
+  //     // if (memo) return memo;
+  //     return unit.field.name === fieldName;
+  //   });
+  // }
+
+  let unit =  mapped.length === 1 ? mapped[0] : mapped.find(unit => {
+    return unit.field.name === fieldName;
+  });
+
+  if ((<any>unit.field.type).builderType === 'graphql') return <any>buildGraphQL(<any>unit);
+  if ((<any>unit.field.type).builderType === 'sparql') return <any>buildSparQL(<any>unit);
+  throw new Error(`Invalid builder type: ${type.builderType}`)
 }

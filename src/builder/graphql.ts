@@ -62,12 +62,13 @@ export class GraphQLBuilder {
   }
 
   thunk() {
-    let args = this._find.map((arg) => {
+    let args = this._find.map(arg => {
       if (arg instanceof GraphQLBuilder) {
         arg.thunk();
         return arg._query;
       }
-      else if(arg instanceof Object) {
+
+      if (arg instanceof Object) {
         return Object.keys(arg).reduce((memo, key) => {
           let value = arg[key];
           if (value instanceof GraphQLBuilder) {
@@ -78,6 +79,7 @@ export class GraphQLBuilder {
           return memo;
         }, {});
       }
+
       return arg;
     });
 

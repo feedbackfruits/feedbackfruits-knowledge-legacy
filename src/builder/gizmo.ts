@@ -24,10 +24,10 @@ export module Morphisms {
     .Tag(`${key}_id`)
 
   export const parents = (key: string = 'parent') => graph.M()
-    .Out(Context.parentFieldOfStudy)
+    .Out(Context.AcademicGraph.parentFieldOfStudy)
 
   export const children = (key: string = 'child') => graph.M()
-    .Out(Context.childFieldOfStudy)
+    .Out(Context.AcademicGraph.childFieldOfStudy)
 }
 
 export type GizmoBuilder = {
