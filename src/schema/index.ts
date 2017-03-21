@@ -7,7 +7,7 @@ import {
   FieldNode
 } from 'graphql';
 
-import { TopicType } from './topic';
+import { FieldOfStudyType } from './field_of_study';
 import { EntityType } from './entity';
 
 import { build, BuilderObjectType } from '../builder';
@@ -23,8 +23,8 @@ export const Schema = new GraphQLSchema({
   query: new BuilderObjectType<GraphQLBuilder | SparQLBuilder>({
     name: 'RootQueryType',
     fields: {
-      topic: {
-        type: TopicType,
+      fieldOfStudy: {
+        type: FieldOfStudyType,
         args: {
           id: {
             type: GraphQLString,
@@ -35,21 +35,21 @@ export const Schema = new GraphQLSchema({
         },
 
         build(builder: GraphQLBuilder, { id, name }, path) {
-          let topic = new GraphQLBuilder(`${Context.name} @rev`);
+          if (id != null && name == null) return builder.filter({ id: `<${id}>` });
 
-          if (id) builder.filter({ id });
-          if (name) builder.filter({ id: name });
+          let fieldOfStudy = new GraphQLBuilder(`${Context.name} @rev`);
 
-          builder.find({ topic });
+          builder.filter({ id: name });
+          builder.find({ fieldOfStudy });
 
-          return topic;
+          return fieldOfStudy;
         },
         resolve(source, { }, context, info) {
           let { operation: node, parentType: type } = info;
           let base = new GraphQLBuilder('nodes',);
-          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'topic');
+          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'fieldOfStudy');
           let query = builder.toString();
-          return cayley(query).then((res: any) => res.nodes.topic);
+          return cayley(query).then((res: any) => res.nodes.fieldOfStudy);
         }
       },
       entity: {

@@ -18,8 +18,8 @@ import { GraphQLBuilder } from '../builder/graphql';
 import * as Context from '../builder/context';
 
 
-export const TopicType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
-  name: 'TopicType',
+export const FieldOfStudyType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
+  name: 'FieldOfStudyType',
   builderType: 'graphql',
   fields: () => ({
     id: {
@@ -59,7 +59,7 @@ export const TopicType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectTyp
       }
     },
     parents: {
-      type: new GraphQLList(TopicType),
+      type: new GraphQLList(FieldOfStudyType),
       build(builder, args, path) {
         let parents = new GraphQLBuilder(Context.AcademicGraph.parentFieldOfStudy);
 
@@ -72,7 +72,7 @@ export const TopicType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectTyp
       }
         },
     children: {
-      type: new GraphQLList(TopicType),
+      type: new GraphQLList(FieldOfStudyType),
       build(builder, args, path) {
         let children = new GraphQLBuilder(Context.AcademicGraph.childFieldOfStudy);
 
@@ -87,4 +87,4 @@ export const TopicType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectTyp
   })
 });
 
-export default TopicType;
+export default FieldOfStudyType;

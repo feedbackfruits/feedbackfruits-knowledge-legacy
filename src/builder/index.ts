@@ -89,7 +89,7 @@ export function mapTypeAndSelections<TBuilder>(type: BuilderObjectType<TBuilder>
 }
 
 export type BuilderType = 'graphql' | 'sparql';
-export type FieldType = 'topic' | 'entity';
+export type FieldType = 'fieldOfStudy' | 'entity';
 export function build<TBuilder>(node: OperationDefinitionNode | FieldNode, type: BuilderObjectType<TBuilder>, builder: TBuilder, fieldName: FieldType): TBuilder {
   let mapped = mapTypeAndSelections<TBuilder>(type, <Array<FieldNode>>node.selectionSet.selections).map(x => {
     let {

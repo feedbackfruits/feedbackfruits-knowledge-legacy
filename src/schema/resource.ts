@@ -17,7 +17,7 @@ import { BuilderObjectType } from '../builder';
 import { GraphQLBuilder } from '../builder/graphql';
 import * as Context from '../builder/context';
 
-import TopicType from './topic';
+import FieldOfStudyType from './field_of_study';
 
 export const ResourceType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
   name: 'ResourceType',
@@ -67,17 +67,17 @@ export const ResourceType: BuilderObjectType<GraphQLBuilder> = new BuilderObject
         return source.license;
       }
     },
-    topics: {
-      type: new GraphQLList(TopicType),
+    fieldOfStudys: {
+      type: new GraphQLList(FieldOfStudyType),
       build(builder, args, path) {
-        let topics = new GraphQLBuilder(Context.about);
+        let fieldOfStudys = new GraphQLBuilder(Context.about);
 
-        builder.find({ topics });
+        builder.find({ fieldOfStudys });
 
-        return topics;
+        return fieldOfStudys;
       },
       resolve(source, args, context, info) {
-        return source.topics !== null ? [].concat(source.topics) : [];
+        return source.fieldOfStudys !== null ? [].concat(source.fieldOfStudys) : [];
       }
     }
   })
