@@ -4,9 +4,11 @@ import {
   GraphQLArgument,
   GraphQLEnumType,
   GraphQLList,
+  GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLString,
   GraphQLObjectTypeConfig,
+  GraphQLInterfaceTypeConfig,
   GraphQLField,
   GraphQLFieldMap,
   GraphQLFieldConfigMap,
@@ -24,6 +26,23 @@ import { buildSparQL, SparQLBuilder } from './sparql';
 
 export interface BuilderFn<TBuilder> {
   (builder: TBuilder, args: { [argName: string]: any }, path: Array<string>): TBuilder
+}
+
+export class BuilderInterfaceType<TBuilder> extends GraphQLInterfaceType {
+  public builderType: BuilderType;
+
+  constructor(config: BuilderInterfaceTypeConfig<any, any, TBuilder>) {
+    super(config);
+    this.builderType = config.builderType;
+  }
+  getFields(): BuilderFieldMap<any, any, TBuilder> {
+    return <BuilderFieldMap<any, any, TBuilder>> super.getFields();
+  }
+}
+
+export interface BuilderInterfaceTypeConfig<TSource, TContext, TBuilder> extends GraphQLInterfaceTypeConfig<TSource, TContext> {
+  builderType?: BuilderType
+  fields: Thunk<BuilderFieldConfigMap<TSource, TContext, TBuilder>>
 }
 
 export class BuilderObjectType<TBuilder> extends GraphQLObjectType {
@@ -89,7 +108,7 @@ export function mapTypeAndSelections<TBuilder>(type: BuilderObjectType<TBuilder>
 }
 
 export type BuilderType = 'graphql' | 'sparql';
-export type FieldType = 'fieldOfStudy' | 'entity';
+export type FieldType = 'fieldOfStudy' | 'entity' | 'resources' | 'videos';
 export function build<TBuilder>(node: OperationDefinitionNode | FieldNode, type: BuilderObjectType<TBuilder>, builder: TBuilder, fieldName: FieldType): TBuilder {
   let mapped = mapTypeAndSelections<TBuilder>(type, <Array<FieldNode>>node.selectionSet.selections).map(x => {
     let {
@@ -123,7 +142,9 @@ export function build<TBuilder>(node: OperationDefinitionNode | FieldNode, type:
     return unit.field.name === fieldName;
   });
 
-  if ((<any>unit.field.type).builderType === 'graphql') return <any>buildGraphQL(<any>unit);
-  if ((<any>unit.field.type).builderType === 'sparql') return <any>buildSparQL(<any>unit);
-  throw new Error(`Invalid builder type: ${type.builderType}`)
+  let fieldType = unit.field.type instanceof GraphQLList ? unit.field.type.ofType : unit.field.type;
+
+  if (fieldType.builderType === 'graphql') return <any>buildGraphQL(<any>unit);
+  if (fieldType.builderType === 'sparql') return <any>buildSparQL(<any>unit);
+  throw new Error(`Invalid builder type: ${fieldType.builderType}`)
 }

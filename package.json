@@ -33,7 +33,6 @@
     "express-graphql": "^0.6.3",
     "flat": "^2.0.1",
     "graphql": "^0.9.1",
-    "graphql-query-builder": "^1.0.7",
     "jsonld": "^0.4.11",
     "memux": "^0.2.0",
     "morgan": "^1.8.0",

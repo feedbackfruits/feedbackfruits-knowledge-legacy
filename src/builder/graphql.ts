@@ -6,8 +6,6 @@ import {
   OperationDefinitionNode
 } from 'graphql';
 
-import Query = require('graphql-query-builder');
-
 import * as Context from './context';
 
 export type GraphQLArgs = { [key: string]: any };
@@ -42,54 +40,68 @@ export function buildGraphQL<TSource, TContext>(unit: GraphQLUnit<TSource, TCont
   return builder;
 }
 
-export class GraphQLBuilder {
-  protected _query: any;
-  protected _find: Array<any>;
+export type GraphQLBuilderDirective = { name: string, args: Array<Object> };
 
-  constructor(name: string, args: any = null) {
-    this._query = new Query(name, args);
+export class GraphQLBuilder {
+  protected _name: string;
+  protected _filter: Array<Object>;
+  protected _find: Array<Object>;
+  protected _directives: Array<GraphQLBuilderDirective>;
+
+  constructor(name: string, args: Object | Array<Object> = []) {
+    this._name = name;
+    this._filter = [].concat(args);
     this._find = [];
+    this._directives = [];
   }
 
-  filter(args: any) {
-    this._query.filter(args);
+  filter(args: Object | Array<Object>) {
+    this._filter = [].concat(this._filter, args);
     return this;
   }
 
-  find(arg: any) {
+  find(arg: Object) {
     this._find.push(arg);
     return this;
   }
 
-  thunk() {
-    let args = this._find.map(arg => {
-      if (arg instanceof GraphQLBuilder) {
-        arg.thunk();
-        return arg._query;
-      }
-
-      if (arg instanceof Object) {
-        return Object.keys(arg).reduce((memo, key) => {
-          let value = arg[key];
-          if (value instanceof GraphQLBuilder) {
-            value.thunk();
-            memo[key] = value._query;
-          }
-          else memo[key] = value;
-          return memo;
-        }, {});
-      }
-
-      return arg;
-    });
-
-    if (args.length === 1) this._query.find(args[0]);
-    else this._query.find(args);
-
+  directive(directive: GraphQLBuilderDirective) {
+    this._directives.push(directive);
     return this;
   }
 
   toString() {
-    return `{ ${this.thunk()._query.toString()} }`;
+    let stringifyArray = (arr) => arr.length ? `(${ stringifyObject(arr.reduce((memo, x) => Object.assign(memo, x), {})) })` : '';
+    let stringifyObject = (obj) => Object.keys(obj).map(key => `${key}: ${obj[key]}`);
+
+    let filterString = stringifyArray(this._filter);
+
+    let directivesString = this._directives.map(dir => {
+      let argsString = stringifyArray(dir.args);
+      return `@${dir.name}${argsString}`;
+    }).join(' ');
+
+    let findString = this._find.map(arg => {
+        if (arg instanceof GraphQLBuilder) {
+          return arg.toString();
+        }
+
+        if (arg instanceof Object) {
+          return stringifyObject(Object.keys(arg).reduce((memo, key) => {
+            let value = arg[key];
+            if (value instanceof GraphQLBuilder) {
+              memo[key] = value.toString();
+            }
+            else memo[key] = value;
+            return memo;
+          }, {}));
+        }
+
+        return arg;
+      }).join(',\n');
+
+    return `${this._name}${filterString} ${directivesString}{
+      ${findString}
+    }`;
   }
 }

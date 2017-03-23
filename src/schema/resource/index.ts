@@ -1,26 +1,24 @@
 import {
-  graphql,
-  GraphQLSchema,
-  GraphQLEnumType,
   GraphQLList,
+  GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLObjectTypeConfig,
-  GraphQLField,
-  GraphQLFieldMap,
-  GraphQLFieldConfigMap,
-  GraphQLFieldConfig,
-  Thunk
 } from 'graphql';
 
-import { BuilderObjectType } from '../builder';
-import { GraphQLBuilder } from '../builder/graphql';
-import * as Context from '../builder/context';
+import { BuilderInterfaceType } from '../../builder';
+import { GraphQLBuilder } from '../../builder/graphql';
+import * as Context from '../../builder/context';
 
-import FieldOfStudyType from './field_of_study';
+import FieldOfStudyType from '../field_of_study';
 
-export const ResourceType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
-  name: 'ResourceType',
+import VideoResourceType from './video';
+
+export const ResourceInterfaceType: BuilderInterfaceType<GraphQLBuilder> = new BuilderInterfaceType<GraphQLBuilder>({
+  name: 'ResourceInterfaceType',
+  builderType: 'graphql',
+  resolveType: () => {
+    return VideoResourceType;
+  },
   fields: () => ({
     id: {
       type: GraphQLString,
@@ -67,20 +65,20 @@ export const ResourceType: BuilderObjectType<GraphQLBuilder> = new BuilderObject
         return source.license;
       }
     },
-    fieldOfStudys: {
-      type: new GraphQLList(FieldOfStudyType),
-      build(builder, args, path) {
-        let fieldOfStudys = new GraphQLBuilder(Context.about);
-
-        builder.find({ fieldOfStudys });
-
-        return fieldOfStudys;
-      },
-      resolve(source, args, context, info) {
-        return source.fieldOfStudys !== null ? [].concat(source.fieldOfStudys) : [];
-      }
-    }
+    // fieldsOfStudy: {
+    //   type: new GraphQLList(FieldOfStudyType),
+    //   build(builder, args, path) {
+    //     let fieldsOfStudy = new GraphQLBuilder(Context.about);
+    //
+    //     builder.find({ fieldsOfStudy });
+    //
+    //     return fieldsOfStudy;
+    //   },
+    //   resolve(source, args, context, info) {
+    //     return source.fieldsOfStudy !== null ? [].concat(source.fieldsOfStudy) : [];
+    //   }
+    // }
   })
 });
 
-export default ResourceType;
+export default ResourceInterfaceType;

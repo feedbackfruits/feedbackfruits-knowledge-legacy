@@ -9,6 +9,8 @@ import {
 
 import { FieldOfStudyType } from './field_of_study';
 import { EntityType } from './entity';
+import { ResourceInterfaceType } from './resource';
+import { VideoResourceType } from './resource/video';
 
 import { build, BuilderObjectType } from '../builder';
 import { GraphQLBuilder } from '../builder/graphql';
@@ -48,8 +50,8 @@ export const Schema = new GraphQLSchema({
           let { operation: node, parentType: type } = info;
           let base = new GraphQLBuilder('nodes',);
           let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'fieldOfStudy');
-          let query = builder.toString();
-          return cayley(query).then((res: any) => res.nodes.fieldOfStudy);
+          let query = `{ ${builder.toString()} }`;
+          return cayley(query).then((res: any) => res.nodes);
         }
       },
       entity: {
@@ -73,6 +75,54 @@ export const Schema = new GraphQLSchema({
           let { mapping } = builder;
           let query = builder.toString();
           return dbpedia(query, mapping);
+        }
+      },
+      resources: {
+        type: new GraphQLList(ResourceInterfaceType),
+        args: {
+        },
+        build(builder: GraphQLBuilder, { }, path) {
+          builder.filter({ id: Context.Knowledge.Resource });
+
+          let resources = new GraphQLBuilder(`${Context.type}`);
+
+          resources.directive({ name: 'rev', args: [] });
+          resources.filter({ first: 10 });
+
+          builder.find({ resources });
+
+          return resources;
+        },
+        resolve(source, args, context, info) {
+          let { operation: node, parentType: type } = info;
+          let base = new GraphQLBuilder('nodes',);
+          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'resources');
+          let query = `{ ${builder.toString()} }`;
+          return cayley(query).then((res: any) => res.nodes.resources);
+        }
+      },
+      videos: {
+        type: new GraphQLList(VideoResourceType),
+        args: {
+        },
+        build(builder: GraphQLBuilder, { }, path) {
+          builder.filter({ id: Context.Knowledge.Resource });
+
+          let videos = new GraphQLBuilder(`${Context.type}`);
+
+          videos.directive({ name: 'rev', args: [] });
+          videos.filter({ first: 10 });
+
+          builder.find({ videos });
+
+          return videos;
+        },
+        resolve(source, args, context, info) {
+          let { operation: node, parentType: type } = info;
+          let base = new GraphQLBuilder('nodes',);
+          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'videos');
+          let query = `{ ${builder.toString()} }`;
+          return cayley(query).then((res: any) => res.nodes.videos);
         }
       }
     }

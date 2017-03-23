@@ -14,6 +14,21 @@ export const Person = '<http://schema.org/Person>';
 export const ReadAction = '<http://schema.org/ReadAction>';
 export const WriteAction = '<http://schema.org/WriteAction>';
 
+export module Knowledge {
+  export const Topic = '<https://knowledge.express/Topic>';
+  export const next = '<https://knowledge.express/next>';
+  export const previous = '<https://knowledge.express/previous>';
+  export const child = '<https://knowledge.express/child>';
+  export const parent = '<https://knowledge.express/parent>';
+  export const resource = '<https://knowledge.express/resource>';
+
+  export const Resource = '<https://knowledge.express/Resource>';
+  export const topic = '<https://knowledge.express/topic>';
+  export const entity = '<https://knowledge.express/entity>';
+
+  export const Entity = '<https://knowledge.express/Entity>';
+}
+
 export module DBPedia {
   export const label = 'http://www.w3.org/2000/01/rdf-schema#label';
   export const abstract = 'http://dbpedia.org/ontology/abstract';

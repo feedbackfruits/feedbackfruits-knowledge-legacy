@@ -13,6 +13,7 @@ export function query(query: string): Promise<Response> {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     }
   }).then(response => response.json()).then((res) => {
+    if ('errors' in res) throw `CAYLEY: ${JSON.stringify(res['errors'])}`;
     if ('data' in res) return res['data'];
   });
 };
