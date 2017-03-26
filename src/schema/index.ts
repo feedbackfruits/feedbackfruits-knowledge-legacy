@@ -100,6 +100,25 @@ export const Schema = new GraphQLSchema({
           return cayley(query).then((res: any) => res.nodes);
         }
       },
+      resource: {
+        type: ResourceInterfaceType,
+        args: {
+          id: {
+            type: GraphQLString,
+          }
+        },
+
+        build(builder: GraphQLBuilder, { id, name }, path) {
+          return builder.filter({ id: `<${id}>` });
+        },
+        resolve(source, { }, context, info) {
+          let { operation: node, parentType: type } = info;
+          let base = new GraphQLBuilder('nodes',);
+          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'resource');
+          let query = `{ ${builder.toString()} }`;
+          return cayley(query).then((res: any) => res.nodes);
+        }
+      },
       resources: {
         type: new GraphQLList(ResourceInterfaceType),
         args: {

@@ -28,6 +28,15 @@ export const VideoResourceType: BuilderObjectType<GraphQLBuilder> = new BuilderO
         return source.id;
       }
     },
+    type: {
+      type: GraphQLString,
+      build(builder, args, path) {
+        return builder.find(Context.GraphQL.TYPE);
+      },
+      resolve(source, args, context, info) {
+        return source.type[0];
+      }
+    },
     name: {
       type: GraphQLString,
       build(builder, args, path) {

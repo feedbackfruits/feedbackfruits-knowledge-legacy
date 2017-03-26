@@ -39,6 +39,7 @@ export module DBPedia {
 export module GraphQL {
   export const ID = 'id';
   export const NAME = { name: `${name} @opt` };
+  export const TYPE = { type: `${type} @opt` };
   export const DESCRIPTION = { description: `${description} @opt` };
   export const IMAGE = { image: `${image} @opt` };
   export const LICENSE = { license: `${license} @opt` };

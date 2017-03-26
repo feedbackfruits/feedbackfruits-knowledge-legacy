@@ -41,6 +41,15 @@ export const TopicType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectTyp
         return source.name;
       }
     },
+    type: {
+      type: GraphQLString,
+      build(builder, args, path) {
+        return builder.find(Context.GraphQL.TYPE);
+      },
+      resolve(source, args, context, info) {
+        return source.type;
+      }
+    },
     description: {
       type: GraphQLString,
       build(builder, args, path) {

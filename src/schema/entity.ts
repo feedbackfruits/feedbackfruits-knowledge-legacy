@@ -20,6 +20,8 @@ import * as Context from '../builder/context';
 import { FieldOfStudyType } from './field_of_study'
 import ResourceInterfaceType from './resource';
 
+const deirify = iri => iri.slice(1, iri.length - 1);
+
 export const EntityType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
   name: 'EntityType',
   builderType: 'graphql',
@@ -31,6 +33,15 @@ export const EntityType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectTy
       },
       resolve(source, args, context, info) {
         return source.id;
+      }
+    },
+    type: {
+      type: GraphQLString,
+      build(builder, args, path) {
+        return builder;
+      },
+      resolve(source, args, context, info) {
+        return deirify(Context.Knowledge.Entity);
       }
     },
     fieldsOfStudy: {
