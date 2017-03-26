@@ -17,6 +17,8 @@ import { BuilderObjectType } from '../builder';
 import { GraphQLBuilder } from '../builder/graphql';
 import * as Context from '../builder/context';
 
+import EntityType from './entity';
+
 
 export const FieldOfStudyType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
   name: 'FieldOfStudyType',
@@ -56,6 +58,19 @@ export const FieldOfStudyType: BuilderObjectType<GraphQLBuilder> = new BuilderOb
       },
       resolve(source, args, context, info) {
         return source.image;
+      }
+    },
+    entities: {
+      type: new GraphQLList(EntityType),
+      build(builder, args, path) {
+        let entities = new GraphQLBuilder(Context.sameAs);
+
+        builder.find({ entities });
+
+        return entities;
+      },
+      resolve(source, args, context, info) {
+        return [].concat(source.entities);
       }
     },
     parents: {

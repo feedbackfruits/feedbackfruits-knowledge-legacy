@@ -9,7 +9,8 @@ import { BuilderInterfaceType } from '../../builder';
 import { GraphQLBuilder } from '../../builder/graphql';
 import * as Context from '../../builder/context';
 
-import FieldOfStudyType from '../field_of_study';
+import EntityType from '../entity';
+import TopicType from '../topic';
 
 import VideoResourceType from './video';
 
@@ -65,19 +66,32 @@ export const ResourceInterfaceType: BuilderInterfaceType<GraphQLBuilder> = new B
         return source.license;
       }
     },
-    // fieldsOfStudy: {
-    //   type: new GraphQLList(FieldOfStudyType),
-    //   build(builder, args, path) {
-    //     let fieldsOfStudy = new GraphQLBuilder(Context.about);
-    //
-    //     builder.find({ fieldsOfStudy });
-    //
-    //     return fieldsOfStudy;
-    //   },
-    //   resolve(source, args, context, info) {
-    //     return source.fieldsOfStudy !== null ? [].concat(source.fieldsOfStudy) : [];
-    //   }
-    // }
+    entities: {
+      type: new GraphQLList(EntityType),
+      build(builder, args, path) {
+        let entities = new GraphQLBuilder(Context.about);
+
+        builder.find({ entities });
+
+        return entities;
+      },
+      resolve(source, args, context, info) {
+        return source.entities !== null ? [].concat(source.entities) : [];
+      }
+    },
+    topics: {
+      type: new GraphQLList(TopicType),
+      build(builder, args, path) {
+        let topics = new GraphQLBuilder(Context.Knowledge.topic);
+
+        builder.find({ topics });
+
+        return topics;
+      },
+      resolve(source, args, context, info) {
+        return source.topics !== null ? [].concat(source.topics) : [];
+      }
+    }
   })
 });
 

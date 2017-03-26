@@ -9,6 +9,9 @@ import { BuilderObjectType } from '../../builder';
 import { GraphQLBuilder } from '../../builder/graphql';
 import * as Context from '../../builder/context';
 
+import EntityType from '../entity';
+import TopicType from '../topic';
+
 import { ResourceInterfaceType } from '.';
 
 export const VideoResourceType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
@@ -59,6 +62,32 @@ export const VideoResourceType: BuilderObjectType<GraphQLBuilder> = new BuilderO
       },
       resolve(source, args, context, info) {
         return source.license;
+      }
+    },
+    entities: {
+      type: new GraphQLList(EntityType),
+      build(builder, args, path) {
+        let entities = new GraphQLBuilder(Context.about);
+
+        builder.find({ entities });
+
+        return entities;
+      },
+      resolve(source, args, context, info) {
+        return source.entities !== null ? [].concat(source.entities) : [];
+      }
+    },
+    topics: {
+      type: new GraphQLList(TopicType),
+      build(builder, args, path) {
+        let topics = new GraphQLBuilder(Context.Knowledge.topic);
+
+        builder.find({ topics });
+
+        return topics;
+      },
+      resolve(source, args, context, info) {
+        return source.topics !== null ? [].concat(source.topics) : [];
       }
     }
   })

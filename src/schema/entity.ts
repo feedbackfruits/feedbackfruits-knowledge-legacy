@@ -1,53 +1,62 @@
 import {
   graphql,
+  GraphQLSchema,
+  GraphQLEnumType,
   GraphQLList,
+  GraphQLObjectType,
   GraphQLString,
+  GraphQLObjectTypeConfig,
+  GraphQLField,
+  GraphQLFieldMap,
+  GraphQLFieldConfigMap,
+  GraphQLFieldConfig,
+  Thunk
 } from 'graphql';
 
 import { BuilderObjectType } from '../builder';
-import { SparQLBuilder } from '../builder/sparql';
+import { GraphQLBuilder } from '../builder/graphql';
 import * as Context from '../builder/context';
 
+import { FieldOfStudyType } from './field_of_study'
+import ResourceInterfaceType from './resource';
 
-export const EntityType: BuilderObjectType<SparQLBuilder> = new BuilderObjectType<SparQLBuilder>({
+export const EntityType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
   name: 'EntityType',
-  builderType: 'sparql',
+  builderType: 'graphql',
   fields: () => ({
     id: {
       type: GraphQLString,
       build(builder, args, path) {
-        return builder;
-        // return builder.find(Context.SparQL.ID);
+        return builder.find(Context.GraphQL.ID);
       },
       resolve(source, args, context, info) {
-        return source.uri;
+        return source.id;
       }
     },
-    name: {
-      type: GraphQLString,
+    fieldsOfStudy: {
+      type: new GraphQLList(FieldOfStudyType),
       build(builder, args, path) {
-        return builder.find(Context.SparQL.NAME);
+        let fieldsOfStudy = new GraphQLBuilder(`${Context.sameAs} @rev`);
+
+        builder.find({ fieldsOfStudy });
+
+        return fieldsOfStudy;
       },
       resolve(source, args, context, info) {
-        return source.name;
+        return source.fieldsOfStudy !== null ? [].concat(source.fieldsOfStudy) : [];
       }
     },
-    description: {
-      type: GraphQLString,
+    resources: {
+      type: new GraphQLList(ResourceInterfaceType),
       build(builder, args, path) {
-        return builder.find(Context.SparQL.DESCRIPTION);
+        let resources = new GraphQLBuilder(`${Context.about} @rev`);
+
+        builder.find({ resources });
+
+        return resources;
       },
       resolve(source, args, context, info) {
-        return source.description;
-      }
-    },
-    image: {
-      type: GraphQLString,
-      build(builder, args, path) {
-        return builder.find(Context.SparQL.IMAGE);
-      },
-      resolve(source, args, context, info) {
-        return source.image;
+        return source.resources !== null ? [].concat(source.resources) : [];
       }
     }
   })

@@ -8,7 +8,8 @@ import {
 } from 'graphql';
 
 import { FieldOfStudyType } from './field_of_study';
-import { EntityType } from './entity';
+import { TopicType } from './topic';
+import EntityType from './entity';
 import { ResourceInterfaceType } from './resource';
 import { VideoResourceType } from './resource/video';
 
@@ -54,27 +55,49 @@ export const Schema = new GraphQLSchema({
           return cayley(query).then((res: any) => res.nodes);
         }
       },
+      topic: {
+        type: TopicType,
+        args: {
+          id: {
+            type: GraphQLString,
+          }
+        },
+
+        build(builder: GraphQLBuilder, { id, name }, path) {
+          return builder.filter({ id: `<${id}>` });
+
+          // let topic = new GraphQLBuilder(`${Context.Knowledge.Topic} @rev`);
+          //
+          // builder.find({ topic });
+
+          // return builder;
+        },
+        resolve(source, { }, context, info) {
+          let { operation: node, parentType: type } = info;
+          let base = new GraphQLBuilder('nodes',);
+          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'topic');
+          let query = `{ ${builder.toString()} }`;
+          // debugger;
+          return cayley(query).then((res: any) => res.nodes);
+        }
+      },
       entity: {
         type: EntityType,
         args: {
           id: {
             type: GraphQLString,
-          },
-          name: {
-            type: GraphQLString
           }
         },
 
-        build(builder, { id }, path) {
-          let uri = id;
-          return new SparQLBuilder(uri);
+        build(builder: GraphQLBuilder, { id, name }, path) {
+          return builder.filter({ id: `<${id}>` });
         },
         resolve(source, { }, context, info) {
           let { operation: node, parentType: type } = info;
-          let builder = build(node, <BuilderObjectType<SparQLBuilder>>type, null, 'entity');
-          let { mapping } = builder;
-          let query = builder.toString();
-          return dbpedia(query, mapping);
+          let base = new GraphQLBuilder('nodes',);
+          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'entity');
+          let query = `{ ${builder.toString()} }`;
+          return cayley(query).then((res: any) => res.nodes);
         }
       },
       resources: {
