@@ -1,100 +1,71 @@
 import {
-  graphql,
-  GraphQLSchema,
-  GraphQLEnumType,
   GraphQLList,
-  GraphQLObjectType,
   GraphQLString,
-  GraphQLObjectTypeConfig,
-  GraphQLField,
-  GraphQLFieldMap,
-  GraphQLFieldConfigMap,
-  GraphQLFieldConfig,
-  Thunk
 } from 'graphql';
 
-import { BuilderObjectType } from '../builder';
-import { GraphQLBuilder } from '../builder/graphql';
 import * as Context from '../builder/context';
 
-import EntityType from './entity';
+import { BuilderObjectType } from '../builder';
+import { buildAttribute, buildRelationship, GraphQLBuilder } from '../builder/graphql';
 
+import { EntityType } from './entity';
 
 export const FieldOfStudyType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
-  name: 'FieldOfStudyType',
+  name: 'FieldOfStudy',
   builderType: 'graphql',
   fields: () => ({
     id: {
       type: GraphQLString,
-      build(builder, args, path) {
-        return builder.find(Context.GraphQL.ID);
-      },
+      build: buildAttribute('id', Context.GraphQL.ID),
       resolve(source, args, context, info) {
         return source.id;
       }
     },
+    type: {
+      type: GraphQLString,
+      build: buildAttribute('type', Context.GraphQL.TYPE),
+      resolve(source, args, context, info) {
+        return source.type;
+      }
+    },
     name: {
       type: GraphQLString,
-      build(builder, args, path) {
-        return builder.find(Context.GraphQL.NAME);
-      },
+      build: buildAttribute('name', Context.GraphQL.NAME),
       resolve(source, args, context, info) {
         return source.name;
       }
     },
     description: {
       type: GraphQLString,
-      build(builder, args, path) {
-        return builder.find(Context.GraphQL.DESCRIPTION);
-      },
+      build: buildAttribute('description', Context.GraphQL.DESCRIPTION),
       resolve(source, args, context, info) {
         return source.description;
       }
     },
     image: {
       type: GraphQLString,
-      build(builder, args, path) {
-        return builder.find(Context.GraphQL.IMAGE);
-      },
+      build: buildAttribute('image', Context.GraphQL.IMAGE),
       resolve(source, args, context, info) {
         return source.image;
       }
     },
     entities: {
       type: new GraphQLList(EntityType),
-      build(builder, args, path) {
-        let entities = new GraphQLBuilder(Context.sameAs);
-
-        builder.find({ entities });
-
-        return entities;
-      },
+      build: buildRelationship('entities', Context.sameAs),
       resolve(source, args, context, info) {
         return [].concat(source.entities);
       }
     },
     parents: {
       type: new GraphQLList(FieldOfStudyType),
-      build(builder, args, path) {
-        let parents = new GraphQLBuilder(Context.AcademicGraph.parentFieldOfStudy);
-
-        builder.find({ parents });
-
-        return parents;
-      },
+      build: buildRelationship('parents', Context.AcademicGraph.parentFieldOfStudy),
       resolve(source, args, context, info) {
         return source.parents !== null ? [].concat(source.parents) : [];
       }
         },
     children: {
       type: new GraphQLList(FieldOfStudyType),
-      build(builder, args, path) {
-        let children = new GraphQLBuilder(Context.AcademicGraph.childFieldOfStudy);
-
-        builder.find({ children });
-
-        return children;
-      },
+      build: buildRelationship('children', Context.AcademicGraph.childFieldOfStudy),
       resolve(source, args, context, info) {
         return source.children !== null ? [].concat(source.children) : [];
       }

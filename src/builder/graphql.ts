@@ -1,4 +1,12 @@
-import { mapTypeAndSelections, BuilderFn, BuilderField, BuilderUnit, BuilderObjectType } from './index';
+import {
+  build,
+  mapTypeAndSelections,
+  BuilderFn,
+  BuilderField,
+  BuilderUnit,
+  BuilderObjectType,
+  FieldType
+} from './index';
 
 import {
   GraphQLList,
@@ -7,6 +15,8 @@ import {
 } from 'graphql';
 
 import * as Context from './context';
+import cayley from '../cayley';
+
 
 export type GraphQLArgs = { [key: string]: any };
 export type GraphQLBuilderFn = BuilderFn<GraphQLBuilder>;
@@ -15,6 +25,49 @@ export interface GraphQLUnit<TSource, TContext> extends BuilderUnit<TSource, TCo
   args: GraphQLArgs
   path: Array<string>,
 };
+
+const irify = (str) => `<${str}>`;
+
+export const buildAttribute = (key: string, edge: any): GraphQLBuilderFn => (builder: GraphQLBuilder, args) => {
+  return builder.find(edge);
+}
+
+export const buildRelationship = (key: string, edge: any): GraphQLBuilderFn => (builder: GraphQLBuilder, args) => {
+  let newBuilder = new GraphQLBuilder(edge);
+
+  builder.find({ [key]: newBuilder });
+
+  return newBuilder;
+}
+
+export const buildRootType = (key: FieldType, type: string) => (builder: GraphQLBuilder, args, path) => {
+  builder.filter({ id: type });
+  let mapped = Object.keys(args)
+      .map(k => {
+        if (k === 'id') return { [k]: args[k] instanceof Array ? args[k].map(irify) : irify(args[k]) };
+        else if (k === 'offset') return { offset: args[k] };
+        else if (k === 'first') return { first: args[k] };
+        return { [Context[k]]: `"${args[k]}"`}
+      })
+      .reduce((memo, value) => Object.assign(memo, value), {});
+
+  let newBuilder = new GraphQLBuilder(`${Context.type}`);
+
+  newBuilder.directive({ name: 'rev', args: [] });
+  newBuilder.filter(Object.assign({ first: 10 }, mapped));
+
+  builder.find({ [key]: newBuilder });
+
+  return newBuilder;
+};
+
+export const resolveRootType = (key: FieldType, plural = false) => (source, args, context, info) => {
+  let { operation: node, parentType: type } = info;
+  let base = new GraphQLBuilder('nodes',);
+  let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, key);
+  let query = `{ ${builder.toString()} }`;
+  return cayley(query).then((res: any) => plural ? [].concat(res.nodes[key]) : res.nodes[key]);
+}
 
 export function buildGraphQL<TSource, TContext>(unit: GraphQLUnit<TSource, TContext>): GraphQLBuilder {
   let { field, builder, args, path, selections } = unit;
@@ -72,7 +125,7 @@ export class GraphQLBuilder {
 
   toString() {
     let stringifyArray = (arr) => arr.length ? `(${ stringifyObject(arr.reduce((memo, x) => Object.assign(memo, x), {})) })` : '';
-    let stringifyObject = (obj) => Object.keys(obj).map(key => `${key}: ${obj[key]}`);
+    let stringifyObject = (obj) => Object.keys(obj).map(key => `${key}: ${obj[key] instanceof Array ? JSON.stringify(obj[key]) : obj[key]}`);
 
     let filterString = stringifyArray(this._filter);
 

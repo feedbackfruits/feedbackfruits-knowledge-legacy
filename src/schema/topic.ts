@@ -1,125 +1,78 @@
 import {
   graphql,
-  GraphQLSchema,
-  GraphQLEnumType,
   GraphQLList,
-  GraphQLObjectType,
   GraphQLString,
-  GraphQLObjectTypeConfig,
-  GraphQLField,
-  GraphQLFieldMap,
-  GraphQLFieldConfigMap,
-  GraphQLFieldConfig,
-  Thunk
 } from 'graphql';
 
 import { BuilderObjectType } from '../builder';
-import { GraphQLBuilder } from '../builder/graphql';
+import { buildAttribute, buildRelationship, GraphQLBuilder } from '../builder/graphql';
 import * as Context from '../builder/context';
 
 import ResourceType from './resource';
 
 export const TopicType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectType<GraphQLBuilder>({
-  name: 'TopicType',
+  name: 'Topic',
   builderType: 'graphql',
   fields: () => ({
     id: {
       type: GraphQLString,
-      build(builder, args, path) {
-        return builder.find(Context.GraphQL.ID);
-      },
+      build: buildAttribute('id', Context.GraphQL.ID),
       resolve(source, args, context, info) {
         return source.id;
       }
     },
     name: {
       type: GraphQLString,
-      build(builder, args, path) {
-        return builder.find(Context.GraphQL.NAME);
-      },
+      build: buildAttribute('name', Context.GraphQL.NAME),
       resolve(source, args, context, info) {
         return source.name;
       }
     },
     type: {
       type: GraphQLString,
-      build(builder, args, path) {
-        return builder.find(Context.GraphQL.TYPE);
-      },
+      build: buildAttribute('type', Context.GraphQL.TYPE),
       resolve(source, args, context, info) {
         return source.type;
       }
     },
     description: {
       type: GraphQLString,
-      build(builder, args, path) {
-        return builder.find(Context.GraphQL.DESCRIPTION);
-      },
+      build: buildAttribute('description', Context.GraphQL.DESCRIPTION),
       resolve(source, args, context, info) {
         return source.description;
       }
     },
     parents: {
       type: new GraphQLList(TopicType),
-      build(builder, args, path) {
-        let parents = new GraphQLBuilder(Context.Knowledge.parent);
-
-        builder.find({ parents });
-
-        return parents;
-      },
+      build: buildRelationship('parents', Context.Knowledge.parent),
       resolve(source, args, context, info) {
         return source.parents !== null ? [].concat(source.parents) : [];
       }
         },
     children: {
       type: new GraphQLList(TopicType),
-      build(builder, args, path) {
-        let children = new GraphQLBuilder(Context.Knowledge.child);
-
-        builder.find({ children });
-
-        return children;
-      },
+      build: buildRelationship('children', Context.Knowledge.child),
       resolve(source, args, context, info) {
         return source.children !== null ? [].concat(source.children) : [];
       }
     },
     successors: {
       type: new GraphQLList(TopicType),
-      build(builder, args, path) {
-        let successors = new GraphQLBuilder(Context.Knowledge.next);
-
-        builder.find({ successors });
-
-        return successors;
-      },
+      build: buildRelationship('successors', Context.Knowledge.next),
       resolve(source, args, context, info) {
         return source.successors !== null ? [].concat(source.successors) : [];
       }
     },
     predecessors: {
       type: new GraphQLList(TopicType),
-      build(builder, args, path) {
-        let predecessors = new GraphQLBuilder(Context.Knowledge.previous);
-
-        builder.find({ predecessors });
-
-        return predecessors;
-      },
+      build: buildRelationship('predecessors', Context.Knowledge.previous),
       resolve(source, args, context, info) {
         return source.predecessors !== null ? [].concat(source.predecessors) : [];
       }
     },
     resources: {
         type: new GraphQLList(ResourceType),
-        build(builder, args, path) {
-          let resources = new GraphQLBuilder(Context.Knowledge.resource);
-
-          builder.find({ resources });
-
-          return resources;
-        },
+        build: buildRelationship('resources', Context.Knowledge.resource),
         resolve(source, args, context, info) {
           return source.resources !== null ? [].concat(source.resources) : [];
         }

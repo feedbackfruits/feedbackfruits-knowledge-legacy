@@ -3,28 +3,33 @@ import {
   GraphQLSchema,
   GraphQLList,
   GraphQLObjectType,
+  GraphQLInt,
   GraphQLString,
   FieldNode
 } from 'graphql';
 
+import * as Context from '../builder/context';
+
+import { build, BuilderObjectType, FieldType } from '../builder';
+import { GraphQLBuilder, buildRootType, resolveRootType } from '../builder/graphql';
+
 import { FieldOfStudyType } from './field_of_study';
 import { TopicType } from './topic';
-import EntityType from './entity';
+import { EntityType }  from './entity';
 import { ResourceInterfaceType } from './resource';
 import { VideoResourceType } from './resource/video';
 
-import { build, BuilderObjectType } from '../builder';
-import { GraphQLBuilder } from '../builder/graphql';
-import { SparQLBuilder } from '../builder/sparql';
-
-import * as Context from '../builder/context';
-
 import cayley from '../cayley';
-import dbpedia from '../dbpedia';
 
 export const Schema = new GraphQLSchema({
-  query: new BuilderObjectType<GraphQLBuilder | SparQLBuilder>({
-    name: 'RootQueryType',
+  types: [
+    FieldOfStudyType,
+    TopicType,
+    EntityType,
+    VideoResourceType
+  ],
+  query: new BuilderObjectType<GraphQLBuilder>({
+    name: 'RootQuery',
     fields: {
       fieldOfStudy: {
         type: FieldOfStudyType,
@@ -33,139 +38,134 @@ export const Schema = new GraphQLSchema({
             type: GraphQLString,
           },
           name: {
-            type: GraphQLString
+            type: GraphQLString,
           }
         },
-
-        build(builder: GraphQLBuilder, { id, name }, path) {
-          if (id != null && name == null) return builder.filter({ id: `<${id}>` });
-
-          let fieldOfStudy = new GraphQLBuilder(`${Context.name} @rev`);
-
-          builder.filter({ id: name });
-          builder.find({ fieldOfStudy });
-
-          return fieldOfStudy;
-        },
-        resolve(source, { }, context, info) {
-          let { operation: node, parentType: type } = info;
-          let base = new GraphQLBuilder('nodes',);
-          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'fieldOfStudy');
-          let query = `{ ${builder.toString()} }`;
-          return cayley(query).then((res: any) => res.nodes);
-        }
+        build: buildRootType('fieldOfStudy', Context.AcademicGraph.FieldOfStudy),
+        resolve: resolveRootType('fieldOfStudy')
       },
       topic: {
         type: TopicType,
         args: {
           id: {
             type: GraphQLString,
-          }
-        },
-
-        build(builder: GraphQLBuilder, { id, name }, path) {
-          return builder.filter({ id: `<${id}>` });
-
-          // let topic = new GraphQLBuilder(`${Context.Knowledge.Topic} @rev`);
-          //
-          // builder.find({ topic });
-
-          // return builder;
-        },
-        resolve(source, { }, context, info) {
-          let { operation: node, parentType: type } = info;
-          let base = new GraphQLBuilder('nodes',);
-          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'topic');
-          let query = `{ ${builder.toString()} }`;
-          // debugger;
-          return cayley(query).then((res: any) => res.nodes);
-        }
-      },
-      entity: {
-        type: EntityType,
-        args: {
-          id: {
+          },
+          name: {
             type: GraphQLString,
           }
         },
-
-        build(builder: GraphQLBuilder, { id, name }, path) {
-          return builder.filter({ id: `<${id}>` });
-        },
-        resolve(source, { }, context, info) {
-          let { operation: node, parentType: type } = info;
-          let base = new GraphQLBuilder('nodes',);
-          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'entity');
-          let query = `{ ${builder.toString()} }`;
-          return cayley(query).then((res: any) => res.nodes);
-        }
+        build: buildRootType('topic', Context.Knowledge.Topic),
+        resolve: resolveRootType('topic')
       },
+      // entity: {
+      //   type: EntityType,
+      //   args: {
+      //     id: {
+      //       type: GraphQLString,
+      //     }
+      //   },
+      //   build: buildRootType('entity', Context.Knowledge.Entity),
+      //   resolve: resolveRootType('entity')
+      // },
       resource: {
-        type: ResourceInterfaceType,
+        type: FieldOfStudyType,
         args: {
           id: {
             type: GraphQLString,
+          },
+          name: {
+            type: GraphQLString,
           }
         },
+        build: buildRootType('resource', Context.Knowledge.Resource),
+        resolve: resolveRootType('resource')
+      },
 
+      fieldsOfStudy: {
+        type: new GraphQLList(FieldOfStudyType),
+        args: {
+          id: {
+            type: new GraphQLList(GraphQLString),
+          },
+          name: {
+            type: new GraphQLList(GraphQLString),
+          },
+          first: {
+            type: GraphQLInt
+          },
+          offset: {
+            type: GraphQLInt
+          }
+        },
+        build: buildRootType('fieldsOfStudy', Context.AcademicGraph.FieldOfStudy),
+        resolve: resolveRootType('fieldsOfStudy', true)
+      },
+      topics: {
+        type: new GraphQLList(TopicType),
+        args: {
+          id: {
+            type: new GraphQLList(GraphQLString),
+          },
+          name: {
+            type: new GraphQLList(GraphQLString),
+          },
+          first: {
+            type: GraphQLInt
+          },
+          offset: {
+            type: GraphQLInt
+          }
+        },
+        build: buildRootType('topics', Context.Knowledge.Topic),
+        resolve: resolveRootType('topics', true)
+      },
+      entities: {
+        type: new GraphQLList(EntityType),
+        args: {
+          id: {
+            type: new GraphQLList(GraphQLString),
+          },
+          name: {
+            type: new GraphQLList(GraphQLString),
+          },
+          first: {
+            type: GraphQLInt
+          },
+          offset: {
+            type: GraphQLInt
+          }
+        },
+        // build: buildRootType('entities', Context.Knowledge.Entity),
+        // resolve: resolveRootType('entities', true)
         build(builder: GraphQLBuilder, { id, name }, path) {
           return builder.filter({ id: `<${id}>` });
         },
         resolve(source, { }, context, info) {
           let { operation: node, parentType: type } = info;
           let base = new GraphQLBuilder('nodes',);
-          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'resource');
+          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'entities');
           let query = `{ ${builder.toString()} }`;
-          return cayley(query).then((res: any) => res.nodes);
+          return cayley(query).then((res: any) => [].concat(res.nodes));
         }
       },
       resources: {
         type: new GraphQLList(ResourceInterfaceType),
         args: {
+          id: {
+            type: new GraphQLList(GraphQLString),
+          },
+          name: {
+            type: new GraphQLList(GraphQLString),
+          },
+          first: {
+            type: GraphQLInt
+          },
+          offset: {
+            type: GraphQLInt
+          }
         },
-        build(builder: GraphQLBuilder, { }, path) {
-          builder.filter({ id: Context.Knowledge.Resource });
-
-          let resources = new GraphQLBuilder(`${Context.type}`);
-
-          resources.directive({ name: 'rev', args: [] });
-          resources.filter({ first: 10 });
-
-          builder.find({ resources });
-
-          return resources;
-        },
-        resolve(source, args, context, info) {
-          let { operation: node, parentType: type } = info;
-          let base = new GraphQLBuilder('nodes',);
-          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'resources');
-          let query = `{ ${builder.toString()} }`;
-          return cayley(query).then((res: any) => res.nodes.resources);
-        }
-      },
-      videos: {
-        type: new GraphQLList(VideoResourceType),
-        args: {
-        },
-        build(builder: GraphQLBuilder, { }, path) {
-          builder.filter({ id: Context.Knowledge.Resource });
-
-          let videos = new GraphQLBuilder(`${Context.type}`);
-
-          videos.directive({ name: 'rev', args: [] });
-          videos.filter({ first: 10 });
-
-          builder.find({ videos });
-
-          return videos;
-        },
-        resolve(source, args, context, info) {
-          let { operation: node, parentType: type } = info;
-          let base = new GraphQLBuilder('nodes',);
-          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'videos');
-          let query = `{ ${builder.toString()} }`;
-          return cayley(query).then((res: any) => res.nodes.videos);
-        }
+        build: buildRootType('resources', Context.Knowledge.Resource),
+        resolve: resolveRootType('resources', true)
       }
     }
   })

@@ -10,6 +10,7 @@ export const author = '<http://schema.org/author>';
 export const about = '<http://schema.org/about>';
 export const citation = '<http://schema.org/citation>';
 export const CreativeWork = '<http://schema.org/CreativeWork>';
+export const VideoObject = '<http://schema.org/VideoObject>';
 export const Person = '<http://schema.org/Person>';
 export const ReadAction = '<http://schema.org/ReadAction>';
 export const WriteAction = '<http://schema.org/WriteAction>';
