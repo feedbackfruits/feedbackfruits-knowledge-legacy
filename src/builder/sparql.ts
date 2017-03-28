@@ -6,8 +6,6 @@ import {
   OperationDefinitionNode
 } from 'graphql';
 
-import Query = require('graphql-query-builder');
-
 import * as Context from './context';
 
 export type SparQLArgs = { [key: string]: any };
