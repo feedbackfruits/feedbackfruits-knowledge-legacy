@@ -18,7 +18,7 @@ export const graph: GizmoBuilder = client.g;
 import * as Context from './context';
 
 export module Morphisms {
-  export const topic = (key: string = 'topic') => graph.M()
+  export const fieldOfStudy = (key: string = 'fieldOfStudy') => graph.M()
     .Save(Context.name, `${key}_name`)
     .Save(Context.image, `${key}_image`)
     .Tag(`${key}_id`)

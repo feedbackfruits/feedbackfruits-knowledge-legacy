@@ -4,9 +4,11 @@ import {
   GraphQLArgument,
   GraphQLEnumType,
   GraphQLList,
+  GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLString,
   GraphQLObjectTypeConfig,
+  GraphQLInterfaceTypeConfig,
   GraphQLField,
   GraphQLFieldMap,
   GraphQLFieldConfigMap,
@@ -15,6 +17,7 @@ import {
   FieldNode,
   ArgumentNode,
   StringValueNode,
+  ListValueNode,
   OperationDefinitionNode
 } from 'graphql';
 
@@ -23,7 +26,24 @@ import { buildGraphQL, GraphQLBuilder } from './graphql';
 import { buildSparQL, SparQLBuilder } from './sparql';
 
 export interface BuilderFn<TBuilder> {
-  (builder: TBuilder, args: { [argName: string]: any }, path: Array<string>): TBuilder
+  (builder: TBuilder, args: { [argName: string]: any }, path?: Array<string>): TBuilder
+}
+
+export class BuilderInterfaceType<TBuilder> extends GraphQLInterfaceType {
+  public builderType: BuilderType;
+
+  constructor(config: BuilderInterfaceTypeConfig<any, any, TBuilder>) {
+    super(config);
+    this.builderType = config.builderType;
+  }
+  // getFields(): BuilderFieldMap<any, any, TBuilder> {
+  //   return <BuilderFieldMap<any, any, TBuilder>> super.getFields();
+  // }
+}
+
+export interface BuilderInterfaceTypeConfig<TSource, TContext, TBuilder> extends GraphQLInterfaceTypeConfig<TSource, TContext> {
+  builderType?: BuilderType
+  fields: Thunk<BuilderFieldConfigMap<TSource, TContext, TBuilder>>
 }
 
 export class BuilderObjectType<TBuilder> extends GraphQLObjectType {
@@ -63,11 +83,18 @@ export interface BuilderUnit<TSource, TContext, TBuilder> {
   selections: Array<FieldNode>
 }
 
+export const buildNoop = () => (builder, args) => builder;
+
 export function mapArguments(args) {
   return args.reduce((memo, arg: ArgumentNode) => {
     let { name: { value: name } } = arg;
-    let { value } = (<StringValueNode>arg.value);
+    let value;
+
+    if ((arg.value.kind) === 'ListValue') value = (<ListValueNode>arg.value).values.map(value => (<StringValueNode>value).value);
+    else value = (<StringValueNode>arg.value).value;
+
     memo[name] = value;
+
     return memo;
   }, {});
 }
@@ -89,7 +116,9 @@ export function mapTypeAndSelections<TBuilder>(type: BuilderObjectType<TBuilder>
 }
 
 export type BuilderType = 'graphql' | 'sparql';
-export type FieldType = 'topic' | 'entity';
+export type FieldType =
+  'fieldOfStudy' | 'topic' | 'entity' | 'resource' |
+  'fieldsOfStudy' | 'topics' | 'entities' | 'resources';
 export function build<TBuilder>(node: OperationDefinitionNode | FieldNode, type: BuilderObjectType<TBuilder>, builder: TBuilder, fieldName: FieldType): TBuilder {
   let mapped = mapTypeAndSelections<TBuilder>(type, <Array<FieldNode>>node.selectionSet.selections).map(x => {
     let {
@@ -123,7 +152,9 @@ export function build<TBuilder>(node: OperationDefinitionNode | FieldNode, type:
     return unit.field.name === fieldName;
   });
 
-  if ((<any>unit.field.type).builderType === 'graphql') return <any>buildGraphQL(<any>unit);
-  if ((<any>unit.field.type).builderType === 'sparql') return <any>buildSparQL(<any>unit);
-  throw new Error(`Invalid builder type: ${type.builderType}`)
+  let fieldType = unit.field.type instanceof GraphQLList ? unit.field.type.ofType : unit.field.type;
+
+  if (fieldType.builderType === 'graphql') return <any>buildGraphQL(<any>unit);
+  if (fieldType.builderType === 'sparql') return <any>buildSparQL(<any>unit);
+  throw new Error(`Invalid builder type: ${fieldType.builderType}`)
 }

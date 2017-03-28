@@ -3,26 +3,47 @@ import {
   GraphQLSchema,
   GraphQLList,
   GraphQLObjectType,
+  GraphQLInt,
   GraphQLString,
   FieldNode
 } from 'graphql';
 
-import { TopicType } from './topic';
-import { EntityType } from './entity';
-
-import { build, BuilderObjectType } from '../builder';
-import { GraphQLBuilder } from '../builder/graphql';
-import { SparQLBuilder } from '../builder/sparql';
-
 import * as Context from '../builder/context';
 
+import { build, BuilderObjectType, FieldType } from '../builder';
+import { GraphQLBuilder, buildRootType, resolveRootType } from '../builder/graphql';
+
+import { FieldOfStudyType } from './field_of_study';
+import { TopicType } from './topic';
+import { EntityType }  from './entity';
+import { ResourceInterfaceType } from './resource';
+import { VideoResourceType } from './resource/video';
+
 import cayley from '../cayley';
-import dbpedia from '../dbpedia';
 
 export const Schema = new GraphQLSchema({
-  query: new BuilderObjectType<GraphQLBuilder | SparQLBuilder>({
-    name: 'RootQueryType',
+  types: [
+    FieldOfStudyType,
+    TopicType,
+    EntityType,
+    VideoResourceType
+  ],
+  query: new BuilderObjectType<GraphQLBuilder>({
+    name: 'RootQuery',
     fields: {
+      fieldOfStudy: {
+        type: FieldOfStudyType,
+        args: {
+          id: {
+            type: GraphQLString,
+          },
+          name: {
+            type: GraphQLString,
+          }
+        },
+        build: buildRootType('fieldOfStudy', Context.AcademicGraph.FieldOfStudy),
+        resolve: resolveRootType('fieldOfStudy')
+      },
       topic: {
         type: TopicType,
         args: {
@@ -30,50 +51,121 @@ export const Schema = new GraphQLSchema({
             type: GraphQLString,
           },
           name: {
-            type: GraphQLString
+            type: GraphQLString,
           }
         },
-
-        build(builder: GraphQLBuilder, { id, name }, path) {
-          let topic = new GraphQLBuilder(`${Context.name} @rev`);
-
-          if (id) builder.filter({ id });
-          if (name) builder.filter({ id: name });
-
-          builder.find({ topic });
-
-          return topic;
-        },
-        resolve(source, { }, context, info) {
-          let { operation: node, parentType: type } = info;
-          let base = new GraphQLBuilder('nodes',);
-          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'topic');
-          let query = builder.toString();
-          return cayley(query).then((res: any) => res.nodes.topic);
-        }
+        build: buildRootType('topic', Context.Knowledge.Topic),
+        resolve: resolveRootType('topic')
       },
-      entity: {
-        type: EntityType,
+      // entity: {
+      //   type: EntityType,
+      //   args: {
+      //     id: {
+      //       type: GraphQLString,
+      //     }
+      //   },
+      //   build: buildRootType('entity', Context.Knowledge.Entity),
+      //   resolve: resolveRootType('entity')
+      // },
+      resource: {
+        type: FieldOfStudyType,
         args: {
           id: {
             type: GraphQLString,
           },
           name: {
-            type: GraphQLString
+            type: GraphQLString,
           }
         },
+        build: buildRootType('resource', Context.Knowledge.Resource),
+        resolve: resolveRootType('resource')
+      },
 
-        build(builder, { id }, path) {
-          let uri = id;
-          return new SparQLBuilder(uri);
+      fieldsOfStudy: {
+        type: new GraphQLList(FieldOfStudyType),
+        args: {
+          id: {
+            type: new GraphQLList(GraphQLString),
+          },
+          name: {
+            type: new GraphQLList(GraphQLString),
+          },
+          first: {
+            type: GraphQLInt
+          },
+          offset: {
+            type: GraphQLInt
+          }
+        },
+        build: buildRootType('fieldsOfStudy', Context.AcademicGraph.FieldOfStudy),
+        resolve: resolveRootType('fieldsOfStudy', true)
+      },
+      topics: {
+        type: new GraphQLList(TopicType),
+        args: {
+          id: {
+            type: new GraphQLList(GraphQLString),
+          },
+          name: {
+            type: new GraphQLList(GraphQLString),
+          },
+          first: {
+            type: GraphQLInt
+          },
+          offset: {
+            type: GraphQLInt
+          }
+        },
+        build: buildRootType('topics', Context.Knowledge.Topic),
+        resolve: resolveRootType('topics', true)
+      },
+      entities: {
+        type: new GraphQLList(EntityType),
+        args: {
+          id: {
+            type: new GraphQLList(GraphQLString),
+          },
+          name: {
+            type: new GraphQLList(GraphQLString),
+          },
+          first: {
+            type: GraphQLInt
+          },
+          offset: {
+            type: GraphQLInt
+          }
+        },
+        // build: buildRootType('entities', Context.Knowledge.Entity),
+        // resolve: resolveRootType('entities', true)
+        build(builder: GraphQLBuilder, { id, name }, path) {
+          return builder.filter({ id: `<${id}>` });
         },
         resolve(source, { }, context, info) {
           let { operation: node, parentType: type } = info;
-          let builder = build(node, <BuilderObjectType<SparQLBuilder>>type, null, 'entity');
-          let { mapping } = builder;
-          let query = builder.toString();
-          return dbpedia(query, mapping);
+          let base = new GraphQLBuilder('nodes',);
+          let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, 'entities');
+          let query = `{ ${builder.toString()} }`;
+          return cayley(query).then((res: any) => [].concat(res.nodes));
         }
+      },
+      resources: {
+        type: new GraphQLList(ResourceInterfaceType),
+        args: {
+          id: {
+            type: new GraphQLList(GraphQLString),
+          },
+          name: {
+            type: new GraphQLList(GraphQLString),
+          },
+          first: {
+            type: GraphQLInt
+          },
+          offset: {
+            type: GraphQLInt
+          }
+        },
+        build: buildRootType('resources', Context.Knowledge.Resource),
+        resolve: resolveRootType('resources', true)
       }
     }
   })

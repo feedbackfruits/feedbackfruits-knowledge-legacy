@@ -10,9 +10,25 @@ export const author = '<http://schema.org/author>';
 export const about = '<http://schema.org/about>';
 export const citation = '<http://schema.org/citation>';
 export const CreativeWork = '<http://schema.org/CreativeWork>';
+export const VideoObject = '<http://schema.org/VideoObject>';
 export const Person = '<http://schema.org/Person>';
 export const ReadAction = '<http://schema.org/ReadAction>';
 export const WriteAction = '<http://schema.org/WriteAction>';
+
+export module Knowledge {
+  export const Topic = '<https://knowledge.express/Topic>';
+  export const next = '<https://knowledge.express/next>';
+  export const previous = '<https://knowledge.express/previous>';
+  export const child = '<https://knowledge.express/child>';
+  export const parent = '<https://knowledge.express/parent>';
+  export const resource = '<https://knowledge.express/resource>';
+
+  export const Resource = '<https://knowledge.express/Resource>';
+  export const topic = '<https://knowledge.express/topic>';
+  export const entity = '<https://knowledge.express/entity>';
+
+  export const Entity = '<https://knowledge.express/Entity>';
+}
 
 export module DBPedia {
   export const label = 'http://www.w3.org/2000/01/rdf-schema#label';
@@ -24,9 +40,11 @@ export module DBPedia {
 export module GraphQL {
   export const ID = 'id';
   export const NAME = { name: `${name} @opt` };
+  export const TYPE = { type: `${type} @opt` };
   export const DESCRIPTION = { description: `${description} @opt` };
   export const IMAGE = { image: `${image} @opt` };
   export const LICENSE = { license: `${license} @opt` };
+  export const SAME_AS = { sameAs: `${sameAs} @opt` };
 }
 
 export module SparQL {

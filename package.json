@@ -9,7 +9,7 @@
     "start": "node dist",
     "test": "NODE_ENV=test npm run dist && nyc tap -R tap test/index.js",
     "coverage": "nyc report --reporter=text-lcov | codecov",
-    "watch": "tsc -w & nodemon dist"
+    "watch": "nodemon dist"
   },
   "author": "",
   "license": "ISC",
@@ -33,7 +33,6 @@
     "express-graphql": "^0.6.3",
     "flat": "^2.0.1",
     "graphql": "^0.9.1",
-    "graphql-query-builder": "^1.0.7",
     "jsonld": "^0.4.11",
     "memux": "^0.2.0",
     "morgan": "^1.8.0",
