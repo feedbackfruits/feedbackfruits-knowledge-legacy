@@ -40,6 +40,27 @@ export const EntityType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectTy
         return deirify(Context.Knowledge.Entity);
       }
     },
+    name: {
+      type: GraphQLString,
+      build: buildAttribute('name', Context.GraphQL.NAME),
+      resolve(source, args, context, info) {
+        return source.name;
+      }
+    },
+    description: {
+      type: GraphQLString,
+      build: buildAttribute('description', Context.GraphQL.DESCRIPTION),
+      resolve(source, args, context, info) {
+        return source.description;
+      }
+    },
+    image: {
+      type: GraphQLString,
+      build: buildAttribute('image', Context.GraphQL.IMAGE),
+      resolve(source, args, context, info) {
+        return source.image;
+      }
+    },
     fieldsOfStudy: {
       type: new GraphQLList(FieldOfStudyType),
       build: buildRelationship('fieldsOfStudy', `${Context.sameAs} @rev`),
