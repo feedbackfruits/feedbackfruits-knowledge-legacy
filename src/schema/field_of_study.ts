@@ -35,20 +35,6 @@ export const FieldOfStudyType: BuilderObjectType<GraphQLBuilder> = new BuilderOb
         return source.name;
       }
     },
-    description: {
-      type: GraphQLString,
-      build: buildAttribute('description', Context.GraphQL.DESCRIPTION),
-      resolve(source, args, context, info) {
-        return source.description;
-      }
-    },
-    image: {
-      type: GraphQLString,
-      build: buildAttribute('image', Context.GraphQL.IMAGE),
-      resolve(source, args, context, info) {
-        return source.image;
-      }
-    },
     entities: {
       type: new GraphQLList(EntityType),
       build: buildRelationship('entities', Context.sameAs),
