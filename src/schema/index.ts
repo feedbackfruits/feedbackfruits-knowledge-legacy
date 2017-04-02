@@ -68,7 +68,7 @@ export const Schema = new GraphQLSchema({
         resolve: resolveRootType('entity')
       },
       resource: {
-        type: FieldOfStudyType,
+        type: ResourceInterfaceType,
         args: {
           id: {
             type: GraphQLString,
