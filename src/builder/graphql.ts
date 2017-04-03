@@ -32,10 +32,12 @@ export const buildAttribute = (key: string, edge: any): GraphQLBuilderFn => (bui
   return builder.find(edge);
 }
 
-export const buildRelationship = (key: string, edge: any): GraphQLBuilderFn => (builder: GraphQLBuilder, args) => {
+export const buildRelationship = (key: string, edge: any, directive = null, filter = null): GraphQLBuilderFn => (builder: GraphQLBuilder, args) => {
   let newBuilder = new GraphQLBuilder(edge);
 
   builder.find({ [key]: newBuilder });
+  if (directive != null) newBuilder.directive(directive);
+  if (filter != null) newBuilder.filter(filter);
 
   return newBuilder;
 }

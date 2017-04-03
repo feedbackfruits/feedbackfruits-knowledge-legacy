@@ -70,7 +70,7 @@ export const EntityType: BuilderObjectType<GraphQLBuilder> = new BuilderObjectTy
     },
     resources: {
       type: new GraphQLList(ResourceInterfaceType),
-      build: buildRelationship('resources', `${Context.about} @rev`),
+      build: buildRelationship('resources', `${Context.about}`, { name: 'rev', args: [] },{ [Context.type]: Context.Knowledge.Resource }),
       resolve(source, args, context, info) {
         return source.resources !== null ? [].concat(source.resources) : [];
       }
