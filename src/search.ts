@@ -1,9 +1,9 @@
 import fetch from 'node-fetch';
 
-var log = console.log.bind(console);
-var deirify = iri => iri.slice(1, iri.length - 1);
+const log = console.log.bind(console);
+const deirify = iri => iri.slice(1, iri.length - 1);
 
-var Context = {
+const Context = {
   Knowledge: {
     Topic: 'https://knowledge.express/Topic',
     Resource: 'https://knowledge.express/Resource',
@@ -11,13 +11,13 @@ var Context = {
   }
 };
 
-var RootFields = {
+const RootFields = {
   [Context.Knowledge.Topic]: 'topic',
   [Context.Knowledge.Resource]: 'resource',
   [Context.Knowledge.Entity]: 'entity'
 };
 
-var Edges = {
+const Edges = {
   [Context.Knowledge.Topic]: {
     children: 0.5,
     parents: 0.5,
@@ -34,13 +34,13 @@ var Edges = {
   }
 };
 
-var Attributes = {
+const Attributes = {
   [Context.Knowledge.Topic]: ['name', 'description']
 };
 
-var threshold = 0.05;
+const threshold = 0.05;
 
-var get = (done = {}, query) => {
+const get = (done = {}, query) => {
   if(query in done) return done[query];
   return done[query] = fetch('http://localhost:4000/?', {
     method: 'POST',
@@ -57,12 +57,12 @@ const matchTypes = {
   [Context.Knowledge.Entity]: true,
 }
 
-var match = document => {
+const match = document => {
   return document.type in matchTypes;
 };
 
 
-var go = ({ done = {}, results = [], score = 1 } = {}, { id, type }) => {
+const go = ({ done = {}, results = [], score = 1 } = {}, { id, type }) => {
   if (score < threshold) return Promise.resolve({ done, results, score });
   if (!id || !type) return Promise.resolve({ done, results, score });
 
@@ -96,7 +96,7 @@ var go = ({ done = {}, results = [], score = 1 } = {}, { id, type }) => {
 
     return Promise.all(Object.entries(edges).map(([edge, penalty]) => {
       return Promise.all(document[edge].map(object => {
-        let newScore = score * penalty;
+        let newScore = score * <number>penalty;
 
         console.log(`Scoring object: ${JSON.stringify(object)}`);
         if (object.type === Context.Knowledge.Entity) {
@@ -132,8 +132,8 @@ function formatResults(results) {
 }
 
 export async function search(query) {
-  // var id = "https://www.youtube.com/watch?v=IY8BXNFgnyI";
-  var type = Context.Knowledge.Entity;
+  // const id = "https://www.youtube.com/watch?v=IY8BXNFgnyI";
+  const type = Context.Knowledge.Entity;
 
   console.log(`Searching for "${query}"`);
   const results = await go({}, { id: query, type }).then(({results}) => formatResults(results)); // .then(log);

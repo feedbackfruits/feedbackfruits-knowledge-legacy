@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "es2017",
         "module": "commonjs",
         "moduleResolution": "node",
         "isolatedModules": false,
@@ -15,7 +15,11 @@
         "noLib": false,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true,
-        "outDir": "dist"
+        "outDir": "dist",
+        "lib": [
+            "es2017",
+            "dom"
+        ]
     },
     "filesGlob": [
       "src/**/*.ts"
