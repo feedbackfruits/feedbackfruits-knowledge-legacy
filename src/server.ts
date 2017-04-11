@@ -5,6 +5,7 @@ import * as graphqlHTTP from 'express-graphql';
 
 import Schema from './schema';
 
+import { search } from './search';
 import Elasticsearch from './elasticsearch';
 
 export function create() {
@@ -36,6 +37,11 @@ export function create() {
     Elasticsearch(query).then(results => {
       res.json(results).end();
     }).catch(err => res.status(500).json(err).end());
+  });
+
+  server.get('/search', async (req, res) => {
+    let { query, text, files, media } = req.query;
+    res.json({ results: await search(query) }).end();
   });
 
   server.all('/', graphqlHTTP({
