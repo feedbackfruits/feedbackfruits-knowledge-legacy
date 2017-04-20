@@ -39,15 +39,25 @@ export function create() {
     }).catch(err => res.status(500).json(err).end());
   });
 
-  server.get('/search', async (req, res) => {
-    let { query, text, files, media } = req.query;
-    res.json({ results: await search(query) }).end();
+  server.get('/search', async (req, res, next) => {
+    let { entities } = req.query;
+    return search(entities || [])
+      .then(results => {
+        res.json({ results }).end();
+      }).catch(next);
   });
 
   server.all('/', graphqlHTTP({
     schema: Schema,
     graphiql: true
   }));
+
+  server.use((error, req, res, next) => {
+    if (error instanceof Error) {
+      console.error(error);
+      res.status(400).json({ error: error.toString() }).end();
+    }
+  });
 
   return server;
 }

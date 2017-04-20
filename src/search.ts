@@ -1,4 +1,5 @@
-import fetch from 'node-fetch';
+import Schema from './schema';
+import { graphql } from 'graphql';
 
 const log = console.log.bind(console);
 const deirify = iri => iri.slice(1, iri.length - 1);
@@ -35,20 +36,15 @@ const Edges = {
 };
 
 const Attributes = {
-  [Context.Knowledge.Topic]: ['name', 'description']
+  [Context.Knowledge.Topic]: ['name', 'description'],
+  [Context.Knowledge.Entity]: ['name', 'description']
 };
 
 const threshold = 0.05;
 
 const get = (done = {}, query) => {
   if(query in done) return done[query];
-  return done[query] = fetch('http://localhost:4000/?', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ query })
-  }).then(response => response.json());
+  return done[query] = graphql(Schema, query);
 };
 
 
@@ -77,6 +73,8 @@ const go = ({ done = {}, results = [], score = 1 } = {}, { id, type }) => {
       ${rootField}(id: "${id}") {
         id,
         type,
+        name,
+        description,
         ${attributes.join(",\n")},
         ${Object.keys(edges).map(edge => `${edge} { id, type }`).join(",\n")}
       }
@@ -120,24 +118,35 @@ const go = ({ done = {}, results = [], score = 1 } = {}, { id, type }) => {
 function formatResults(results) {
   return Object.entries(results.reduce((memo, {score, document}) => {
     if (document.id in memo) {
-      memo[document.id] = memo[document.id] + score;
+      memo[document.id] = { score: memo[document.id].score + score, document };
     } else {
-      memo[document.id] = score;
+      memo[document.id] = { score, document };
     }
 
     return memo;
-  }, {})).sort(([aId, aScore], [bId, bScore]) => {
+  }, {})).sort(([aId, { score: aScore }], [bId, { score: bScore } ]) => {
     return aScore > bScore ? -1 : 1;
+  }).map(([id, { score, document }]) => {
+    return {
+      id,
+      score,
+      type: document.type,
+      name: document.name,
+      description: document.description
+    }
   });
 }
 
-export async function search(query) {
-  // const id = "https://www.youtube.com/watch?v=IY8BXNFgnyI";
-  const type = Context.Knowledge.Entity;
+function combineResults(results, otherResults) {
+  return [].concat(results, otherResults);
+}
 
-  console.log(`Searching for "${query}"`);
-  const results = await go({}, { id: query, type }).then(({results}) => formatResults(results)); // .then(log);
-  return [].concat(results);
+export async function search(entities) {
+  const results = await Promise.all(entities.map(id => {
+    return go({}, { id, type: Context.Knowledge.Entity}).then(({results}) => results);
+  }));
+
+  return formatResults(results.reduce(combineResults, []));
 }
 
 export default search;
