@@ -48,7 +48,7 @@ export const FieldOfStudyType: BuilderObjectType<GraphQLBuilder> = new BuilderOb
       resolve(source, args, context, info) {
         return source.parents !== null ? [].concat(source.parents) : [];
       }
-        },
+    },
     children: {
       type: new GraphQLList(FieldOfStudyType),
       build: buildRelationship('children', Context.AcademicGraph.childFieldOfStudy),

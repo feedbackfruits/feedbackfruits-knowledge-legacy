@@ -48,3 +48,33 @@ g.V()
 	.Save("<http://schema.org/name>", "child_name")
 	.All()
 ```
+
+```gremlin
+graph.V("<http://dbpedia.org/resource/Mathematics>")
+	.ForEach(function(d) {
+      g.V(d.id)
+      	.Out("<http://schema.org/name>")
+      	.ForEach(function(e) {
+          if (e.id === 'd') { g.Emit(e) }
+          else { g.Emit("Nope!") }
+          })
+    })
+```
+
+```gremlin
+graph.V("<http://dbpedia.org/resource/Mathematics>")
+	.ForEach(function(d) {
+      depth = 1
+
+      function doThings(c, type, predicate, depth) {
+
+        (type === 'in' ? c.In : c.Out)(predicate).ForEach(function(e) {
+          g.Emit(e.id);
+          if (depth === 0) return;
+   		  doThings(this, 'out', "<http://schema.org/about>", depth - 1);
+        })
+      }
+
+      doThings(this, 'in', "<http://schema.org/about>", depth);
+    })
+```
