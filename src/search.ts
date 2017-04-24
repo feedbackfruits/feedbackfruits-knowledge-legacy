@@ -4,6 +4,8 @@ import { graphql } from 'graphql';
 const log = console.log.bind(console);
 const deirify = iri => iri.slice(1, iri.length - 1);
 
+const globalDone = {};
+
 const Context = {
   Knowledge: {
     Topic: 'https://knowledge.express/Topic',
@@ -31,7 +33,7 @@ const Edges = {
     entities: 0.1
   },
   [Context.Knowledge.Entity]: {
-    resources: 0.1
+    resources: 0.7
   }
 };
 
@@ -40,7 +42,7 @@ const Attributes = {
   [Context.Knowledge.Entity]: ['name', 'description']
 };
 
-const threshold = 0.05;
+const threshold = 0.7;
 
 const get = (done = {}, query) => {
   if(query in done) return done[query];
@@ -50,7 +52,7 @@ const get = (done = {}, query) => {
 
 const matchTypes = {
   [Context.Knowledge.Resource]: true,
-  [Context.Knowledge.Entity]: true,
+  // [Context.Knowledge.Entity]: true,
 }
 
 const match = document => {
@@ -142,8 +144,9 @@ function combineResults(results, otherResults) {
 }
 
 export async function search(entities) {
+  // const done = {};
   const results = await Promise.all(entities.map(id => {
-    return go({}, { id, type: Context.Knowledge.Entity}).then(({results}) => results);
+    return go(globalDone, { id, type: Context.Knowledge.Entity}).then(({results}) => results);
   }));
 
   return formatResults(results.reduce(combineResults, []));
