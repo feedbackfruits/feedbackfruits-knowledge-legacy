@@ -39,7 +39,8 @@ const Edges = {
 
 const Attributes = {
   [Context.Knowledge.Topic]: ['name', 'description'],
-  [Context.Knowledge.Entity]: ['name', 'description']
+  [Context.Knowledge.Entity]: ['name', 'description'],
+  [Context.Knowledge.Resource]: ['name', 'description', 'license']
 };
 
 const threshold = 0.7;
@@ -134,7 +135,8 @@ function formatResults(results) {
       score,
       type: document.type,
       name: document.name,
-      description: document.description
+      description: document.description,
+      license: document.license
     }
   });
 }
