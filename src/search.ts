@@ -30,7 +30,7 @@ const Edges = {
   },
   [Context.Knowledge.Resource]: {
     topics: 0.5,
-    entities: 0.1
+    entities: 0.2
   },
   [Context.Knowledge.Entity]: {
     resources: 0.7
@@ -136,7 +136,8 @@ function formatResults(results) {
       type: document.type,
       name: document.name,
       description: document.description,
-      license: document.license
+      license: document.license,
+      entities: document.entities
     }
   });
 }
