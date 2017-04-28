@@ -26,14 +26,22 @@ export function create() {
   server.get('/autocomplete', (req, res) => {
     let { text } = req.query;
     let query = `{
-      "size": 5,
-      "_source": "name",
-      "query": {
-        "match": {
-          "name": "${text}"
+    "size": 5,
+    "_source": "name",
+    "query": {
+         "function_score": {
+          "query": {
+            "multi_match": {
+              "query":    "${text}",
+              "fields": [ "name" ]
+            }
+          },
+          "field_value_factor": {
+            "field": "count"
+          }
         }
-      }
-    }`;
+    }
+}`;
     Elasticsearch(query).then(results => {
       res.json(results).end();
     }).catch(err => res.status(500).json(err).end());
