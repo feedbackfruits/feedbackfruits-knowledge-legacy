@@ -63,6 +63,13 @@ export const ResourceInterfaceType: BuilderInterfaceType<GraphQLBuilder> = new B
         return source.license;
       }
     },
+    sourceOrganization: {
+      type: GraphQLString,
+      build: buildAttribute('license', Context.GraphQL.SOURCE_ORGANIZATION),
+      resolve(source, args, context, info) {
+        return source.sourceOrganization;
+      }
+    },
     entities: {
       type: new GraphQLList(EntityType),
       build: buildRelationship('entities', Context.about),

@@ -78,3 +78,17 @@ graph.V("<http://dbpedia.org/resource/Mathematics>")
       doThings(this, 'in', "<http://schema.org/about>", depth);
     })
 ```
+
+
+```gremlin
+context = {}
+g.V()
+	.Has("<http://schema.org/sourceOrganization>")
+	.Out("<http://schema.org/sourceOrganization>")
+	//.Limit(10)
+	.ForEach(function(o){
+		context[o.id] = o.id
+    })
+
+g.Emit(context)
+```

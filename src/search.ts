@@ -30,7 +30,7 @@ const Edges = {
   },
   [Context.Knowledge.Resource]: {
     topics: 0.5,
-    entities: 0.2
+    entities: 0.3
   },
   [Context.Knowledge.Entity]: {
     resources: 0.7
@@ -40,7 +40,7 @@ const Edges = {
 const Attributes = {
   [Context.Knowledge.Topic]: ['name', 'description'],
   [Context.Knowledge.Entity]: ['name', 'description'],
-  [Context.Knowledge.Resource]: ['name', 'description', 'license']
+  [Context.Knowledge.Resource]: ['name', 'description', 'license', 'sourceOrganization']
 };
 
 const threshold = 0.7;
@@ -137,6 +137,7 @@ function formatResults(results) {
       name: document.name,
       description: document.description,
       license: document.license,
+      sourceOrganization: document.sourceOrganization,
       entities: document.entities
     }
   });

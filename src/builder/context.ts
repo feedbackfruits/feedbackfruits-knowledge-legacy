@@ -6,6 +6,7 @@ export const text = '<http://schema.org/text>';
 export const url = '<http://schema.org/url>';
 export const sameAs = '<http://schema.org/sameAs>';
 export const license = '<http://schema.org/license>';
+export const sourceOrganization = '<http://schema.org/sourceOrganization>';
 export const author = '<http://schema.org/author>';
 export const about = '<http://schema.org/about>';
 export const citation = '<http://schema.org/citation>';
@@ -22,7 +23,6 @@ export module Knowledge {
   export const child = '<https://knowledge.express/child>';
   export const parent = '<https://knowledge.express/parent>';
   export const resource = '<https://knowledge.express/resource>';
-
   export const Resource = '<https://knowledge.express/Resource>';
   export const topic = '<https://knowledge.express/topic>';
   export const entity = '<https://knowledge.express/entity>';
@@ -44,6 +44,7 @@ export module GraphQL {
   export const DESCRIPTION = { description: `${description} @opt` };
   export const IMAGE = { image: `${image} @opt` };
   export const LICENSE = { license: `${license} @opt` };
+  export const SOURCE_ORGANIZATION = { sourceOrganization: `${sourceOrganization} @opt` }
   export const SAME_AS = { sameAs: `${sameAs} @opt` };
 }
 
