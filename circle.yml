@@ -1,6 +1,9 @@
 machine:
   node:
-    version: 6.0.0
+    version: 8
+dependencies:
+  pre:
+    - npm install -g npm
 test:
   post:
     - npm run coverage
