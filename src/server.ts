@@ -1,18 +1,18 @@
-import * as express from 'express';
-import * as morgan from 'morgan';
-import * as cors   from 'cors';
-import * as graphqlHTTP from 'express-graphql';
+import * as cors from "cors";
+import * as express from "express";
+import * as graphqlHTTP from "express-graphql";
+import * as morgan from "morgan";
 
-import Schema from './schema';
+import Schema from "./schema";
 
-import { search } from './search';
-import Elasticsearch from './elasticsearch';
+import Elasticsearch from "./elasticsearch";
+import { search } from "./search";
 
 export function create() {
   const server = express();
 
   // Add morgan for logging
-  server.use(morgan('combined'));
+  server.use(morgan("combined"));
 
   // Allow CORS
   server.use(cors({
@@ -21,11 +21,11 @@ export function create() {
   }));
 
   // Disable favicon
-  server.get('/favicon.ico', (req, res, next) => res.status(404).end());
+  server.get("/favicon.ico", (req, res, next) => res.status(404).end());
 
-  server.get('/autocomplete', (req, res) => {
-    let { text } = req.query;
-    let query = `{
+  server.get("/autocomplete", (req, res) => {
+    const { text } = req.query;
+    const query = `{
     "size": 5,
     "_source": "name",
     "query": {
@@ -47,21 +47,22 @@ export function create() {
     }).catch(err => res.status(500).json(err).end());
   });
 
-  server.get('/search', async (req, res, next) => {
-    let { entities } = req.query;
+  server.get("/search", async (req, res, next) => {
+    const { entities } = req.query;
     return search(entities || [])
       .then(results => {
         res.json({ results }).end();
       }).catch(next);
   });
 
-  server.all('/', graphqlHTTP({
+  server.all("/", graphqlHTTP({
     schema: Schema,
     graphiql: true
   }));
 
   server.use((error, req, res, next) => {
     if (error instanceof Error) {
+      // tslint:disable-next-line no-console
       console.error(error);
       res.status(400).json({ error: error.toString() }).end();
     }

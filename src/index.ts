@@ -1,23 +1,25 @@
-import { PORT } from './config';
-import Server from './server';
-import Schema from './schema';
+import { PORT } from "./config";
+import Schema from "./schema";
+import Server from "./server";
+import * as Logger from "./utils/logger";
 
 // Start the server when executed directly
 declare const require: any;
 if (require.main === module) {
-  console.log('Running as script.');
+  Logger.log("Running as script.");
 
   // Create http server
-  let server = Server.create();
+  const server = Server.create();
 
-  console.log("Server started, listening on", PORT);
+  Logger.log("Server started, listening on", PORT);
   server.listen(PORT);
 
   // Export globally
-  global['Knowledge'] = module.exports;
+  // tslint:disable-next-line no-string-literal
+  global["Knowledge"] = module.exports;
 }
 
 export default {
   Server,
   Schema
-}
+};

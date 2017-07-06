@@ -1,34 +1,37 @@
-import { mapTypeAndSelections, BuilderFn, BuilderField, BuilderUnit, BuilderObjectType } from './index';
+import { BuilderFn, BuilderObjectType, IBuilderUnit, mapTypeAndSelections } from "./index";
 
 import {
-  GraphQLList,
   FieldNode,
+  GraphQLList,
   OperationDefinitionNode
-} from 'graphql';
+} from "graphql";
 
-import * as Context from './context';
+import * as Context from "./context";
 
-export type SparQLArgs = { [key: string]: any };
+export interface ISparQLArgs { [key: string]: any; }
 export type SparQLBuilderFn = BuilderFn<SparQLBuilder>;
-export interface SparQLUnit<TSource, TContext> extends BuilderUnit<TSource, TContext, SparQLBuilder> {
-  builder: SparQLBuilder,
-  args: SparQLArgs
-  path: Array<string>,
-};
+export interface ISparQLUnit<TSource, TContext> extends IBuilderUnit<TSource, TContext, SparQLBuilder> {
+  builder: SparQLBuilder;
+  args: ISparQLArgs;
+  path: string[];
+}
 
-export function buildSparQL<TSource, TContext>(unit: SparQLUnit<TSource, TContext>): SparQLBuilder {
-  let { field, builder, args, path, selections } = unit;
+export function buildSparQL<TSource, TContext>(unit: ISparQLUnit<TSource, TContext>): SparQLBuilder {
+  const { field, builder, args, path, selections } = unit;
 
-  let type = field.type instanceof GraphQLList ? field.type.ofType : field.type;
-  let newBuilder = field.build(builder, args, path);
+  const type = field.type instanceof GraphQLList ? field.type.ofType : field.type;
+  const newBuilder = field.build(builder, args, path);
 
-  if (selections.length === 0) return newBuilder;
+  if (selections.length === 0) {
+    return newBuilder;
+  }
+
   return mapTypeAndSelections<SparQLBuilder>(type, selections)
-    .reduce((newBuilder, { field: newField, name, args: newArgs, selections: newSelections }) => {
-    let newPath = [].concat(path, name);
-    let newUnit = {
+    .reduce((previousBuilder, { field: newField, name, args: newArgs, selections: newSelections }) => {
+    const newPath = [].concat(path, name);
+    const newUnit = {
       field: newField,
-      builder: newBuilder,
+      builder: previousBuilder,
       args: newArgs,
       path: newPath,
       selections: newSelections ? newSelections : []
@@ -39,26 +42,26 @@ export function buildSparQL<TSource, TContext>(unit: SparQLUnit<TSource, TContex
 }
 
 export class SparQLBuilder {
-  protected _uri: string;
   public mapping: {};
+  protected _URI: string;
 
   constructor(uri) {
-    this._uri = uri;
+    this._URI = uri;
     this.mapping = {};
   }
 
-  find(predicate) {
+  public find(predicate) {
     this.mapping = Object.assign(this.mapping, predicate);
     return this;
   }
 
-  toString() {
-    const uri = this._uri;
+  public toString() {
+    const uri = this._URI;
     const mapping = this.mapping;
 
-    const what = Object.keys(mapping).map(key => `?${key}`).join(' ') + ' ?uri';
+    const what = Object.keys(mapping).map(key => `?${key}`).join(" ") + " ?uri";
     const where = Object.keys(mapping).map(key => `OPTIONAL { ?uri <${mapping[key]}> ?${key} . }`).join("\n");
-    const filter = Object.keys(mapping).map(key => `(!isLiteral(?${key}) || lang(?${key}) = 'en')`).join(" && ");
+    const filter = Object.keys(mapping).map(key => `(!isLiteral(?${key}) || lang(?${key}) = "en")`).join(" && ");
 
     const query = `
       SELECT DISTINCT ${what} WHERE {
@@ -75,6 +78,5 @@ export class SparQLBuilder {
     `;
 
     return query;
-    // return `{ ${this.thunk()._query.toString()} }`;
   }
 }

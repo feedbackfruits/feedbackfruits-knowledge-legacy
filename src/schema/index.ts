@@ -1,25 +1,20 @@
 import {
-  graphql,
-  GraphQLSchema,
-  GraphQLList,
-  GraphQLObjectType,
   GraphQLInt,
-  GraphQLString,
-  FieldNode
-} from 'graphql';
+  GraphQLList,
+  GraphQLSchema,
+  GraphQLString
+} from "graphql";
 
-import * as Context from '../builder/context';
+import * as Context from "../builder/context";
 
-import { build, BuilderObjectType, FieldType } from '../builder';
-import { GraphQLBuilder, buildRootType, resolveRootType } from '../builder/graphql';
+import { BuilderObjectType } from "../builder";
+import { buildRootType, GraphQLBuilder, resolveRootType } from "../builder/graphql";
 
-import { FieldOfStudyType } from './field_of_study';
-import { TopicType } from './topic';
-import { EntityType }  from './entity';
-import { ResourceInterfaceType } from './resource';
-import { VideoResourceType } from './resource/video';
-
-import cayley from '../cayley';
+import { EntityType } from "./entity";
+import { FieldOfStudyType } from "./field_of_study";
+import { ResourceInterfaceType } from "./resource";
+import { VideoResourceType } from "./resource/video";
+import { TopicType } from "./topic";
 
 export const Schema = new GraphQLSchema({
   types: [
@@ -29,7 +24,7 @@ export const Schema = new GraphQLSchema({
     VideoResourceType
   ],
   query: new BuilderObjectType<GraphQLBuilder>({
-    name: 'RootQuery',
+    name: "RootQuery",
     fields: {
       fieldOfStudy: {
         type: FieldOfStudyType,
@@ -41,8 +36,8 @@ export const Schema = new GraphQLSchema({
             type: GraphQLString,
           }
         },
-        build: buildRootType('fieldOfStudy', Context.AcademicGraph.FieldOfStudy),
-        resolve: resolveRootType('fieldOfStudy')
+        build: buildRootType("fieldOfStudy", Context.AcademicGraph.FieldOfStudy),
+        resolve: resolveRootType("fieldOfStudy")
       },
       topic: {
         type: TopicType,
@@ -54,8 +49,8 @@ export const Schema = new GraphQLSchema({
             type: GraphQLString,
           }
         },
-        build: buildRootType('topic', Context.Knowledge.Topic),
-        resolve: resolveRootType('topic')
+        build: buildRootType("topic", Context.Knowledge.Topic),
+        resolve: resolveRootType("topic")
       },
       entity: {
         type: EntityType,
@@ -64,8 +59,8 @@ export const Schema = new GraphQLSchema({
             type: GraphQLString,
           }
         },
-        build: buildRootType('entity', Context.Knowledge.Entity),
-        resolve: resolveRootType('entity')
+        build: buildRootType("entity", Context.Knowledge.Entity),
+        resolve: resolveRootType("entity")
       },
       resource: {
         type: ResourceInterfaceType,
@@ -77,8 +72,8 @@ export const Schema = new GraphQLSchema({
             type: GraphQLString,
           }
         },
-        build: buildRootType('resource', Context.Knowledge.Resource),
-        resolve: resolveRootType('resource')
+        build: buildRootType("resource", Context.Knowledge.Resource),
+        resolve: resolveRootType("resource")
       },
 
       fieldsOfStudy: {
@@ -97,8 +92,8 @@ export const Schema = new GraphQLSchema({
             type: GraphQLInt
           }
         },
-        build: buildRootType('fieldsOfStudy', Context.AcademicGraph.FieldOfStudy),
-        resolve: resolveRootType('fieldsOfStudy', true)
+        build: buildRootType("fieldsOfStudy", Context.AcademicGraph.FieldOfStudy),
+        resolve: resolveRootType("fieldsOfStudy", true)
       },
       topics: {
         type: new GraphQLList(TopicType),
@@ -116,8 +111,8 @@ export const Schema = new GraphQLSchema({
             type: GraphQLInt
           }
         },
-        build: buildRootType('topics', Context.Knowledge.Topic),
-        resolve: resolveRootType('topics', true)
+        build: buildRootType("topics", Context.Knowledge.Topic),
+        resolve: resolveRootType("topics", true)
       },
       entities: {
         type: new GraphQLList(EntityType),
@@ -135,8 +130,8 @@ export const Schema = new GraphQLSchema({
             type: GraphQLInt
           }
         },
-        build: buildRootType('entities', Context.Knowledge.Entity),
-        resolve: resolveRootType('entities', true)
+        build: buildRootType("entities", Context.Knowledge.Entity),
+        resolve: resolveRootType("entities", true)
       },
       resources: {
         type: new GraphQLList(ResourceInterfaceType),
@@ -154,8 +149,8 @@ export const Schema = new GraphQLSchema({
             type: GraphQLInt
           }
         },
-        build: buildRootType('resources', Context.Knowledge.Resource),
-        resolve: resolveRootType('resources', true)
+        build: buildRootType("resources", Context.Knowledge.Resource),
+        resolve: resolveRootType("resources", true)
       }
     }
   })

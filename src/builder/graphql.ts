@@ -1,89 +1,106 @@
 import {
   build,
-  mapTypeAndSelections,
   BuilderFn,
-  BuilderField,
-  BuilderUnit,
   BuilderObjectType,
-  FieldType
-} from './index';
+  FieldType,
+  IBuilderUnit,
+  mapTypeAndSelections,
+} from "./index";
 
 import {
-  GraphQLList,
   FieldNode,
+  GraphQLList,
   OperationDefinitionNode
-} from 'graphql';
+} from "graphql";
 
-import * as Context from './context';
-import cayley from '../cayley';
+import cayley from "../cayley";
+import * as Context from "./context";
 
+export interface IGraphQLArgs { [key: string]: any; }
 
-export type GraphQLArgs = { [key: string]: any };
-export type GraphQLBuilderFn = BuilderFn<GraphQLBuilder>;
-export interface GraphQLUnit<TSource, TContext> extends BuilderUnit<TSource, TContext, GraphQLBuilder> {
-  builder: GraphQLBuilder,
-  args: GraphQLArgs
-  path: Array<string>,
-};
+export interface IGraphQLUnit<TSource, TContext> extends IBuilderUnit<TSource, TContext, GraphQLBuilder> {
+  builder: GraphQLBuilder;
+  args: IGraphQLArgs;
+  path: string[];
+}
 
 const irify = (str) => `<${str}>`;
 
-export const buildAttribute = (key: string, edge: any): GraphQLBuilderFn => (builder: GraphQLBuilder, args) => {
-  return builder.find(edge);
-}
-
-export const buildRelationship = (key: string, edge: any, directive = null, filter = null): GraphQLBuilderFn => (builder: GraphQLBuilder, args) => {
-  let newBuilder = new GraphQLBuilder(edge);
-
-  builder.find({ [key]: newBuilder });
-  if (directive != null) newBuilder.directive(directive);
-  if (filter != null) newBuilder.filter(filter);
-
-  return newBuilder;
-}
-
-export const buildRootType = (key: FieldType, type: string) => (builder: GraphQLBuilder, args, path) => {
-  builder.filter({ id: type });
-  let mapped = Object.keys(args)
-      .map(k => {
-        if (k === 'id') return { [k]: args[k] instanceof Array ? args[k].map(irify) : irify(args[k]) };
-        else if (k === 'offset') return { offset: args[k] };
-        else if (k === 'first') return { first: args[k] };
-        return { [Context[k]]: `"${args[k]}"`}
-      })
-      .reduce((memo, value) => Object.assign(memo, value), {});
-
-  let newBuilder = new GraphQLBuilder(`${Context.type}`);
-
-  newBuilder.directive({ name: 'rev', args: [] });
-  newBuilder.filter(Object.assign({ first: 10 }, mapped));
-
-  builder.find({ [key]: newBuilder });
-
-  return newBuilder;
+export const buildAttribute = (key: string, edge: any): BuilderFn<GraphQLBuilder> => {
+  return (builder: GraphQLBuilder, args) => {
+    return builder.find(edge);
+  };
 };
 
+export const buildRelationship =
+(key: string, edge: any, directive = null, filter = null): BuilderFn<GraphQLBuilder> => {
+  return (builder: GraphQLBuilder, args) => {
+    const newBuilder = new GraphQLBuilder(edge);
+
+    builder.find({ [key]: newBuilder });
+    if (directive != null) {
+      newBuilder.directive(directive);
+    }
+
+    if (filter != null) {
+      newBuilder.filter(filter);
+    }
+
+    return newBuilder;
+  };
+};
+
+export const buildRootType = (key: FieldType, type: string) => {
+  return (builder: GraphQLBuilder, args, path) => {
+    builder.filter({ id: type } as object);
+    const mapped = Object.keys(args)
+        .map(k => {
+          if (k === "id") {
+            return { [k]: args[k] instanceof Array ? args[k].map(irify) : irify(args[k]) };
+          } else if (k === "offset") {
+            return { offset: args[k] };
+          } else if (k === "first") {
+            return { first: args[k] };
+          }
+
+          return { [Context[k]]: `"${args[k]}"`};
+        })
+        .reduce((memo, value) => Object.assign(memo, value), {});
+
+    const newBuilder = new GraphQLBuilder(`${Context.type}`);
+
+    newBuilder.directive({ name: "rev", args: [] });
+    newBuilder.filter(Object.assign({ first: 10 }, mapped));
+
+    builder.find({ [key]: newBuilder });
+
+    return newBuilder;
+  };
+};
 export const resolveRootType = (key: FieldType, plural = false) => (source, args, context, info) => {
-  let { operation: node, parentType: type } = info;
-  let base = new GraphQLBuilder('nodes',);
-  let builder = build(node, <BuilderObjectType<GraphQLBuilder>>type, base, key);
-  let query = `{ ${builder.toString()} }`;
+  const { operation: node, parentType: type } = info;
+  const base = new GraphQLBuilder("nodes", );
+  const builder = build(node, type as BuilderObjectType<GraphQLBuilder>, base, key);
+  const query = `{ ${builder.toString()} }`;
   return cayley(query).then((res: any) => plural ? [].concat(res.nodes[key]) : res.nodes[key]);
-}
+};
 
-export function buildGraphQL<TSource, TContext>(unit: GraphQLUnit<TSource, TContext>): GraphQLBuilder {
-  let { field, builder, args, path, selections } = unit;
+export function buildGraphQL<TSource, TContext>(unit: IGraphQLUnit<TSource, TContext>): GraphQLBuilder {
+  const { field, builder, args, path, selections } = unit;
 
-  let type = field.type instanceof GraphQLList ? field.type.ofType : field.type;
-  let newBuilder = field.build(builder, args, path);
+  const type = field.type instanceof GraphQLList ? field.type.ofType : field.type;
+  const newBuilder = field.build(builder, args, path);
 
-  if (selections.length === 0) return newBuilder;
+  if (selections.length === 0) {
+    return newBuilder;
+  }
+
   mapTypeAndSelections<GraphQLBuilder>(type, selections)
-    .reduce((newBuilder, { field: newField, name, args: newArgs, selections: newSelections }) => {
-    let newPath = [].concat(path, name);
-    let newUnit = {
+    .reduce((previousBuilder, { field: newField, name, args: newArgs, selections: newSelections }) => {
+    const newPath = [].concat(path, name);
+    const newUnit = {
       field: newField,
-      builder: newBuilder,
+      builder: previousBuilder,
       args: newArgs,
       path: newPath,
       selections: newSelections ? newSelections : []
@@ -95,67 +112,77 @@ export function buildGraphQL<TSource, TContext>(unit: GraphQLUnit<TSource, TCont
   return builder;
 }
 
-export type GraphQLBuilderDirective = { name: string, args: Array<Object> };
+export interface IGraphQLBuilderDirective {
+  name: string;
+  args: object[];
+}
 
 export class GraphQLBuilder {
-  protected _name: string;
-  protected _filter: Array<Object>;
-  protected _find: Array<Object>;
-  protected _directives: Array<GraphQLBuilderDirective>;
+  protected _NAME: string;
+  protected _FILTER: object[];
+  protected _FIND: object[];
+  protected _DIRECTIVES: IGraphQLBuilderDirective[];
 
-  constructor(name: string, args: Object | Array<Object> = []) {
-    this._name = name;
-    this._filter = [].concat(args);
-    this._find = [];
-    this._directives = [];
+  constructor(name: string, args: object | object[] = []) {
+    this._NAME = name;
+    this._FILTER = [].concat(args);
+    this._FIND = [];
+    this._DIRECTIVES = [];
   }
 
-  filter(args: Object | Array<Object>) {
-    this._filter = [].concat(this._filter, args);
+  public filter(args: object | object[]) {
+    this._FILTER = [].concat(this._FILTER, args);
     return this;
   }
 
-  find(arg: Object) {
-    this._find.push(arg);
+  public find(arg: object) {
+    this._FIND.push(arg);
     return this;
   }
 
-  directive(directive: GraphQLBuilderDirective) {
-    this._directives.push(directive);
+  public directive(directive: IGraphQLBuilderDirective) {
+    this._DIRECTIVES.push(directive);
     return this;
   }
 
-  toString() {
-    let stringifyArray = (arr) => arr.length ? `(${ stringifyObject(arr.reduce((memo, x) => Object.assign(memo, x), {})) })` : '';
-    let stringifyObject = (obj) => Object.keys(obj).map(key => `${key}: ${obj[key] instanceof Array ? JSON.stringify(obj[key]) : obj[key]}`);
+  public toString() {
+    const stringifyArray = (arr) => {
+      return arr.length ? `(${ stringifyObject(arr.reduce((memo, x) => Object.assign(memo, x), {})) })` : "";
+    };
 
-    let filterString = stringifyArray(this._filter);
+    const stringifyObject = (obj) => {
+      return Object.keys(obj).map(key => `${key}: ${obj[key] instanceof Array ? JSON.stringify(obj[key]) : obj[key]}`);
+    };
 
-    let directivesString = this._directives.map(dir => {
-      let argsString = stringifyArray(dir.args);
+    const filterString = stringifyArray(this._FILTER);
+
+    const directivesString = this._DIRECTIVES.map(dir => {
+      const argsString = stringifyArray(dir.args);
       return `@${dir.name}${argsString}`;
-    }).join(' ');
+    }).join(" ");
 
-    let findString = this._find.map(arg => {
+    const findString = this._FIND.map(arg => {
         if (arg instanceof GraphQLBuilder) {
           return arg.toString();
         }
 
         if (arg instanceof Object) {
           return stringifyObject(Object.keys(arg).reduce((memo, key) => {
-            let value = arg[key];
+            const value = arg[key];
             if (value instanceof GraphQLBuilder) {
               memo[key] = value.toString();
+            } else {
+              memo[key] = value;
             }
-            else memo[key] = value;
+
             return memo;
           }, {}));
         }
 
         return arg;
-      }).join(',\n');
+      }).join(",\n");
 
-    return `${this._name}${filterString} ${directivesString}{
+    return `${this._NAME}${filterString} ${directivesString}{
       ${findString}
     }`;
   }

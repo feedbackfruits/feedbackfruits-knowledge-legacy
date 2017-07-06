@@ -1,23 +1,21 @@
-import Schema from './schema';
-import { graphql } from 'graphql';
-
-const log = console.log.bind(console);
-const deirify = iri => iri.slice(1, iri.length - 1);
+import { graphql } from "graphql";
+import Schema from "./schema";
+import * as Logger from "./utils/logger";
 
 const globalDone = {};
 
 const Context = {
   Knowledge: {
-    Topic: 'https://knowledge.express/Topic',
-    Resource: 'https://knowledge.express/Resource',
-    Entity: 'https://knowledge.express/Entity'
+    Topic: "https://knowledge.express/Topic",
+    Resource: "https://knowledge.express/Resource",
+    Entity: "https://knowledge.express/Entity"
   }
 };
 
 const RootFields = {
-  [Context.Knowledge.Topic]: 'topic',
-  [Context.Knowledge.Resource]: 'resource',
-  [Context.Knowledge.Entity]: 'entity'
+  [Context.Knowledge.Topic]: "topic",
+  [Context.Knowledge.Resource]: "resource",
+  [Context.Knowledge.Entity]: "entity"
 };
 
 const Edges = {
@@ -38,35 +36,43 @@ const Edges = {
 };
 
 const Attributes = {
-  [Context.Knowledge.Topic]: ['name', 'description'],
-  [Context.Knowledge.Entity]: ['name', 'description'],
-  [Context.Knowledge.Resource]: ['name', 'description', 'license', 'sourceOrganization']
+  [Context.Knowledge.Topic]: ["name", "description"],
+  [Context.Knowledge.Entity]: ["name", "description"],
+  [Context.Knowledge.Resource]: ["name", "description", "license", "sourceOrganization"]
 };
 
 const threshold = 0.7;
 
 const get = (done = {}, query) => {
-  if(query in done) return done[query];
+  if (query in done) {
+    return done[query];
+  }
+
   return done[query] = graphql(Schema, query);
 };
-
 
 const matchTypes = {
   [Context.Knowledge.Resource]: true,
   // [Context.Knowledge.Entity]: true,
-}
+};
 
 const match = document => {
   return document.type in matchTypes;
 };
 
-
 const go = ({ done = {}, results = [], score = 1 } = {}, { id, type }) => {
-  if (score < threshold) return Promise.resolve({ done, results, score });
-  if (!id || !type) return Promise.resolve({ done, results, score });
+  if (score < threshold) {
+    return Promise.resolve({ done, results, score });
+  }
+
+  if (!id || !type) {
+    return Promise.resolve({ done, results, score });
+  }
 
   const rootField = RootFields[type];
-  if (!rootField) return Promise.resolve({ done, results, score });
+  if (!rootField) {
+    return Promise.resolve({ done, results, score });
+  }
 
   const edges = Edges[type] || {};
   const attributes = Attributes[type] || [];
@@ -87,7 +93,9 @@ const go = ({ done = {}, results = [], score = 1 } = {}, { id, type }) => {
   return get(done, query).then(({data}) => {
     const document = data[rootField];
 
-    if (!document) return { done, results, score };
+    if (!document) {
+      return { done, results, score };
+    }
 
     if (match(document)) {
       results.push({
@@ -97,18 +105,17 @@ const go = ({ done = {}, results = [], score = 1 } = {}, { id, type }) => {
 
     return Promise.all(Object.entries(edges).map(([edge, penalty]) => {
       return Promise.all(document[edge].map(object => {
-        let newScore = score * <number>penalty;
+        let newScore = score * (penalty as number);
 
-        console.log(`Scoring object: ${JSON.stringify(object)}`);
+        Logger.log(`Scoring object: ${JSON.stringify(object)}`);
         if (object.type === Context.Knowledge.Entity) {
-          console.log(`Boosting by type ${object.type}`);
+          Logger.log(`Boosting by type ${object.type}`);
           newScore *= 2;
         }
-        if (object.id === 'http://dbpedia.org/resource/Statistics') {
-          console.log(`Boosting by id ${object.id}`);
+        if (object.id === "http://dbpedia.org/resource/Statistics") {
+          Logger.log(`Boosting by id ${object.id}`);
           newScore *= 2;
         }
-
 
         return go({ done, results, score: newScore }, object);
       }));
@@ -116,7 +123,7 @@ const go = ({ done = {}, results = [], score = 1 } = {}, { id, type }) => {
   }).then(() => {
     return { done, results, score };
   });
-}
+};
 
 function formatResults(results) {
   return Object.entries(results.reduce((memo, {score, document}) => {
@@ -139,7 +146,7 @@ function formatResults(results) {
       license: document.license,
       sourceOrganization: document.sourceOrganization,
       entities: document.entities
-    }
+    };
   });
 }
 
@@ -150,7 +157,7 @@ function combineResults(results, otherResults) {
 export async function search(entities) {
   // const done = {};
   const results = await Promise.all(entities.map(id => {
-    return go(globalDone, { id, type: Context.Knowledge.Entity}).then(({results}) => results);
+    return go(globalDone, { id, type: Context.Knowledge.Entity}).then(({ results: res }) => res);
   }));
 
   return formatResults(results.reduce(combineResults, []));
