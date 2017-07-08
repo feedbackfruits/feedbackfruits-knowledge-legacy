@@ -7,14 +7,12 @@
     "dist": "tsc",
     "prestart": "npm run dist",
     "start": "node dist",
-    "pretest": "npm run dist",
+    "pretest": "tsc --inlineSourceMap",
     "test": "nyc ava",
-    "posttest": "npm run coverage",
-    "coverage": "nyc report --reporter=text-lcov | codecov",
+    "coverage": "codecov",
     "watch": "nodemon dist"
   },
-  "nyc": {
-  },
+  "nyc": {},
   "ava": {
     "files": [
       "test/**/*.js"
