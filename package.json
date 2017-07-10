@@ -5,10 +5,12 @@
   "main": "dist/index.js",
   "scripts": {
     "dist": "tsc",
+    "clean": "rm -rf dist",
     "prestart": "npm run dist",
     "start": "node dist",
-    "pretest": "tsc --inlineSourceMap",
+    "pretest": "npm run clean && tsc --inlineSourceMap",
     "test": "nyc ava",
+    "watch-test": "nodemon -w test -x 'npm run test'",
     "coverage": "codecov",
     "watch": "nodemon dist"
   },
@@ -74,6 +76,7 @@
     "codecov": "^1.0.1",
     "nodemon": "^1.11.0",
     "nyc": "^11.0.3",
+    "supertest": "^3.0.0",
     "tap": "^5.7.0"
   },
   "engines": {

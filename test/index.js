@@ -1,1 +1,6 @@
-require('./schema');
+import test from 'ava';
+import App from '../dist';
+
+test('App - it exists', t => {
+  t.not(App, undefined);
+});
