@@ -19,7 +19,7 @@ dependencies:
 
     # Cayley
     - if [[ ! -e cayley_v0.6.1_linux_386 ]]; then wget https://github.com/cayleygraph/cayley/releases/download/v0.6.1/cayley_v0.6.1_linux_386.tar.gz && tar -xvf cayley_v0.6.1_linux_386.tar.gz; fi
-    - cd cayley_v0.6.1_linux_386 && ./cayley http --dbpath=./data/30kmoviedata.nq.gz --host 0.0.0.0 --port 64210: {background: true}
+    - cd cayley_v0.6.1_linux_386 && ./cayley http --dbpath=../seeds/cayley.nq --host 0.0.0.0 --port 64210: {background: true}
     - sleep 10 && wget --waitretry=5 --retry-connrefused -v http://127.0.0.1:64210/
 test:
   post:
