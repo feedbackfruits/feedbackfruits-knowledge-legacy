@@ -29,7 +29,7 @@ jobs:
       - run:
           name: Seed Cayley
           command: |
-            curl --fail -H "Content-Type: application/x-www-form-urlencoded" -XPOST --data-binary @seeds/cayley.nq localhost:64210/api/v1/write/file/nquad
+            curl --fail -H "Content-Type: multipart/form-data" -XPOST -F NQuadFile=@seeds/cayley.nq localhost:64210/api/v1/write/file/nquad
 
       - save_cache:
           paths:
