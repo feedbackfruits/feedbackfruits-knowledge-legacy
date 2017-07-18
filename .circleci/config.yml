@@ -1,0 +1,42 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/feedbackfruits-knowledge
+    docker:
+      - image: node:8
+        environment:
+          NODE_ENV: test
+      - image: elasticsearch:5-alpine
+        environment:
+          ES_JAVA_OPTS: -Xms512m -Xmx1024m
+      - image: quay.io/cayleygraph/cayley:latest
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - node_modules-{{ checksum "package.json" }}
+          - node_modules-
+
+      - run: yarn global add npm@5
+      - run: npm install
+
+      - run:
+          name: Seed Elasticsearch
+          command: |
+            curl --fail -H "Content-Type: application/x-ndjson" -XPOST --data-binary @seeds/elasticsearch.ndjson localhost:9200/_bulk
+
+      - run:
+          name: Seed Cayley
+          command: |
+            curl --fail -H "Content-Type: application/x-www-form-urlencoded" -XPOST --data-binary @seeds/cayley.nq localhost:64210/api/v1/write/file/nquad
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: node_modules-{{ checksum "package.json" }}
+
+      - run: npm test
+      - run: npm run coverage
+
+      - store_artifacts:
+          path: coverage
