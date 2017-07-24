@@ -4,7 +4,8 @@ import * as graphqlHTTP from "express-graphql";
 import * as morgan from "morgan";
 import * as Config from './config';
 
-import Schema from "./schema";
+// import Schema from "./schema";
+import Schema from "./semantic-schema";
 
 import Elasticsearch from "./elasticsearch";
 
