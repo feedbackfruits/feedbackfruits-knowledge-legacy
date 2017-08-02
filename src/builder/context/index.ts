@@ -1,31 +1,30 @@
-import { AcademicGraph, DBPedia, KhanAcademy, Knowledge } from "feedbackfruits-knowledge-context";
+export * from "feedbackfruits-knowledge-context";
 
-import * as GraphQL from "./graphql";
-import * as SparQL from "./sparql";
+import {
+  name,
+  type,
+  description,
+  image,
+  license,
+  sourceOrganization,
+  sameAs,
+  DBPedia
+} from "feedbackfruits-knowledge-context"
 
-export const type = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
-export const name = "<http://schema.org/name>";
-export const image = "<http://schema.org/image>";
-export const description = "<http://schema.org/description>";
-export const text = "<http://schema.org/text>";
-export const url = "<http://schema.org/url>";
-export const sameAs = "<http://schema.org/sameAs>";
-export const license = "<http://schema.org/license>";
-export const sourceOrganization = "<http://schema.org/sourceOrganization>";
-export const author = "<http://schema.org/author>";
-export const about = "<http://schema.org/about>";
-export const citation = "<http://schema.org/citation>";
-export const CreativeWork = "<http://schema.org/CreativeWork>";
-export const VideoObject = "<http://schema.org/VideoObject>";
-export const Person = "<http://schema.org/Person>";
-export const ReadAction = "<http://schema.org/ReadAction>";
-export const WriteAction = "<http://schema.org/WriteAction>";
+export module GraphQL {
+  export const ID = "id";
+  export const NAME = { name: `${name} @opt` };
+  export const TYPE = { type: `${type} @opt` };
+  export const DESCRIPTION = { description: `${description} @opt` };
+  export const IMAGE = { image: `${image} @opt` };
+  export const LICENSE = { license: `${license} @opt` };
+  export const SOURCE_ORGANIZATION = { sourceOrganization: `${sourceOrganization} @opt` };
+  export const SAME_AS = { sameAs: `${sameAs} @opt` };
+}
 
-export {
-  AcademicGraph,
-  DBPedia,
-  GraphQL,
-  KhanAcademy,
-  Knowledge,
-  SparQL,
-};
+export module SparQL {
+  export const ID = "id";
+  export const NAME = { name: DBPedia.label };
+  export const DESCRIPTION = { description: DBPedia.abstract };
+  export const IMAGE = { image: DBPedia.thumbnail };
+}
