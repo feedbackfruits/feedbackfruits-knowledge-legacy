@@ -1842,6 +1842,14 @@ fast-levenshtein@~2.0.4:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
 
+feedbackfruits-knowledge-context@feedbackfruits/feedbackfruits-knowledge-context:
+  version "1.0.0"
+  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-context/tar.gz/8a795df825260e1b5094f4ba60c5ce2a9465baca"
+  dependencies:
+    "@types/node" "^8.0.8"
+    tslint "^5.5.0"
+    typescript "^2.4.1"
+
 "feedbackfruits-knowledge-context@github:feedbackfruits/feedbackfruits-knowledge-context":
   version "1.0.0"
   resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-context/tar.gz/ad8b44bcc122ac6dc12b80bbe5b491456406bede"
