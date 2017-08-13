@@ -5,6 +5,7 @@ import {
 } from "./config";
 
 export function query(queryBody: string): Promise<Response> {
+  console.log(`Sending query to ${CAYLEY_ADDRESS} :`, queryBody);
   const url = `${CAYLEY_ADDRESS}api/v1/query/graphql`;
   return fetch(url, {
     method: "post",

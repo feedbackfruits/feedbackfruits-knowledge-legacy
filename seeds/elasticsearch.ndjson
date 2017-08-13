@@ -10,3 +10,5 @@
 {"id": "http://dbpedia.org/resource/General_knowledge","name": "General knowledge","count": 0}
 { "index": { "_index": "test_knowledge","_type": "entity","_id": "http://dbpedia.org/resource/Knowledge_economy" } }
 {"id": "http://dbpedia.org/resource/Knowledge_economy","name": "Knowledge economy","count": 0}
+{ "index": { "_index": "test_knowledge","_type": "resource","_id": "https://www.youtube.com/watch?v=j7WcgW4BpqE" } }
+{"license":"<http://creativecommons.org/licenses/by-nc-sa/3.0>","entities":[{"id":"http://dbpedia.org/resource/Agriculture"},{"id":"http://dbpedia.org/resource/Civilization"},{"id":"http://dbpedia.org/resource/History"},{"id":"http://dbpedia.org/resource/Knowledge"},{"id":"http://dbpedia.org/resource/Science"}],"name":"One Student of Big History","sourceOrganization":"KhanAcademy","description":"Did you know Bill Gates was a big history student? Here he explains why it's his favorite course of all time.","id":"https://www.youtube.com/watch?v=j7WcgW4BpqE","type":["http://schema.org/VideoObject","https://knowledge.express/Resource"]}

@@ -6,7 +6,6 @@ import * as morgan from "morgan";
 import Schema from "./schema";
 
 import Elasticsearch from "./elasticsearch";
-import { search } from "./search";
 
 export function create() {
   const server = express();
@@ -42,17 +41,44 @@ export function create() {
         }
     }
 }`;
-    Elasticsearch(query).then(results => {
+    Elasticsearch('entity', query).then(results => {
       res.json(results).end();
     }).catch(err => res.status(500).json(err).end());
   });
 
-  server.get("/search", async (req, res, next) => {
-    const { entities } = req.query;
-    return search(entities || [])
-      .then(results => {
-        res.json({ results }).end();
-      }).catch(next);
+  server.get("/search", (req, res) => {
+    const { entities = [], page = 1, pageSize = 10 } = req.query;
+    console.log('Searching for entities:', entities);
+    const from = ((page || 0) - 1) * pageSize;
+    const size = pageSize;
+
+    const query = `{
+    "from": ${from},
+    "size": ${size},
+    "_source": "entities.id",
+    "_source": [
+      "id",
+      "type",
+      "name",
+      "description",
+      "entities",
+      "license",
+      "sourceOrganization"
+    ],
+    "query": {
+        "terms": {
+           "entities.id": ${JSON.stringify(entities)}
+        }
+    }
+}`;
+    Elasticsearch('resource', query).then((results: any) => {
+      res.json({
+        results: results.map(result => ({
+          score: result._score,
+          ...result._source,
+        }))
+      }).end();
+    }).catch(err => res.status(500).json(err).end());
   });
 
   server.all("/", graphqlHTTP({

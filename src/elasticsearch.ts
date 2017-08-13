@@ -10,10 +10,11 @@ const client = new elasticsearch.Client( {
   apiVersion: "5.x"
 });
 
-export function query(queryBody: string): Promise<object[]> {
+export function query(type: string, queryBody: string): Promise<object[]> {
   return new Promise((resolve, reject) => {
     client.search({
       index: ELASTICSEARCH_INDEX_NAME,
+      type,
       body: queryBody
     }, (err, res) => {
       if (err) {
