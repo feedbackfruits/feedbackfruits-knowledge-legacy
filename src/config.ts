@@ -1,7 +1,6 @@
-import dotenv = require("dotenv");
-dotenv.load({ silent: true });
+require("dotenv").load({ silent: true });
 
-export const {
+const {
   PORT = 4000,
   CAYLEY_ADDRESS = "http://localhost:64210/",
   ELASTICSEARCH_ADDRESS = "http://localhost:9200",
@@ -11,3 +10,29 @@ export const {
   DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql",
   MAG_API_KEY
 } = process.env;
+
+const SEARCH_ORGANIZATIONS: string[] = 'SEARCH_ORGANIZATIONS' in process.env ? process.env.SEARCH_ORGANIZATIONS.split(',') : [
+  "KhanAcademy",
+  "Dynamics TU Delft",
+  "UCIrvineOCW",
+  "TU Delft Online Learning",
+  "OxfordSBS",
+  "UCBerkeley",
+  "UCLACourses",
+  "METUOpenCourseWare",
+  "MIT",
+  "Mathematics TU Delft",
+  "YaleCourses",
+];
+
+export {
+  PORT,
+  CAYLEY_ADDRESS,
+  ELASTICSEARCH_ADDRESS,
+  ELASTICSEARCH_INDEX_NAME,
+  MAG_API_ENDPOINT,
+  DBPEDIA_ENDPOINT,
+  DBPEDIA_SPARQL_ENDPOINT,
+  MAG_API_KEY,
+  SEARCH_ORGANIZATIONS,
+};

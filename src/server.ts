@@ -2,6 +2,7 @@ import * as cors from "cors";
 import * as express from "express";
 import * as graphqlHTTP from "express-graphql";
 import * as morgan from "morgan";
+import * as Config from './config';
 
 import Schema from "./schema";
 
@@ -53,22 +54,34 @@ export function create() {
     const size = pageSize;
 
     const query = `{
-    "from": ${from},
-    "size": ${size},
-    "_source": "entities.id",
-    "_source": [
-      "id",
-      "type",
-      "name",
-      "description",
-      "entities",
-      "license",
-      "sourceOrganization"
-    ],
-    "query": {
-        "terms": {
-           "entities.id": ${JSON.stringify(entities)}
+      "from": ${from},
+      "size": ${size},
+      "_source": "entities.id",
+      "_source": [
+        "id",
+        "type",
+        "name",
+        "description",
+        "entities",
+        "license",
+        "sourceOrganization"
+      ],
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "terms" : {
+                "entities.id": ${JSON.stringify(entities)}
+              }
+            },
+            {
+              "terms" : {
+                "sourceOrganization" : ${JSON.stringify(Config.SEARCH_ORGANIZATIONS)}
+              }
+            }
+          ]
         }
+      }
     }
 }`;
     Elasticsearch('resource', query).then((results: any) => {
