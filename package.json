@@ -1,6 +1,6 @@
 {
   "name": "feedbackfruits-knowledge",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "FeedbackFruits Knowledge server",
   "main": "dist/index.js",
   "scripts": {
