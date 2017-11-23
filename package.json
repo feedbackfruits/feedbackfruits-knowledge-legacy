@@ -63,6 +63,7 @@
     "graphql": "^0.10.5",
     "graphql-relay": "^0.5.2",
     "jsonld": "^0.4.12",
+    "md5": "^2.2.1",
     "memux": "^0.2.0",
     "morgan": "^1.8.2",
     "node-cayley": "^0.1.13",

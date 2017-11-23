@@ -1,31 +1,35 @@
 import * as DataLoader from 'dataloader';
+import md5 = require('md5');
 
 import cayley from "./cayley";
 
-const loader = new DataLoader<{ subject: string, predicate: string }, any>(async keys => {
-  console.log('I am a loader!', keys);
-  // return keys.map(({ subject, predicate }) => {
+export const encodeQuery = (query) => `_${md5(query)}`;
+
+export const loader = new DataLoader<string, any>(async queries => {
+  console.log('I am a loader!', queries);
+  // return queries.map(({ subject, predicate }) => {
   //   return {
   //     id: predicate
   //   }
   // })
 
-  const reduced = keys.reduce((memo, { subject, predicate }) => {
-    return { ...memo, [subject]: [ ...(memo[subject] || []), predicate ] }
-  }, {});
+  // const reduced = queries.reduce((memo, { subject, predicate, reverse }) => {
+  //   return { ...memo, [subject]: [ ...(memo[subject] || []), reverse ? `${predicate} @rev` : predicate ] }
+  // }, {});
 
-  console.log(reduced);
+  // console.log(reduced);
+
 
   const query = `{
-    ${Object.keys(reduced).map(subject => `
-      ${subject}: nodes(id: "${subject}") { ${reduced[subject].map(predicate => `${predicate} @opt`).join(' ')} }
+    ${queries.map((query, i) => `
+      ${encodeQuery(query)}: ${query}
     `)}
   }`;
 
   console.log("Query:", query);
   const response = await cayley(query);
 
-  const results = keys.map(({ subject, predicate }) => response[subject][predicate]);  
+  const results = queries.map((query) => response[encodeQuery(query)]);
   console.log("Results:", results);
 
   return results;

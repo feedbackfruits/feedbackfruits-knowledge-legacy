@@ -18,6 +18,7 @@ const graph = new SemanticGraph(resolvers, { relay: false });
 
 ontologyFiles.forEach(filePath =>  graph.parseFile(filePath));
 
+graph['http://schema.org/subjectOf'].shouldAlwaysUseInverseOf = true;
 // console.log(`graph created: ${graph}`);
 
 // module.exports = graph;
@@ -54,10 +55,16 @@ export default new GraphQLSchema({
     name: "Query",
     fields: {
       // node: graph.nodeField,
-      resources: {
+      resource: {
         type: new GraphQLList(graph.getObjectType("https://knowledge.express/Resource")),
-        resolve: (source, args, context) => new Array(1).fill({ id: 'https://www.khanacademy.org/math/early-math/cc-early-math-counting-topic/cc-early-math-comparing-numbers' }),
+        resolve: (source, args, context) => new Array(1).fill({ id: 'https://www.youtube.com/watch?v=SQzjzStU1RQ' }),
       },
+
+      entity: {
+        type: new GraphQLList(graph.getObjectType("https://knowledge.express/Entity")),
+        resolve: (source, args, context) => new Array(1).fill({ id: 'http://dbpedia.org/resource/Mathematics' }),
+      },
+
       // viewer: {
       //   type: graph.getObjectType("https://knowledge.express#Resource"),
       //   resolve: (source, args, { viewer }) => viewer,
