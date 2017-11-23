@@ -5,7 +5,7 @@ import * as morgan from "morgan";
 import * as Config from './config';
 
 // import Schema from "./schema";
-import Schema from "./semantic-schema";
+import Schema from "./schema";
 
 import Elasticsearch from "./elasticsearch";
 
@@ -26,24 +26,24 @@ export function create() {
 
   server.get("/autocomplete", (req, res) => {
     const { text } = req.query;
-    const query = `{
-    "size": 5,
-    "_source": "name",
-    "query": {
-         "function_score": {
-          "query": {
-            "multi_match": {
-              "query":    "${text}",
-              "fields": [ "name" ]
+    const query = {
+      size: 5,
+      _source: 'name',
+      query: {
+         function_score: {
+          query: {
+            multi_match: {
+              query: text,
+              fields: [ 'name' ]
             }
           },
-          "field_value_factor": {
-            "field": "count"
+          field_value_factor: {
+            field: 'count'
           }
         }
-    }
-}`;
-    Elasticsearch('entity', query).then(results => {
+      }
+    };
+    Elasticsearch(JSON.stringify(query)).then(results => {
       res.json(results).end();
     }).catch(err => res.status(500).json(err).end());
   });

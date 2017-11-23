@@ -1,159 +1,43 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import {
-  GraphQLInt,
-  GraphQLList,
+  GraphQLObjectType,
   GraphQLSchema,
+  GraphQLList,
   GraphQLString
-} from "graphql";
+} from 'graphql';
+import SemanticGraph = require('semantic-graphql');
+import { connectionArgs, connectionFromPromisedArray, globalIdField } from 'graphql-relay';
+import { turtle } from 'feedbackfruits-knowledge-context';
 
-import * as Context from "../builder/context";
+import * as resolvers from './resolvers';
+import loader from './cayley-loader';
 
-import { BuilderObjectType } from "../builder";
-import { buildRootType, GraphQLBuilder, resolveRootType } from "../builder/graphql";
+const graph = new SemanticGraph(resolvers, { relay: false });
+graph.parse(turtle);
+graph['http://schema.org/subjectOf'].shouldAlwaysUseInverseOf = true;
 
-import { EntityType } from "./entity";
-import { FieldOfStudyType } from "./field_of_study";
-import { ResourceInterfaceType } from "./resource";
-import { VideoResourceType } from "./resource/video";
-import { TopicType } from "./topic";
-
-export const Schema = new GraphQLSchema({
-  types: [
-    FieldOfStudyType,
-    TopicType,
-    EntityType,
-    VideoResourceType
-  ],
-  query: new BuilderObjectType<GraphQLBuilder>({
-    name: "RootQuery",
+const schema = new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: 'Query',
     fields: {
-      fieldOfStudy: {
-        type: FieldOfStudyType,
-        args: {
-          id: {
-            type: GraphQLString,
-          },
-          name: {
-            type: GraphQLString,
-          }
-        },
-        build: buildRootType("fieldOfStudy", Context.AcademicGraph.FieldOfStudy),
-        resolve: resolveRootType("fieldOfStudy")
-      },
-      topic: {
-        type: TopicType,
-        args: {
-          id: {
-            type: GraphQLString,
-          },
-          name: {
-            type: GraphQLString,
-          }
-        },
-        build: buildRootType("topic", Context.Knowledge.Topic),
-        resolve: resolveRootType("topic")
-      },
-      entity: {
-        type: EntityType,
-        args: {
-          id: {
-            type: GraphQLString,
-          }
-        },
-        build: buildRootType("entity", Context.Knowledge.Entity),
-        resolve: resolveRootType("entity")
-      },
       resource: {
-        type: ResourceInterfaceType,
         args: {
-          id: {
-            type: GraphQLString,
-          },
-          name: {
-            type: GraphQLString,
-          }
+          id: { type: new GraphQLList(GraphQLString) }
         },
-        build: buildRootType("resource", Context.Knowledge.Resource),
-        resolve: resolveRootType("resource")
+        type: new GraphQLList(graph.getObjectType('https://knowledge.express/Resource')),
+        resolve: (source, args, context) => args.id.map(id => ({ id }))
       },
 
-      fieldsOfStudy: {
-        type: new GraphQLList(FieldOfStudyType),
+      entity: {
         args: {
-          id: {
-            type: new GraphQLList(GraphQLString),
-          },
-          name: {
-            type: new GraphQLList(GraphQLString),
-          },
-          first: {
-            type: GraphQLInt
-          },
-          offset: {
-            type: GraphQLInt
-          }
+          id: { type: new GraphQLList(GraphQLString) }
         },
-        build: buildRootType("fieldsOfStudy", Context.AcademicGraph.FieldOfStudy),
-        resolve: resolveRootType("fieldsOfStudy", true)
-      },
-      topics: {
-        type: new GraphQLList(TopicType),
-        args: {
-          id: {
-            type: new GraphQLList(GraphQLString),
-          },
-          name: {
-            type: new GraphQLList(GraphQLString),
-          },
-          first: {
-            type: GraphQLInt
-          },
-          offset: {
-            type: GraphQLInt
-          }
-        },
-        build: buildRootType("topics", Context.Knowledge.Topic),
-        resolve: resolveRootType("topics", true)
-      },
-      entities: {
-        type: new GraphQLList(EntityType),
-        args: {
-          id: {
-            type: new GraphQLList(GraphQLString),
-          },
-          name: {
-            type: new GraphQLList(GraphQLString),
-          },
-          first: {
-            type: GraphQLInt
-          },
-          offset: {
-            type: GraphQLInt
-          }
-        },
-        build: buildRootType("entities", Context.Knowledge.Entity),
-        resolve: resolveRootType("entities", true)
-      },
-      resources: {
-        type: new GraphQLList(ResourceInterfaceType),
-        args: {
-          id: {
-            type: new GraphQLList(GraphQLString),
-          },
-          name: {
-            type: new GraphQLList(GraphQLString),
-          },
-          first: {
-            type: GraphQLInt
-          },
-          offset: {
-            type: GraphQLInt
-          }
-        },
-        build: buildRootType("resources", Context.Knowledge.Resource),
-        resolve: resolveRootType("resources", true)
+        type: new GraphQLList(graph.getObjectType('https://knowledge.express/Entity')),
+        resolve: (source, args, context) => args.id.map(id => ({ id }))
       }
     }
   })
 });
 
-export default Schema;
+export default schema;
