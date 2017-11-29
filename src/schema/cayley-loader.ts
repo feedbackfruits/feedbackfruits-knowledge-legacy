@@ -12,6 +12,7 @@ export const loader = new DataLoader<string, any>(async queries => {
     `)}
   }`;
 
+  console.log('Query:', query);
   const response = await cayley(query);
   const results = queries.map((query) => response[encodeQuery(query)]);
   return results;

@@ -58,7 +58,7 @@
     "elasticsearch": "^12.1.3",
     "express": "^4.15.3",
     "express-graphql": "^0.6.6",
-    "feedbackfruits-knowledge-context": "github:feedbackfruits/feedbackfruits-knowledge-context#feature/ontology",
+    "feedbackfruits-knowledge-context": "feedbackfruits/feedbackfruits-knowledge-context#feature/ontology",
     "flat": "^2.0.1",
     "graphql": "^0.10.5",
     "graphql-relay": "^0.5.2",

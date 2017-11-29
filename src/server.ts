@@ -43,7 +43,8 @@ export function create() {
         }
       }
     };
-    Elasticsearch(JSON.stringify(query)).then(results => {
+    
+    Elasticsearch('entity', JSON.stringify(query)).then(results => {
       res.json(results).end();
     }).catch(err => res.status(500).json(err).end());
   });

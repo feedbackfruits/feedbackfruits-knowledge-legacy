@@ -16,6 +16,7 @@ import loader from './cayley-loader';
 const graph = new SemanticGraph(resolvers, { relay: false });
 graph.parse(turtle);
 graph['http://schema.org/subjectOf'].shouldAlwaysUseInverseOf = true;
+// graph['http://www.w3.org/2002/07/owl#sameAs'].shouldAlwaysUseInverseOf = true;
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -34,6 +35,14 @@ const schema = new GraphQLSchema({
           id: { type: new GraphQLList(GraphQLString) }
         },
         type: new GraphQLList(graph.getObjectType('https://knowledge.express/Entity')),
+        resolve: (source, args, context) => args.id.map(id => ({ id }))
+      },
+
+      fieldOfStudy: {
+        args: {
+          id: { type: new GraphQLList(GraphQLString) }
+        },
+        type: new GraphQLList(graph.getObjectType('http://academic.microsoft.com/FieldOfStudy')),
         resolve: (source, args, context) => args.id.map(id => ({ id }))
       }
     }
