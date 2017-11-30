@@ -24,6 +24,9 @@ export function query(type: string, queryBody: string): Promise<object[]> {
     });
   }).then((res: any) => {
     return res.hits.hits;
+  }, (error: any) => {
+    console.error('ElasticSearch failed:', error);
+    throw error;
   });
 }
 

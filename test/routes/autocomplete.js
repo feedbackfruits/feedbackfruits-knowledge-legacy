@@ -11,7 +11,7 @@ test('/autocomplete - Autocomplete endpoint - Basic response', t => {
     .expect(200)
     .then(() => {
       return t.pass();
-    }, t.error);
+    }, (err) => {console.error('Error!', err); t.fail()});
 });
 
 test('/autocomplete - Autocomplete endpoint - Empty query', t => {
@@ -22,7 +22,7 @@ test('/autocomplete - Autocomplete endpoint - Empty query', t => {
     .expect(200)
     .then(() => {
       return t.pass();
-    }, t.error);
+    }, (err) => {console.error('Error!', err); t.fail()});
 });
 
 test('/autocomplete - Autocomplete endpoint - Normal query', t => {
@@ -33,5 +33,5 @@ test('/autocomplete - Autocomplete endpoint - Normal query', t => {
     .expect(200)
     .then(() => {
       return t.pass();
-    }, t.error);
+    }, (err) => {console.error('Error!', err); t.fail()});
 });

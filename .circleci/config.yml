@@ -6,6 +6,7 @@ jobs:
       - image: node:8
         environment:
           NODE_ENV: test
+          ELASTICSEARCH_INDEX_NAME: test_knowledge
       - image: elasticsearch:5-alpine
         environment:
           ES_JAVA_OPTS: -Xms512m -Xmx1024m

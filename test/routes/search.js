@@ -12,7 +12,7 @@ test('/search - Search endpoint - Basic response', t => {
     .expect(200)
     .then(() => {
       return t.pass();
-    }, t.error);
+    }, (err) => {console.error('Error!', err); t.fail()});
 });
 
 test('/search - Search endpoint - Regular query', t => {
@@ -23,5 +23,5 @@ test('/search - Search endpoint - Regular query', t => {
     .expect(200)
     .then(() => {
       return t.pass();
-    }, t.error);
+    }, (err) => {console.error('Error!', err); t.fail()});
 });
