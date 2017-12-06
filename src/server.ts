@@ -26,6 +26,8 @@ export function create() {
 
   server.get("/autocomplete", (req, res) => {
     const { text } = req.query;
+    if (!text || text == '') return res.json([]);
+    
     const query = {
       size: 5,
       _source: 'name',
@@ -43,7 +45,7 @@ export function create() {
         }
       }
     };
-    
+
     Elasticsearch('entity', JSON.stringify(query)).then(results => {
       res.json(results).end();
     }).catch(err => res.status(500).json(err).end());

@@ -35,45 +35,55 @@ test('/ - GraphQL - Regular query', t => {
   query {
     entity(id: "http://dbpedia.org/resource/Number_theory") {
       id
-      type
-      name
-      fieldsOfStudy {
+      type {
         id
-        type
-        name
+      }
 
-        parents {
+      name
+      sameAs {
+        ... on FieldOfStudy {
           id
-        }
+          type
+          name
 
-        children {
-          id
+          parentFieldOfStudy {
+            id
+          }
+
+          childFieldOfStudy {
+            id
+          }
         }
       }
-      resources {
+
+      resource {
         id
-        type
+        type {
+          id
+        }
         name
         description
         license
         sourceOrganization
-        topics {
+        topic {
           id
-          type
+          type {
+            id
+          }
           name
-          predecessors {
+          previous {
             id
           }
 
-          successors {
+          next {
             id
           }
 
-          parents {
+          parent {
             id
           }
 
-          children {
+          child {
             id
           }
         }
@@ -90,9 +100,9 @@ test('/ - GraphQL - Regular query', t => {
     .send({ })    // .query({ query: '{}' })
     .expect('Content-Type', 'application/json; charset=utf-8')
     // .expect('Content-Length', '15')
-    .expect(200)
+    .expect(400)
     .then((res) => {
-      log('Passed test with', res.status, res.body);
-      return t.pass();
-    }, t.error);
+      log('Passed test with', res.status, JSON.stringify(res.body));
+      return t.fail();
+    }, (err) => {console.error('Error!', err); t.fail()});
 });
