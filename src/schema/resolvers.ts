@@ -1,24 +1,26 @@
 import loader from './cayley-loader';
+import { mapPredicate } from './hacks';
 
-export async function simpleQuery(subject, predicate) {
+export async function simpleQuery(subject: string, iri: string): Promise<any> {
+  const predicate = mapPredicate(iri);
   console.log('Simpe query:', subject, predicate);
-  if (predicate === 'http://www.w3.org/2002/07/owl#sameAs') predicate = 'http://schema.org/sameAs';
 
   const query =  `
     nodes(id: "${subject}") {
-      ${predicate === 'http://schema.org/sameAs' ? `${predicate} @rev` : predicate} @opt
+      ${predicate.iri} @opt ${predicate.reverse ? ' @rev' : ''}
     }`;
 
   const result = await loader.load(query);
-  return result[predicate];
+  return result[predicate.iri];
 }
 
-export async function reverseFilterQuery(types, predicate, value) {
-    console.log('Reverse filter query:', types, predicate, value);
+export async function reverseFilterQuery(types, iri, value) {
+  const predicate = mapPredicate(iri);
+  console.log('Reverse filter query:', types, predicate, value);
   // if (predicate === 'http://www.w3.org/2002/07/owl#sameAs') predicate = 'http://schema.org/sameAs';
 
   const query =  `
-    nodes(${predicate}: "${value}", http://www.w3.org/1999/02/22-rdf-syntax-ns#type: ${JSON.stringify(types)}) {
+    nodes(${predicate.iri}: "${value}", http://www.w3.org/1999/02/22-rdf-syntax-ns#type: ${JSON.stringify(types)}) {
       id
     }`;
 

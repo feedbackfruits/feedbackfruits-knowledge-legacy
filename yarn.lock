@@ -1846,7 +1846,7 @@ fast-levenshtein@~2.0.4:
 
 feedbackfruits-knowledge-context@feedbackfruits/feedbackfruits-knowledge-context#feature/ontology:
   version "1.0.0"
-  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-context/tar.gz/9be73445832b8ad37ccf8ff8a6a556193e0b7aa3"
+  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-context/tar.gz/c9411c9495e41fab55eaba370832e2646030d2cc"
   dependencies:
     "@types/node" "^8.0.8"
     recursive-readdir-sync "^1.0.6"
@@ -4114,9 +4114,9 @@ safe-buffer@^5.0.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
 
-semantic-graphql@^0.6.2:
+semantic-graphql@knowledge-express/semantic-graphql#fix/null-arrays:
   version "0.6.2"
-  resolved "https://registry.yarnpkg.com/semantic-graphql/-/semantic-graphql-0.6.2.tgz#1b0b65d2d4f192ed631a2846ff4d1c1569e9edc5"
+  resolved "https://codeload.github.com/knowledge-express/semantic-graphql/tar.gz/60bdfd81681d2716ddfe1d8206a758783bdfeb00"
   dependencies:
     n3 "^0.10.0"
 

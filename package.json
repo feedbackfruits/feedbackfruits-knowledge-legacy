@@ -71,7 +71,7 @@
     "p-queue": "^0.2.0",
     "qs": "^6.5.0",
     "redis": "^2.6.5",
-    "semantic-graphql": "knowledge-express/semantic-graphql#feature/polymorphic-object-type",
+    "semantic-graphql": "knowledge-express/semantic-graphql#fix/null-arrays",
     "semantic-toolkit": "^0.2.1",
     "tslint": "^5.5.0",
     "typescript": "^2.4.1"

@@ -40,25 +40,37 @@ test('/ - GraphQL - Regular query', t => {
       }
 
       name
-      sameAs {
-        ... on FieldOfStudy {
+      fieldOfStudy {
+        id
+        type {
           id
-          type
-          name
+        }
+        name
 
-          parentFieldOfStudy {
-            id
-          }
+        parentFieldOfStudy {
+          id
 
-          childFieldOfStudy {
+          entity {
             id
           }
         }
+
+        childFieldOfStudy {
+          id
+        }
+
+        entity {
+          id
+        }
       }
 
-      resource {
+      subjectOf {
         id
         type {
+          id
+        }
+
+        about {
           id
         }
         name
@@ -100,9 +112,9 @@ test('/ - GraphQL - Regular query', t => {
     .send({ })    // .query({ query: '{}' })
     .expect('Content-Type', 'application/json; charset=utf-8')
     // .expect('Content-Length', '15')
-    .expect(400)
+    .expect(200)
     .then((res) => {
       log('Passed test with', res.status, JSON.stringify(res.body));
-      return t.fail();
+      return t.pass();
     }, (err) => {console.error('Error!', err); t.fail()});
 });
