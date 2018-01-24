@@ -24,12 +24,12 @@ jobs:
       - run:
           name: Seed Elasticsearch
           command: |
-            curl --fail -H "Content-Type: application/x-ndjson" -XPOST --data-binary @seeds/elasticsearch.ndjson localhost:9200/_bulk
+            sleep 10 && curl --retry 2 --retry-delay 2 -H "Content-Type: application/x-ndjson" -XPOST --data-binary @seeds/elasticsearch.ndjson localhost:9200/_bulk
 
       - run:
           name: Seed Cayley
           command: |
-            curl --fail -H "Content-Type: multipart/form-data" -XPOST -F NQuadFile=@seeds/cayley.nq localhost:64210/api/v1/write/file/nquad
+            sleep 10 && curl --retry 2 --retry-delay 2 -H "Content-Type: multipart/form-data" -XPOST -F NQuadFile=@seeds/cayley.nq localhost:64210/api/v1/write/file/nquad
 
       - save_cache:
           paths:

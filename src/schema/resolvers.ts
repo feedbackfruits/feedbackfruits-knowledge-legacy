@@ -1,46 +1,21 @@
-import loader from './cayley-loader';
-import { mapPredicate } from './hacks';
-
-export async function simpleQuery(subject: string, iri: string): Promise<any> {
-  const predicate = mapPredicate(iri);
-  console.log('Simpe query:', subject, predicate);
-
-  const query =  `
-    nodes(id: "${subject}") {
-      ${predicate.iri} @opt ${predicate.reverse ? ' @rev' : ''}
-    }`;
-
-  const result = await loader.load(query);
-  return result[predicate.iri];
-}
-
-export async function reverseFilterQuery(types, iri, value) {
-  const predicate = mapPredicate(iri);
-  console.log('Reverse filter query:', types, predicate, value);
-  // if (predicate === 'http://www.w3.org/2002/07/owl#sameAs') predicate = 'http://schema.org/sameAs';
-
-  const query =  `
-    nodes(${predicate.iri}: "${value}", http://www.w3.org/1999/02/22-rdf-syntax-ns#type: ${JSON.stringify(types)}) {
-      id
-    }`;
-
-  const result = await loader.load(query);
-  return result;
-}
+import * as CayleyLoader from './cayley-loader';
+import * as ContextLoader from './context-loader';
 
 export async function resolveSourceId(source) {
-  console.log('resolveSourceId:', source.id);
-  return `${source.id}`;
+  console.log('resolveSourceId:', source);
+  return source.id;
 }
 
 export async function resolveSourcePropertyValue(source, iri) {
-  console.log('resolveSourcePropertyValue:', source.id ,iri);
-  return simpleQuery(`<${source.id}>`, iri)
+  console.log('resolveSourcePropertyValue:', source ,iri);
+  return await ContextLoader.resolveSourcePropertyValue(source, iri) || await CayleyLoader.resolveSourcePropertyValue(source, iri);
 }
 
-export async function resolveSourceTypes(source) {
-  console.log('resolveSourceTypes:', source.id);
-  return simpleQuery(`<${source.id}>`, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+export async function resolveSourceTypes(source): Promise<string[]> {
+  console.log('resolveSourceTypes:', source);
+
+  // Make everything an instance of rdfs:Class to conform with the rdfs:Resource type attribute
+  return ["http://www.w3.org/2000/01/rdf-schema#Class"].concat(await ContextLoader.resolveSourceTypes(source) || await CayleyLoader.resolveSourceTypes(source) || []);
 }
 
 export async function resolveResource(id) {
@@ -55,5 +30,5 @@ export async function resolveResources(ids) {
 
 export async function resolveResourcesByPredicate(types, iri, value) {
   console.log('resolveResourcesByPredicate:', types, iri, value);
-  return reverseFilterQuery(types.map(type => `<${type}>`), iri, `<${value}>`);
+  return await ContextLoader.resolveResourcesByPredicate(types, iri, value) || CayleyLoader.resolveResourcesByPredicate(types, iri, value);
 };

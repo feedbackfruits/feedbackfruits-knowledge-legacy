@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {
+  GraphQLInt,
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLList,
@@ -9,9 +10,10 @@ import {
 import SemanticGraph = require('semantic-graphql');
 import { connectionArgs, connectionFromPromisedArray, globalIdField } from 'graphql-relay';
 import { turtle } from 'feedbackfruits-knowledge-context';
+import { getClasses } from 'rdf-tools';
+import * as semtools from 'semantic-toolkit';
 
 import * as resolvers from './resolvers';
-import loader from './cayley-loader';
 
 const graph = new SemanticGraph(resolvers, { relay: false });
 graph.parse(turtle);
@@ -19,35 +21,43 @@ graph['https://knowledge.express/entity'].shouldNeverUseInverseOf = true;
 graph['https://knowledge.express/subjectOf'].shouldAlwaysUseInverseOf = true;
 // graph['http://www.w3.org/2002/07/owl#sameAs'].shouldAlwaysUseInverseOf = true;
 
-const schema = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'Query',
-    fields: {
-      resource: {
-        args: {
-          id: { type: new GraphQLList(GraphQLString) }
-        },
-        type: new GraphQLList(graph.getObjectType('https://knowledge.express/Resource')),
-        resolve: (source, args, context) => args.id.map(id => ({ id }))
-      },
+const lowerCaseFirst = (str: string): string => {
+  return str[0].toLowerCase() + str.slice(1, str.length);
+};
 
-      entity: {
-        args: {
-          id: { type: new GraphQLList(GraphQLString) }
-        },
-        type: new GraphQLList(graph.getObjectType('https://knowledge.express/Entity')),
-        resolve: (source, args, context) => args.id.map(id => ({ id }))
-      },
+export async function getSchema() {
+  const { classes } = await getClasses(turtle);
 
-      fieldOfStudy: {
+  // Expose class as a type so things rdfs:Class is queryable
+  const fields = ["http://www.w3.org/2000/01/rdf-schema#Class"].concat(classes.map(c => c.iri)).reduce((memo, iri) => {
+    const name = semtools.getLocalName(iri);
+    return {
+      ...memo,
+      [lowerCaseFirst(name)]: {
         args: {
-          id: { type: new GraphQLList(GraphQLString) }
+          id: { type: new GraphQLList(GraphQLString) },
+          // page: { type: GraphQLInt, defaultValue: 1 },
+          // perPage: { type: GraphQLInt, defaultValue: 10 },
         },
-        type: new GraphQLList(graph.getObjectType('http://academic.microsoft.com/FieldOfStudy')),
-        resolve: (source, args, context) => args.id.map(id => ({ id }))
+        type: new GraphQLList(graph.getObjectType(iri)),
+        resolve: (source, args, context) => {
+          return args.id.reduce((memo, id) => {
+            console.log()
+            return [].concat({
+              id,
+              // page: args.page,
+              // perPage: args.perPage
+            }, memo);
+          }, []);
+        }
       }
-    }
-  })
-});
+    };
+  }, {});
 
-export default schema;
+  return new GraphQLSchema({
+    query: new GraphQLObjectType({
+      name: 'Query',
+      fields: fields
+    })
+  });
+}

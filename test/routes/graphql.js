@@ -1,12 +1,14 @@
 import test from 'ava';
-import Server from '../../dist/server';
+import * as Server from '../../dist/server';
 import request from 'supertest';
 
 let server = Server.create();
 
 const log = console.log.bind(console); // eslint-disable-line no-console
 
-test('/ - GraphIQL  - Basic response', t => {
+test('/ - GraphIQL  - Basic response', async t => {
+  const server = await Server.create();
+
   return request(server)
     .get('/')
     .set('Accept', 'text/html')
@@ -17,7 +19,9 @@ test('/ - GraphIQL  - Basic response', t => {
     }, t.error);
 });
 
-test('/ - GraphQL - Empty query body', t => {
+  test('/ - GraphQL - Empty query body', async t => {
+    const server = await Server.create();
+
   return request(server)
     .post('/')
     .set('Content-Type', 'application/json')
@@ -30,78 +34,76 @@ test('/ - GraphQL - Empty query body', t => {
     }, t.error);
 });
 
-test('/ - GraphQL - Regular query', t => {
+test('/ - GraphQL - Regular query', async t => {
+  const server = await Server.create();
+
   const query = `
   query {
-    entity(id: "http://dbpedia.org/resource/Number_theory") {
+  entity(id: "http://dbpedia.org/resource/Number_theory") {
+    id
+    type {
+      id
+    }
+
+    name
+    fieldOfStudy {
+      id
+      type {
+        id
+      }
+      name
+
+    resource {
       id
       type {
         id
       }
 
       name
-      fieldOfStudy {
+      description
+      license
+      sourceOrganization
+      topic {
         id
         type {
           id
         }
         name
-
-        parentFieldOfStudy {
-          id
-
-          entity {
-            id
-          }
-        }
-
-        childFieldOfStudy {
+        previous {
           id
         }
+
+        next {
+          id
+        }
+
+        parent {
+          id
+        }
+
+        child {
+          id
+        }
+      }
+    }
+      parentFieldOfStudy {
+        id
 
         entity {
           id
         }
       }
 
-      subjectOf {
+      childFieldOfStudy {
         id
-        type {
-          id
-        }
+      }
 
-        about {
-          id
-        }
-        name
-        description
-        license
-        sourceOrganization
-        topic {
-          id
-          type {
-            id
-          }
-          name
-          previous {
-            id
-          }
-
-          next {
-            id
-          }
-
-          parent {
-            id
-          }
-
-          child {
-            id
-          }
-        }
+      entity {
+        id
       }
     }
   }
+}
 `;
 
   return request(server)

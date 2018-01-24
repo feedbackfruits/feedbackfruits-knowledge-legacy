@@ -5,11 +5,11 @@ import * as morgan from "morgan";
 import * as Config from './config';
 
 // import Schema from "./schema";
-import Schema from "./schema";
+import { getSchema } from "./schema";
 
 import Elasticsearch from "./elasticsearch";
 
-export function create() {
+export async function create() {
   const server = express();
 
   // Add morgan for logging
@@ -27,7 +27,7 @@ export function create() {
   server.get("/autocomplete", (req, res) => {
     const { text } = req.query;
     if (!text || text == '') return res.json([]);
-    
+
     const query = {
       size: 5,
       _source: 'name',
@@ -99,7 +99,7 @@ export function create() {
   });
 
   server.all("/", graphqlHTTP({
-    schema: Schema,
+    schema: await getSchema(),
     graphiql: true
   }));
 

@@ -1,10 +1,10 @@
 import test from 'ava';
-import Server from '../../dist/server';
+import * as Server from '../../dist/server';
 import request from 'supertest';
 
-let server = Server.create();
+test('/autocomplete - Autocomplete endpoint - Basic response', async t => {
+  const server = await Server.create();
 
-test('/autocomplete - Autocomplete endpoint - Basic response', t => {
   return request(server)
     .get('/autocomplete')
     .set('Accept', 'text/html')
@@ -14,7 +14,9 @@ test('/autocomplete - Autocomplete endpoint - Basic response', t => {
     }, (err) => {console.error('Error!', err); t.fail()});
 });
 
-test('/autocomplete - Autocomplete endpoint - Empty query', t => {
+test('/autocomplete - Autocomplete endpoint - Empty query', async t => {
+  const server = await Server.create();
+
   return request(server)
     .get('/autocomplete')
     .query({ text: '' })
@@ -25,7 +27,9 @@ test('/autocomplete - Autocomplete endpoint - Empty query', t => {
     }, (err) => {console.error('Error!', err); t.fail()});
 });
 
-test('/autocomplete - Autocomplete endpoint - Normal query', t => {
+  test('/autocomplete - Autocomplete endpoint - Normal query', async t => {
+    const server = await Server.create();
+
   return request(server)
     .get('/autocomplete')
     .query({ text: 'knowledge' })

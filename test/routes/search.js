@@ -1,11 +1,13 @@
 import test from 'ava';
-import Server from '../../dist/server';
+import * as Server from '../../dist/server';
 import request from 'supertest';
 
 let server = Server.create();
 
 
-test('/search - Search endpoint - Basic response', t => {
+test('/search - Search endpoint - Basic response', async t => {
+  const server = await Server.create();
+
   return request(server)
     .get('/search')
     .set('Accept', 'text/html')
@@ -15,8 +17,10 @@ test('/search - Search endpoint - Basic response', t => {
     }, (err) => {console.error('Error!', err); t.fail()});
 });
 
-test('/search - Search endpoint - Regular query', t => {
+test('/search - Search endpoint - Regular query', async t => {
+  const server = await Server.create();
   const entities = 'http://dbpedia.org/resource/Knowledge';
+
   return request(server)
     .get('/search')
     .query({ 'entities[]': entities })
