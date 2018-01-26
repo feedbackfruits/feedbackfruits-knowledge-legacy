@@ -41,14 +41,14 @@ export async function getSchema() {
         },
         type: new GraphQLList(graph.getObjectType(iri)),
         resolve: (source, args, context) => {
-          return args.id.reduce((memo, id) => {
+          return "id" in args ? args.id.reduce((memo, id) => {
             console.log()
             return [].concat({
               id,
               // page: args.page,
               // perPage: args.perPage
             }, memo);
-          }, []);
+          }, []) : null;
         }
       }
     };

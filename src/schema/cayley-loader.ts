@@ -61,10 +61,6 @@ export async function reverseFilterQuery(types, iri, value) {
   return result ? result : [];
 }
 
-export async function resolveSourceId(source) {
-  return `${source.id}`;
-}
-
 export async function resolveSourcePropertyValue(source, iri) {
   return simpleQuery(`<${source.id}>`, iri)
 }
