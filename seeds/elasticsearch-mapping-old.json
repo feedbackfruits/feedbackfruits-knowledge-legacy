@@ -1,0 +1,83 @@
+{
+  "settings": {
+      "analysis": {
+         "filter": {
+            "edge_ngram_filter": {
+               "type": "edge_ngram",
+               "min_gram": 2,
+               "max_gram": 20
+            }
+         },
+         "analyzer": {
+            "edge_ngram_analyzer": {
+               "type": "custom",
+               "tokenizer": "standard",
+               "filter": [
+                  "lowercase",
+                  "edge_ngram_filter"
+               ]
+            }
+         }
+      }
+   },
+  "mappings": {
+    "entity": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "text",
+          "analyzer": "edge_ngram_analyzer",
+          "search_analyzer": "english"
+        }
+      }
+    },
+    "resource": {
+      "properties": {
+        "description": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "entities": {
+          "properties": {
+            "id": {
+              "type": "keyword"
+            }
+          }
+        },
+        "id": {
+          "type": "keyword"
+        },
+        "license": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          },
+          "analyzer": "edge_ngram_analyzer",
+          "search_analyzer": "english"
+        },
+        "sourceOrganization": {
+          "type": "keyword"
+        },
+        "type": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}

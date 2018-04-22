@@ -17,9 +17,6 @@ import * as resolvers from './resolvers';
 
 const graph = new SemanticGraph(resolvers, { relay: false });
 graph.parse(turtle);
-graph['https://knowledge.express/entity'].shouldNeverUseInverseOf = true;
-graph['https://knowledge.express/subjectOf'].shouldAlwaysUseInverseOf = true;
-// graph['http://www.w3.org/2002/07/owl#sameAs'].shouldAlwaysUseInverseOf = true;
 
 const lowerCaseFirst = (str: string): string => {
   return str[0].toLowerCase() + str.slice(1, str.length);

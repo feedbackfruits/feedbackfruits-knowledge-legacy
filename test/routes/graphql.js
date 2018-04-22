@@ -38,70 +38,36 @@ test('/ - GraphQL - Regular query', async t => {
   const server = await Server.create();
 
   const query = `
-  query {
-  entity(id: "http://dbpedia.org/resource/Number_theory") {
+
+query resource {
+  video(id: "https://www.youtube.com/watch?v=Efoeqb6tC88") {
     id
     type {
       id
     }
 
     name
-    fieldOfStudy {
+    description
+    image {
       id
-      type {
-        id
-      }
-      name
-
-    resource {
+    }
+    license {
       id
-      type {
-        id
-      }
-
-      name
-      description
-      license
-      sourceOrganization
-      topic {
-        id
-        type {
-          id
-        }
-        name
-        previous {
-          id
-        }
-
-        next {
-          id
-        }
-
-        parent {
-          id
-        }
-
-        child {
-          id
-        }
-      }
     }
-      parentFieldOfStudy {
-        id
-
-        entity {
-          id
-        }
-      }
-
-      childFieldOfStudy {
-        id
-      }
-
-      entity {
-        id
-      }
+    sourceOrganization {
+      id
     }
+
+    tag {
+      id
+    }
+
+    caption {
+      id
+      startsAfter
+      duration
+    }
+
   }
 }
 `;

@@ -10,24 +10,43 @@ const client = new elasticsearch.Client( {
   apiVersion: "5.x"
 });
 
-export function query(type: string, queryBody: string): Promise<object[]> {
-  return new Promise((resolve, reject) => {
+type SearchResult = { _score: number, _source: object };
+type SearchResults = {
+  meta: {
+    from: number,
+    size: number,
+    total: number
+  }
+  results: SearchResult[]
+}
+
+export async function query(index: string, type: string, queryBody: string, from: number, size: number): Promise<SearchResults> {
+  const res = await new Promise<{ hits: { hits: SearchResult[], total: number }}>((resolve, reject) => {
     client.search({
-      index: ELASTICSEARCH_INDEX_NAME,
+      index: index === ELASTICSEARCH_INDEX_NAME ? index :`${ELASTICSEARCH_INDEX_NAME}_${index}`,
       type,
-      body: queryBody
+      body: queryBody,
+      from,
+      size,
     }, (err, res) => {
       if (err) {
         return reject(err);
       }
       return resolve(res);
     });
-  }).then((res: any) => {
-    return res.hits.hits;
-  }, (error: any) => {
-    console.error('ElasticSearch failed:', error);
-    throw error;
   });
+
+  const results = res.hits.hits;
+  const total = res.hits.total;
+
+  return {
+    meta: {
+      from,
+      size,
+      total
+    },
+    results
+  };
 }
 
 export default query;

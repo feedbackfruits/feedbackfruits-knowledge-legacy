@@ -12,7 +12,7 @@ const {
 } = process.env;
 
 const SEARCH_ORGANIZATIONS: string[] = 'SEARCH_ORGANIZATIONS' in process.env ? process.env.SEARCH_ORGANIZATIONS.split(',') : [
-  "KhanAcademy",
+  "https://www.khanacademy.org/",
   "Dynamics TU Delft",
   "UCIrvineOCW",
   "TU Delft Online Learning",

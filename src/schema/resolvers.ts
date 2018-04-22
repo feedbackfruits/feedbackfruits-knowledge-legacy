@@ -11,7 +11,7 @@ const loaders = {
 const loadersEnabled = {
   Cayley: true,
   Context: true,
-  DBPedia: true,
+  DBPedia: false,
 };
 
 export async function resolveSourceId(source) {
