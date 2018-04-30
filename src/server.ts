@@ -65,6 +65,7 @@ export async function create() {
       query: {
         has_child: {
           type: "Tag",
+          score_mode : "avg",
           query: {
             bool: {
               must: [
