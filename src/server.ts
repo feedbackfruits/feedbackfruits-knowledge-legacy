@@ -53,54 +53,58 @@ export async function create() {
     }).catch(err => res.status(500).json(err).end());
   });
 
-  server.get("/search", async (req, res) => {
-    const { entities = [], page = 1, pageSize = 10 } = req.query;
-    console.log('Searching for entities:', entities);
-    const from = ((page || 0) - 1) * pageSize;
-    const size = pageSize;
+  server.get("/search", async (req, res, next) => {
+    try {
+      const { entities = [], page = 1, pageSize = 10 } = req.query;
+      console.log('Searching for entities:', entities);
+      const from = ((page || 0) - 1) * pageSize;
+      const size = pageSize;
 
-    const query = {
-      from,
-      size,
-      query: {
-        has_child: {
-          type: "Tag",
-          score_mode : "sum",
-          query: {
-            bool: {
-              must: [
-                {
-                  terms: {
-                    about: entities
+      const query = {
+        from,
+        size,
+        query: {
+          bool: {
+            must: [
+              {
+                terms : {
+                  sourceOrganization: Config.SEARCH_ORGANIZATIONS
+                }
+              },
+              {
+                has_child: {
+                  type: "Tag",
+                  score_mode : "sum",
+                  query: {
+                    terms: {
+                      about: entities
+                    }
                   }
-                },
-                // {
-                //   terms : {
-                //     sourceOrganization : Config.SEARCH_ORGANIZATIONS
-                //   }
-                // }
-              ]
-            }
+                }
+              }
+            ]
           }
         }
-      }
-    };
+      };
 
-    const searchResults = await Elasticsearch('resources', 'Resource', JSON.stringify(query), from, size)
-    const totalPages = Math.ceil(searchResults.meta.total / pageSize);
+      const searchResults = await Elasticsearch('resources', 'Resource', JSON.stringify(query), from, size)
+      const totalPages = Math.ceil(searchResults.meta.total / pageSize);
 
-    res.json({
-      meta: {
-        page,
-        pageSize,
-        totalPages,
-        totalResults: searchResults.meta.total
-      },
-      results: searchResults.results.map(result => ({
-        score: result._score,
-        ...result._source,
-      }))
-    }).end();
+      res.json({
+        meta: {
+          page,
+          pageSize,
+          totalPages,
+          totalResults: searchResults.meta.total
+        },
+        results: searchResults.results.map(result => ({
+          score: result._score,
+          ...result._source,
+        }))
+      }).end();
+    } catch(err) {
+      res.status(500).json(err).end();
+    }
   });
 
   server.all("/", graphqlHTTP({

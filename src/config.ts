@@ -13,16 +13,16 @@ const {
 
 const SEARCH_ORGANIZATIONS: string[] = 'SEARCH_ORGANIZATIONS' in process.env ? process.env.SEARCH_ORGANIZATIONS.split(',') : [
   "https://www.khanacademy.org/",
-  "Dynamics TU Delft",
-  "UCIrvineOCW",
-  "TU Delft Online Learning",
-  "OxfordSBS",
-  "UCBerkeley",
-  "UCLACourses",
-  "METUOpenCourseWare",
-  "MIT",
-  "Mathematics TU Delft",
-  "YaleCourses",
+  "https://www.youtube.com/user/MIT",
+  "https://www.youtube.com/channel/UCOoVmLA0M1IS1JU7ZTUk8jA", // "Dynamics TU Delft",
+  "https://www.youtube.com/user/METUOpenCourseWare", // "METUOpenCourseWare",
+  "https://www.youtube.com/channel/UC4XB8AQCiucZ7324-UaYA4A", // "Mathematics TU Delft",
+  "https://www.youtube.com/user/OxfordSBS", // "OxfordSBS",
+  "https://www.youtube.com/channel/UCBktixD-Y_kixzSJy9OrlZw", // "TU Delft Online Learning",
+  "https://www.youtube.com/user/ucberkeleycampuslife", // "UCBerkeley",
+  "https://www.youtube.com/channel/UCngehmCV-65FikHYUV1_qXA", // "UCIrvineOCW",
+  "https://www.youtube.com/user/UCLACourses", // "UCLACourses",
+  "https://www.youtube.com/user/YaleCourses", // "YaleCourses"
 ];
 
 export {
