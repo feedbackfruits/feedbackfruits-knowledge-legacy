@@ -1,0 +1,28 @@
+{
+  "name": "feedbackfruits-knowledge",
+  "scripts": {},
+  "env": {
+    "NODE_ENV": {
+      "value": "review"
+    },
+    "HEROKU_APP_NAME": {
+      "required": true
+    },
+    "CAYLEY_ADDRESS": {
+      "required": true
+    },
+    "ELASTICSEARCH_ADDRESS": {
+      "required": true
+    },
+    "ELASTICSEARCH_INDEX_NAME": {
+      "required": true
+    },
+    "NODE_MODULES_CACHE": {
+      "required": true
+    }
+  },
+  "formation": {},
+  "addons": [],
+  "buildpacks": [
+  ]
+}
