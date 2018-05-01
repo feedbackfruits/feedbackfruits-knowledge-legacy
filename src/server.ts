@@ -77,16 +77,35 @@ export async function create() {
                 }
               },
               {
-                has_child: {
-                  type: "Tag",
-                  score_mode : "sum",
-                  query: {
-                    terms: {
-                      about: entities
+                bool: {
+                  should: [
+                    {
+                      has_child: {
+                        type: "Tag",
+                        score_mode : "avg",
+                        query: {
+                          terms: {
+                            about: entities
+                          }
+                        }
+                      }
+                    },
+                    {
+                      has_child: {
+                        type: "Annotation",
+                        score_mode : "avg",
+                        query: {
+                          terms: {
+                            about: entities
+                          }
+                        }
+                      }
                     }
-                  }
+                  ]
                 }
-              }
+              },
+
+
             ]
           }
         }
