@@ -65,12 +65,33 @@ export async function create() {
       const from = ((page || 0) - 1) * pageSize;
       const size = pageSize;
 
+      const entityNames = entities.map(uri => uri.replace(/(https:\/\/en\.wikipedia\.org\/wiki\/|http:\/\/dbpedia\.org\/resource\/)/, '').replace(/_/g, ' '));
+      const metadataQueries = entityNames.reduce((memo, name) => {
+        return [
+          ...memo,
+          {
+            match: {
+              name: {
+                query: name,
+                boost: 2
+              }
+            }
+          },
+          {
+            match: {
+              description: name
+            }
+          }
+        ];
+      }, []);
+
       const query = {
         from,
         size,
         query: {
           bool: {
             must: [
+              // This filters by organzation(s)
               {
                 terms : {
                   sourceOrganization: Config.SEARCH_ORGANIZATIONS
@@ -79,13 +100,24 @@ export async function create() {
               {
                 bool: {
                   should: [
+                    // This finds resources by tags and annotations. Some notes:
+                    // - Tags and annotations are treated equally at the moment
+                    // - Tags and annotations are scored linearly weighed by their score from LTE/NER
+                    // - Scoring is based on the average of the child scores, so as to not bias longer resources vs shorter ones
                     {
                       has_child: {
                         type: "Tag",
                         score_mode : "avg",
                         query: {
-                          terms: {
-                            about: entities
+                           function_score: {
+                            query: {
+                              terms: {
+                                about: entities
+                              }
+                            },
+                            field_value_factor: {
+                              field: 'score'
+                            }
                           }
                         }
                       }
@@ -95,12 +127,28 @@ export async function create() {
                         type: "Annotation",
                         score_mode : "avg",
                         query: {
-                          terms: {
-                            about: entities
+                           function_score: {
+                            query: {
+                              terms: {
+                                about: entities
+                              }
+                            },
+                            field_value_factor: {
+                              field: 'score'
+                            }
                           }
                         }
                       }
+                    },
+
+                    // This allows resources to be found if the entityName occurs in the title or description of the resource
+                    {
+                      bool: {
+                        should: metadataQueries,
+                        boost: 0.2
+                      }
                     }
+
                   ]
                 }
               },
