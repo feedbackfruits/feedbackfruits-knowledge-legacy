@@ -42,10 +42,15 @@ export async function simpleQuery(subject: string, iri: string): Promise<any> {
 
   const query =  `
     nodes(id: "${subject}") {
-      ${predicate.iri} @opt ${predicate.reverse ? ' @rev' : ''}
+      ${predicate.iri} ${predicate.reverse ? ' @rev' : ''}
     }`;
 
   const result = await loader.load(query);
+  if (result instanceof Array) {
+    console.log('Result array!');
+    return result.map(res => res[predicate.iri]);
+  }
+  
   return result[predicate.iri];
 }
 

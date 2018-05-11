@@ -18,6 +18,9 @@ import * as resolvers from './resolvers';
 const graph = new SemanticGraph(resolvers, { relay: false });
 graph.parse(turtle);
 
+graph['https://knowledge.express/tag'].shouldNeverUseInverseOf = true;
+graph['https://knowledge.express/annotation'].shouldNeverUseInverseOf = true;
+
 const lowerCaseFirst = (str: string): string => {
   return str[0].toLowerCase() + str.slice(1, str.length);
 };
