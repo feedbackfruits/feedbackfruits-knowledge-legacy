@@ -3,6 +3,10 @@ import * as express from "express";
 import * as graphqlHTTP from "express-graphql";
 import * as morgan from "morgan";
 import * as Config from './config';
+import * as bodyParser from 'body-parser';
+
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+
 
 // import Schema from "./schema";
 import { getSchema } from "./schema";
@@ -107,10 +111,12 @@ export async function create() {
     }
   });
 
-  server.all("/", graphqlHTTP({
+  server.get('/', graphiqlExpress({ endpointURL: '/' }));
+  server.all("/", bodyParser.json(), graphqlExpress({
     schema: await getSchema(),
-    graphiql: true
+    // graphiql: true
   }));
+
 
   server.use((error, req, res, next) => {
     if (error instanceof Error) {

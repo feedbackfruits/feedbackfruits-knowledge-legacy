@@ -8,7 +8,8 @@ const {
   MAG_API_ENDPOINT = "https://academic.microsoft.com/api/browse/GetEntityDetails",
   DBPEDIA_ENDPOINT = "http://dbpedia.org/resource/",
   DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql",
-  MAG_API_KEY
+  MAG_API_KEY,
+  APOLLO_API_KEY,
 } = process.env;
 
 const SEARCH_ORGANIZATIONS: string[] = 'SEARCH_ORGANIZATIONS' in process.env ? process.env.SEARCH_ORGANIZATIONS.split(',') : [
@@ -34,5 +35,6 @@ export {
   DBPEDIA_ENDPOINT,
   DBPEDIA_SPARQL_ENDPOINT,
   MAG_API_KEY,
+  APOLLO_API_KEY,
   SEARCH_ORGANIZATIONS,
 };

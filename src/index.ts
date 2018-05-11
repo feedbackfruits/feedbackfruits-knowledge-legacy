@@ -1,6 +1,8 @@
 import { PORT } from "./config";
 import Server from "./server";
+import * as Config from "./config";
 import * as Logger from "./utils/logger";
+import { ApolloEngine } from 'apollo-engine';
 
 // Start the server when executed directly
 declare const require: any;
@@ -11,8 +13,18 @@ if (require.main === module) {
     // Create http server
     const server = await Server.create();
 
+    const engine = new ApolloEngine({
+      apiKey: Config.APOLLO_API_KEY
+    });
+
+    engine.listen({
+      port: PORT,
+      expressApp: server,
+    });
+
+
     Logger.log("Server started, listening on", PORT);
-    server.listen(PORT);
+    // server.listen(PORT);
   })()
 
   // Export globally
