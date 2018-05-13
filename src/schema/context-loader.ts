@@ -1,4 +1,4 @@
-import { turtle } from 'feedbackfruits-knowledge-context';
+import { Context } from 'feedbackfruits-knowledge-engine';
 import * as rdfTools from 'rdf-tools';
 
 import * as CayleyLoader from './cayley-loader';
@@ -6,12 +6,12 @@ import * as CayleyLoader from './cayley-loader';
 
 let _graph = null;
 async function _getGraph() {
-  return _graph = _graph || await rdfTools.getRDFGraph(turtle);
+  return _graph = _graph || await rdfTools.getRDFGraph(Context.turtle);
 }
 
 let _classIris = null;
 async function _getClasses() {
-  return _classIris = _classIris || (await rdfTools.getClasses(turtle)).classes.reduce((memo, c) => [ c.iri, ...c.subClasses, ...c.superClasses , ...memo ], []).reduce((memo, iri) => ({ ...memo, [iri]: true }),{});
+  return _classIris = _classIris || (await rdfTools.getClasses(Context.turtle)).classes.reduce((memo, c) => [ c.iri, ...c.subClasses, ...c.superClasses , ...memo ], []).reduce((memo, iri) => ({ ...memo, [iri]: true }),{});
 }
 
 export async function resolveSourcePropertyValue(source, iri): Promise<string | Array<string>> {

@@ -5,6 +5,8 @@ const {
   CAYLEY_ADDRESS = "http://localhost:64210/",
   ELASTICSEARCH_ADDRESS = "http://localhost:9200",
   ELASTICSEARCH_INDEX_NAME = "knowledge",
+  REDIS_URL = undefined,
+
   MAG_API_ENDPOINT = "https://academic.microsoft.com/api/browse/GetEntityDetails",
   DBPEDIA_ENDPOINT = "http://dbpedia.org/resource/",
   DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql",
@@ -34,6 +36,7 @@ export {
   CAYLEY_ADDRESS,
   ELASTICSEARCH_ADDRESS,
   ELASTICSEARCH_INDEX_NAME,
+  REDIS_URL,
   MAG_API_ENDPOINT,
   DBPEDIA_ENDPOINT,
   DBPEDIA_SPARQL_ENDPOINT,

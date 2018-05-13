@@ -34,6 +34,8 @@ export const loader = new DataLoader<string, any>(async queries => {
   const response = await cayley(query);
   const results = queries.map((query) => response[encodeQuery(query)]);
   return results;
+}, {
+  maxBatchSize: 30,
 });
 
 
@@ -46,11 +48,8 @@ export async function simpleQuery(subject: string, iri: string): Promise<any> {
     }`;
 
   const result = await loader.load(query);
-  if (result instanceof Array) {
-    console.log('Result array!');
-    return result.map(res => res[predicate.iri]);
-  }
-  
+  if (result instanceof Array) return result.map(res => res[predicate.iri]);
+
   return result[predicate.iri];
 }
 

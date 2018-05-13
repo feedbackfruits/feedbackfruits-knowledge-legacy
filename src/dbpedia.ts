@@ -2,7 +2,7 @@ import * as qs from 'qs';
 import fetch from 'node-fetch';
 
 import { DBPEDIA_SPARQL_ENDPOINT } from './config';
-import * as Context from 'feedbackfruits-knowledge-context';
+import { Context } from 'feedbackfruits-knowledge-engine';
 // import { DBPedia } from './builder/context';
 
 // const { abstract, label, thumbnail, redirects } = DBPedia;
