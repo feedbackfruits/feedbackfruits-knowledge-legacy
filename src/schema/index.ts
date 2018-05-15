@@ -79,7 +79,7 @@ export async function getSchema() {
           if  (!("id" in args)) return null;
 
           const cached = await Promise.all(args.id.map(async (id) => {
-            const cached = await Cache.getDoc(id);
+            const cached = null; //await Cache.getDoc(id);
             console.log('Cached result:', cached);
             const result = cached ? (await compactedToResult(cached)) : { id };
             console.log('Returning result:', result);
@@ -134,7 +134,9 @@ export async function getSchema() {
         const searchResults = await Elasticsearch('resources', 'Resource', JSON.stringify(query), from, size)
         const totalPages = Math.ceil(searchResults.meta.total / pageSize);
 
-        return await Promise.all(searchResults.results.map(result => compactedToResult(result._source)));
+        const results = await Promise.all(searchResults.results.map(result => compactedToResult(result._source)));
+        return results;
+        // return [].concat(results[0]);
 
         // {
         //   meta: {
