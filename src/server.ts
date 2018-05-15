@@ -2,15 +2,15 @@ import * as cors from "cors";
 import * as express from "express";
 import * as graphqlHTTP from "express-graphql";
 import * as morgan from "morgan";
-import * as Config from './config';
 import * as bodyParser from 'body-parser';
+import { createServer } from 'http';
 
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { prepareSchema } from 'graphql-rxjs';
 
-
-// import Schema from "./schema";
+import * as Config from './config';
 import { getSchema } from "./schema";
-
 import Elasticsearch from "./elasticsearch";
 
 export async function create() {
@@ -111,12 +111,17 @@ export async function create() {
     }
   });
 
-  server.get('/', graphiqlExpress({ endpointURL: '/' }));
-  server.all("/", bodyParser.json(), graphqlExpress({
-    schema: await getSchema(),
-    // graphiql: true
+  const schema = prepareSchema(await getSchema());
+
+  server.get('/', graphiqlExpress({
+    endpointURL: Config.HOST,
+    subscriptionsEndpoint: Config.HOST
   }));
 
+  server.all("/", bodyParser.json(), graphqlExpress(<any>{
+    schema,
+    // graphiql: true
+  }));
 
   server.use((error, req, res, next) => {
     if (error instanceof Error) {
@@ -126,7 +131,7 @@ export async function create() {
     }
   });
 
-  return server;
+  return createServer(server);
 }
 
 export default {

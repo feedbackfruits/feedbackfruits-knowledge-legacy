@@ -26,8 +26,11 @@ const SEARCH_ORGANIZATIONS: string[] = 'SEARCH_ORGANIZATIONS' in process.env ? p
   "https://www.youtube.com/user/YaleCourses", // "YaleCourses"
 ];
 
+const HOST = 'HOST' in process.env ? process.env.HOST : `ws://localhost:${PORT}/`;
+
 export {
   PORT,
+  HOST,
   CAYLEY_ADDRESS,
   ELASTICSEARCH_ADDRESS,
   ELASTICSEARCH_INDEX_NAME,

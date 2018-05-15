@@ -6,14 +6,16 @@ import {
   GraphQLSchema,
   GraphQLList,
   GraphQLString
-} from 'graphql';
+} from 'graphql-rxjs';
 import SemanticGraph = require('semantic-graphql');
-import { connectionArgs, connectionFromPromisedArray, globalIdField } from 'graphql-relay';
+// import { connectionArgs, connectionFromPromisedArray, globalIdField } from 'graphql-relay';
 import { turtle } from 'feedbackfruits-knowledge-context';
 import { getClasses } from 'rdf-tools';
 import * as semtools from 'semantic-toolkit';
 
 import * as resolvers from './resolvers';
+
+import { Observable } from 'rxjs';
 
 const graph = new SemanticGraph(resolvers, { relay: false });
 graph.parse(turtle);
