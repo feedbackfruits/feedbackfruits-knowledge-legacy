@@ -83,7 +83,7 @@
     "semantic-toolkit": "^0.2.1",
     "subscriptions-transport-ws": "^0.9.9",
     "tslint": "^5.5.0",
-    "typescript": "^2.4.1"
+    "typescript": "^2.6.1"
   },
   "devDependencies": {
     "ava": "^0.20.0",

@@ -80,7 +80,7 @@ export function groupQueries(queries: Query[]): CompactedQuery[] {
   // const reverse = <ReverseFilterQuery[]>queries.filter(q => q.type === 'ReverseFilterQuery');
 
   // Group by subject
-  const bySubject = simple.reduce((memo, query) => {
+  const bySubject = simple.reduce<{ [index: string]: { [index: string]: boolean } }>((memo, query) => {
     const { subject, predicate } = query;
 
     if (!(subject in memo)) memo[subject] = { [predicate.iri]: predicate.reverse };
@@ -90,7 +90,7 @@ export function groupQueries(queries: Query[]): CompactedQuery[] {
   }, { });
 
   // Group groups by same predicates
-  const groupedGroups = Object.entries(bySubject).reduce((memo, [ subject, predicates ]) => {
+  const groupedGroups = Object.entries(bySubject).reduce<{ [index: string]: { [index: string]: { [index: string]: boolean } } }>((memo, [ subject, predicates ]) => {
     const predicatesString = JSON.stringify(Object.keys(predicates).sort());
 
     if (!(predicatesString in memo)) memo[predicatesString] = { [subject]: predicates };

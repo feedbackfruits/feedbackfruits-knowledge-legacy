@@ -13,7 +13,7 @@ export function query(queryBody: string): Promise<Response> {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
     }
-  }).then(response => response.json() as Promise<{ data: any, errors: any[] }>).then((res) => {
+  }).then(response => response.json() as Promise<{ data: any, errors?: any[] }>).then((res) => {
     if ("errors" in res) {
       throw new Error(`CAYLEY: ${JSON.stringify(res.errors)}`);
     }
