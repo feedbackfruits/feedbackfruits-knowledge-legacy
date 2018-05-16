@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/feedbackfruits-knowledge
     docker:
-      - image: node:8
+      - image: node:8.5.0
         environment:
           NODE_ENV: test
           ELASTICSEARCH_INDEX_NAME: test_knowledge
@@ -11,6 +11,7 @@ jobs:
         environment:
           ES_JAVA_OPTS: -Xms512m -Xmx1024m
       - image: quay.io/cayleygraph/cayley:latest
+      - image: redis
     steps:
       - checkout
       - restore_cache:

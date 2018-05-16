@@ -113,7 +113,7 @@ export async function create() {
 
   const schema = prepareSchema(await getSchema());
 
-  server.get('/', graphiqlExpress({
+  server.all('/', graphiqlExpress({
     endpointURL: Config.HOST,
     subscriptionsEndpoint: Config.HOST
   }));
