@@ -1,5 +1,6 @@
 import * as cors from "cors";
 import * as express from "express";
+import * as accepts from "express-accepts";
 import * as graphqlHTTP from "express-graphql";
 import * as morgan from "morgan";
 import * as bodyParser from 'body-parser';
@@ -113,12 +114,17 @@ export async function create() {
 
   const schema = prepareSchema(await getSchema());
 
-  server.all('/', graphiqlExpress({
+  server.all('/', accepts('text/html', 'application/json'));
+  server.all('/', accepts.on('text/html'), graphiqlExpress({
     endpointURL: Config.HOST,
     subscriptionsEndpoint: Config.HOST
   }));
 
-  server.all("/", bodyParser.json(), graphqlExpress(<any>{
+  server.all("/", bodyParser.json(), (req, res, next) => {
+    console.log('Bla!', req.body);
+    if (typeof req.body === 'object' && Object.keys(req.body).length === 0) return next(new Error('POST body cannot be an empty object.'));
+    next();
+  }, graphqlExpress(<any>{
     schema,
     // graphiql: true
   }));

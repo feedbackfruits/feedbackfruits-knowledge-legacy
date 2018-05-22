@@ -71,6 +71,7 @@ export async function getDoc(id: string): Promise<Doc> {
   return new Promise((resolve, reject) => {
     client.hgetall(id, async (err, res) => {
       if (err) return reject(err);
+      if (!res) return resolve(null);
       // The result is an object with predicate as keys and strings as values
       const quads = Object.entries(res).reduce((memo, [ key, value ]) => {
         // console.log(`Parsing ${key} ${value}`);

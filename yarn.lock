@@ -2207,6 +2207,10 @@ expand-range@^1.8.1:
   dependencies:
     fill-range "^2.1.0"
 
+express-accepts@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/express-accepts/-/express-accepts-0.1.0.tgz#04554f428a4cd8fc4ee5bdc572eb242aa445a0f0"
+
 express-graphql@^0.6.6:
   version "0.6.12"
   resolved "https://registry.yarnpkg.com/express-graphql/-/express-graphql-0.6.12.tgz#dfcb2058ca72ed5190b140830ad8cdbf76a9128a"

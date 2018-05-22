@@ -43,8 +43,8 @@ export async function resolveSourcePropertyValue(source, iri) {
   if (localName in source) return source[localName];
 
   // Check Cache second
-  // const cached = await Cache.getQuad({ subject: source.id, predicate: iri });
-  // if (cached != null) return cached.object;
+  const cached = await Cache.getQuad({ subject: source.id, predicate: iri });
+  if (cached != null) return cached.object;
 
   const res = (await Promise.all(Object.keys(loadersEnabled).map(key => {
     if (loadersEnabled[key]) return loaders[key].resolveSourcePropertyValue(source, iri);

@@ -10,7 +10,7 @@ test('/search - Search endpoint - Basic response', async t => {
 
   return request(server)
     .get('/search')
-    .set('Accept', 'text/html')
+    // .set('Accept', 'text/html')
     .expect(200)
     .then(() => {
       return t.pass();

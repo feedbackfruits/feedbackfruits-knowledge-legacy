@@ -24,8 +24,9 @@ test('/ - GraphIQL  - Basic response', async t => {
 
   return request(server)
     .post('/')
+    .set('Accept', 'application/json')
     .set('Content-Type', 'application/json')
-    .query({ query: '' })
+    // .query({ query: '' })
     .send({ })
     .expect(400)
     .then((res) => {
@@ -74,11 +75,12 @@ query resource {
 
   return request(server)
     .post('/')
+    .set('Accept', 'application/json')
     .set('Content-Type', 'application/json')
     // .set('Content-Type', )
-    .query({ query })
-    .send({ })    // .query({ query: '{}' })
-    .expect('Content-Type', 'application/json; charset=utf-8')
+    // .query({ query })
+    .send({ query })    // .query({ query: '{}' })
+    // .expect('Content-Type', 'application/json; charset=utf-8')
     // .expect('Content-Length', '15')
     .expect(200)
     .then((res) => {

@@ -75,16 +75,20 @@ export async function getSchema() {
         },
         type: new GraphQLList(graph.getObjectType(iri)),
         resolve: async (source, args, context) => {
+          console.log(`Resolving top-level ${name}`);
           const { id  } = args;
           if  (!("id" in args)) return null;
 
           const cached = await Promise.all(args.id.map(async (id) => {
-            const cached = null; //await Cache.getDoc(id);
+            // const cached = null;
+            const cached = await Cache.getDoc(id);
             console.log('Cached result:', cached);
             const result = cached ? (await compactedToResult(cached)) : { id };
             console.log('Returning result:', result);
             return result;
           }));
+
+          console.log(`Returning cached:`, cached);
 
           return cached;
         }
