@@ -1,4 +1,5 @@
 import * as semtools from 'semantic-toolkit';
+import { Context } from 'feedbackfruits-knowledge-engine';
 
 import * as CayleyLoader from './cayley-loader';
 import * as ContextLoader from './context-loader';
@@ -73,23 +74,31 @@ export async function resolveSourcePropertyValue(source, iri) {
 export async function resolveSourceTypes(source): Promise<string[]> {
   console.log('resolveSourceTypes:', source);
 
-  // Check source first
-  // console.log(`localName type in source?:`, 'type' in source);
-  if ('type' in source) return [].concat(source.type, "https://knowledge.express/Video");
-
   // Make everything an instance of rdfs:Class to conform with the rdfs:Resource type attribute
-  const res = ["http://www.w3.org/2000/01/rdf-schema#Class"].concat((await Promise.all(Object.keys(loadersEnabled).map(key => {
-    if (loadersEnabled[key]) return loaders[key].resolveSourceTypes(source);
-    return null;
-  }))).reduce((memo, result) => {
-    if (memo == null && result == null) return null;
-    if (memo == null && !(result == null)) return result;
-    if (memo != null && result == null) return memo;
-    if (memo != null && result != null) return [].concat(memo, result);
-  }, undefined) || []);
+  let res = ["http://www.w3.org/2000/01/rdf-schema#Class"];
+
+  // Check source first
+  if ('type' in source) res = [].concat(res, source.type);
+  else {
+    res = [].concat(res, (await Promise.all(Object.keys(loadersEnabled).map(key => {
+      if (loadersEnabled[key]) return loaders[key].resolveSourceTypes(source);
+      return null;
+    }))).reduce((memo, result) => {
+      if (memo == null && result == null) return null;
+      if (memo == null && !(result == null)) return result;
+      if (memo != null && result == null) return memo;
+      if (memo != null && result != null) return [].concat(memo, result);
+    }, undefined) || []);
+  }
+
+  // Apply hacks
+  const types = res.reduce((memo, type) => ({ ...memo, [type]: true }), {});
+  if (Context.iris.$.Resource in types && Context.iris.schema.VideoObject in types) {
+    res = [].concat(res, Context.iris.$.Video);
+  }
 
   // console.log('resolveSourceTypes result:', res);
-  return res.concat("https://knowledge.express/Video");
+  return res;
 }
 
 export async function resolveResourcesByPredicate(types, iri, value) {

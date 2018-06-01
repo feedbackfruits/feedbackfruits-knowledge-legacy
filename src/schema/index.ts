@@ -25,6 +25,7 @@ graph.parse(Context.turtle);
 
 graph['https://knowledge.express/tag'].shouldNeverUseInverseOf = true;
 graph['https://knowledge.express/annotation'].shouldNeverUseInverseOf = true;
+graph['https://knowledge.express/caption'].shouldNeverUseInverseOf = true;
 
 const lowerCaseFirst = (str: string): string => {
   return str[0].toLowerCase() + str.slice(1, str.length);
@@ -97,13 +98,13 @@ export async function getSchema() {
   }, {
     search: {
       args: {
-        topic: {
+        about: {
           type: new GraphQLList(GraphQLString),
         }
       },
       type: new GraphQLList(graph.getInterfaceType(Context.iris.$.Resource)),
       resolve: async (source, args, context) => {
-        const { topic: entities = [], page = 1, pageSize = 10 } = args;
+        const { about: entities = [], page = 1, pageSize = 10 } = args;
         console.log('Searching for entities:', entities);
         const from = ((page || 0) - 1) * pageSize;
         const size = pageSize;

@@ -150,9 +150,11 @@ export async function queryMany(queriesObj: { [index: string]: SimpleQuery }): P
   const results = parsed.map(query => response[encodeQuery(query)]);
   // console.log('Got grouped results:', results);
   const resultsBySubject = results.reduce((memo, result) => {
-    if (!(result instanceof Array)) return { ...memo, [`<${result.id}>`]: result };
+    if (result == null) return memo;
+    if (!(result instanceof Array)) return result.id == null ? memo : { ...memo, [`<${result.id}>`]: result };
     return result.reduce((memo, result) => {
-      return { ...memo, [`<${result.id}>`]: result };
+      if (result == null) return memo;
+      return result.id == null ? memo : { ...memo, [`<${result.id}>`]: result };
     }, memo);
   }, {});
 
@@ -236,9 +238,18 @@ export async function simpleQuery(subject: string, iri: string): Promise<any> {
   //   }`;
 
   const result = await loader.load(query);
-  if (result instanceof Array) return result.map(res => res[predicate.iri].id);
-  if (result[predicate.iri] instanceof Array) return result[predicate.iri].map(res => res.id);
-  return result[predicate.iri].id;
+
+  console.log('Checking res:', result);
+
+  try {
+    if (result == null) return result;
+    if (result instanceof Array) return result.map(res => res[predicate.iri] != null ? res[predicate.iri].id : res[predicate.iri]);
+    if (result[predicate.iri] instanceof Array) return result[predicate.iri].map(res => res != null ? res.id : res);
+    return result[predicate.iri] != null ? result[predicate.iri].id : result[predicate.iri];
+  } catch(e) {
+    console.log('Broke on res:', result);
+    throw e;
+  }
 }
 
 export async function reverseFilterQuery(types, iri, value) {
