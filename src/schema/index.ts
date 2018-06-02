@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import {
   GraphQLInt,
   GraphQLObjectType,
@@ -7,31 +5,25 @@ import {
   GraphQLList,
   GraphQLString
 } from 'graphql-rxjs';
-import SemanticGraph = require('semantic-graphql');
 // import { connectionArgs, connectionFromPromisedArray, globalIdField } from 'graphql-relay';
 import { getClasses } from 'rdf-tools';
 import * as semtools from 'semantic-toolkit';
 import { Doc, Context } from 'feedbackfruits-knowledge-engine';
 
-import * as resolvers from './resolvers';
-import * as Config from '../config';
 import * as Cache from '../cache';
+import * as Config from '../config';
 import Elasticsearch from '../elasticsearch';
 
 import { Observable } from 'rxjs';
+import graph from './semantic-graph';
 
-const graph = new SemanticGraph(resolvers, { relay: false });
-graph.parse(Context.turtle);
-
-graph['https://knowledge.express/tag'].shouldNeverUseInverseOf = true;
-graph['https://knowledge.express/annotation'].shouldNeverUseInverseOf = true;
-graph['https://knowledge.express/caption'].shouldNeverUseInverseOf = true;
+import SearchType from './search';
 
 const lowerCaseFirst = (str: string): string => {
   return str[0].toLowerCase() + str.slice(1, str.length);
 };
 
-async function compactedToResult(compacted): Promise<object> {
+async function normalizeJSONLD(compacted): Promise<object> {
   const [ expanded ] = await Doc.expand(compacted, Context.context);
   const localized = Object.entries(expanded).reduce((memo, [key, value]) => {
     if (key[0] === '@') return { ...memo, [key]: value };
@@ -84,7 +76,7 @@ export async function getSchema() {
             // const cached = null;
             const cached = await Cache.getDoc(id);
             console.log('Cached result:', cached);
-            const result = cached ? (await compactedToResult(cached)) : { id };
+            const result = cached ? (await normalizeJSONLD(cached)) : { id };
             console.log('Returning result:', result);
             return result;
           }));
@@ -100,14 +92,19 @@ export async function getSchema() {
       args: {
         about: {
           type: new GraphQLList(GraphQLString),
+        },
+        page: {
+          type: GraphQLInt
+        },
+        perPage: {
+          type: GraphQLInt
         }
       },
-      type: new GraphQLList(graph.getInterfaceType(Context.iris.$.Resource)),
+      type: SearchType,
       resolve: async (source, args, context) => {
-        const { about: entities = [], page = 1, pageSize = 10 } = args;
-        console.log('Searching for entities:', entities);
-        const from = ((page || 0) - 1) * pageSize;
-        const size = pageSize;
+        const { about: entities = [], page = 1, perPage = 10 } = args;
+        const from = ((page || 0) - 1) * perPage;
+        const size = perPage;
 
         const query = {
           from,
@@ -137,24 +134,17 @@ export async function getSchema() {
         };
 
         const searchResults = await Elasticsearch('resources', 'Resource', JSON.stringify(query), from, size)
-        const totalPages = Math.ceil(searchResults.meta.total / pageSize);
+        const totalPages = Math.ceil(searchResults.meta.total / perPage);
 
-        const results = await Promise.all(searchResults.results.map(result => compactedToResult(result._source)));
-        return results;
-        // return [].concat(results[0]);
-
-        // {
-        //   meta: {
-        //     page,
-        //     pageSize,
-        //     totalPages,
-        //     totalResults: searchResults.meta.total
-        //   },
-        //   results: searchResults.results.map(result => ({
-        //     score: result._score,
-        //     ...result._source,
-        //   }))
-        // }
+        return {
+          meta: {
+            page,
+            perPage,
+            totalPages,
+            totalResults: searchResults.meta.total
+          },
+          results: searchResults.results.map(result => normalizeJSONLD(result._source))
+        }
       }
     }
   });

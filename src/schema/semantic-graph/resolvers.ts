@@ -5,7 +5,7 @@ import * as CayleyLoader from './cayley-loader';
 import * as ContextLoader from './context-loader';
 import * as DBPediaLoader from './dbpedia-loader';
 
-import * as Cache from '../cache';
+import * as Cache from '../../cache';
 
 const loaders = {
   Cayley: CayleyLoader,

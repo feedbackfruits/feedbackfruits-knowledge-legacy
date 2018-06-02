@@ -1,7 +1,7 @@
 import * as DataLoader from 'dataloader';
 import md5 = require('md5');
 
-import cayley from "../cayley";
+import cayley from "../../cayley";
 
 const predicateMap: { [key: string]: CayleyGraphQLPredicate } = {
   // This breaks because semantic-graphql can't deal with IRIs with the same local name
@@ -120,9 +120,11 @@ export function ungroupResults(results: any[], queries: CompactedQuery[]): any[]
   return results;
 }
 
-export async function queryMany(queriesObj: { [index: string]: SimpleQuery }): Promise<{ [index: string]: any }> {
+export async function queryMany(queriesObj: { [index: string]: Query }): Promise<{ [index: string]: any }> {
   const queries = Object.values(queriesObj);
-  const grouped = groupQueries(queries);
+  const simple: SimpleQuery[] = <any>queries.filter(query => query.type === 'SimpleQuery');
+  const reverse: ReverseFilterQuery[] = <any>queries.filter(query => query.type === 'ReverseFilterQuery');
+  const grouped = groupQueries(simple);
   // console.log('Grouped queries:', grouped);
 
   const groupedBySubject = grouped.reduce((memo, query) => {
@@ -130,7 +132,7 @@ export async function queryMany(queriesObj: { [index: string]: SimpleQuery }): P
     return subjects.reduce((memo, subject) => ({ ...memo, [subject]: query }), memo);
   }, {});
 
-  const mapped = queries.map(query => {
+  const mapped = simple.map(query => {
     const { subject, predicate } = query;
     if (subject in groupedBySubject) return groupedBySubject[subject];
     return query;
@@ -138,7 +140,9 @@ export async function queryMany(queriesObj: { [index: string]: SimpleQuery }): P
 
   // console.log('Mapped:', mapped.map(m => ({ q: m, encoded: encodeQuery[m] })));
 
-  const parsed = grouped.map(parseQuery);
+  const parsedReverse = reverse.map(parseQuery);
+  const parsedGrouped = grouped.map(parseQuery);
+  const parsed = [ ...parsedReverse, ...parsedGrouped ];
   const query = `{
     ${parsed.map((query, i) => `
       ${encodeQuery(query)}: ${query}
@@ -160,10 +164,14 @@ export async function queryMany(queriesObj: { [index: string]: SimpleQuery }): P
 
   // console.log('Results by subject:', resultsBySubject);
   const byHash = Object.entries(queriesObj).reduce((memo, [ hash, query ]) => {
-    const { subject } = query;
-    // console.log('Matching subject:', subject)
-    const result = resultsBySubject[subject];
-    return { ...memo, [hash]: result };
+    if (query.type === 'SimpleQuery') {
+      const { subject } = query;
+      // console.log('Matching subject:', subject)
+      const result = resultsBySubject[subject];
+      return { ...memo, [hash]: result };
+    } else {
+      return { ...memo, [hash]: results[hash] };
+    }
   }, {});
 
   // console.log('Results by hash:', byHash);
@@ -181,14 +189,14 @@ export async function queryMany(queriesObj: { [index: string]: SimpleQuery }): P
 export const loader = new DataLoader<Query, any>(async queries => {
   const queriesObj = queries.reduce((memo, query) => {
     console.log('Reducing queries:', JSON.stringify(query));
-    if (query.type !== 'SimpleQuery') return memo;
+    // if (query.type !== 'SimpleQuery') return memo;
     const hash = encodeQuery(parseQuery(query));
     return { ...memo, [hash]: query };
   }, {});
 
   // console.log('Awaiting queryMany...');
   const results = await queryMany(<any>queriesObj);
-  // console.log('Retuning results:', results);
+  console.log('Retuning results:', results);
   return Object.values(results);
   // const grouped = groupQueries(queries);
   // // console.log('Grouped queries:', grouped);
