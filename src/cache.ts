@@ -30,13 +30,14 @@ function quadsBySubject(quads: Quad[]): { [index: string]: string[] } {
   }, {});
 }
 
-export async function getQuad({ subject, predicate }): Promise<Quad> {
+export async function getQuads({ subject, predicate }): Promise<Quad[]> {
   // console.log(`Getting quad for <${subject}> <${predicate}> ?...?`);
-  return new Promise<Quad>((resolve, reject) => {
-    client.hget(subject, predicate, (err, res) => {
+  return new Promise<Quad[]>((resolve, reject) => {
+    client.hget(subject, predicate, (err, res: string) => {
       if (err) return reject(err);
       if (!res) return resolve(null);
-      return resolve({ subject, predicate, object: JSON.parse(res) });
+      const objects = [].concat(JSON.parse(res));
+      return resolve(objects.map(object => ({ subject, predicate, object })));
     });
   });
 }
@@ -69,19 +70,26 @@ export async function setQuads(quads: Quad[]) {
 export async function getDoc(id: string): Promise<Doc> {
   // console.log(`Getting doc ${id} from cache.`);
   return new Promise((resolve, reject) => {
-    client.hgetall(id, async (err, res) => {
+    client.hgetall(id, async (err, res: { [key: string]: string }) => {
       if (err) return reject(err);
       if (!res) return resolve(null);
-      // The result is an object with predicate as keys and strings as values
-      const quads = Object.entries(res).reduce((memo, [ key, value ]) => {
-        // console.log(`Parsing ${key} ${value}`);
-        const quad = { subject: id, predicate: key, object: value };
-        return [ ...memo, quad ];
-      }, []);
+      try {
+        // The result is an object with predicate as keys and strings as values
+        const quads = Object.entries(res).reduce((memo, [ key, value ]) => {
+          // console.log(`Parsing ${key} ${value}`);
+          const parsed = JSON.parse(value);
+          if (!(parsed instanceof Array)) return [ ...memo, { subject: id, predicate: key, object: parsed } ];
+          const quads = parsed.map(object => ({ subject: id, predicate: key, object }));
+          return [ ...memo, ...quads ];
+        }, []);
 
-      const [ expanded ] = await Doc.expand(await Doc.fromQuads(quads, Context.context), Context.context);
-      const compacted = await Doc.compact(expanded, Context.context);
-      return resolve(compacted);
+        const [ expanded ] = await Doc.expand(await Doc.fromQuads(quads, Context.context), Context.context);
+        const compacted = await Doc.compact(expanded, Context.context);
+        return resolve(compacted);
+      } catch(e) {
+        console.error(e);
+        reject(e);
+      }
     });
   });
 }
@@ -91,39 +99,3 @@ export async function setDoc(doc: Doc) {
   const quads = await Doc.toQuads(doc);
   return setQuads(quads);
 }
-
-// export function hashKey(key: string): string {
-//   return md5(key);
-// }
-//
-// export async function has(key: string): Promise<boolean> {
-//   return new Promise<boolean>((resolve, reject) => {
-//     client.exists(hashKey(key), (err, res) => {
-//       if (err) return reject(err);
-//       console.log(`${hashKey(key)} in cache:`, res);
-//       return resolve(!!res);
-//     })
-//   });
-// }
-//
-// export async function get<V>(key: string, destringify: (str: string) => V = JSON.parse): Promise<V> {
-//   // console.log(`Getting ${key} from cache`);
-//   return new Promise<V>((resolve, reject) => {
-//     client.get(hashKey(key), (err, res) => {
-//       if (err) return reject(err);
-//       console.log("Just got:", res);
-//       return resolve(destringify(res));
-//     })
-//   });
-// }
-//
-// export async function set<V>(key: string, value: V, stringify: (value: V) => string = JSON.stringify): Promise<V> {
-//   // console.log(`Caching ${key}`);
-//   return new Promise<V>((resolve, reject) => {
-//     client.set(hashKey(key), stringify(value), (err, res) => {
-//       if (err) return reject(err);
-//       console.log("Just set:", value);
-//       return resolve(value);
-//     })
-//   });
-// }

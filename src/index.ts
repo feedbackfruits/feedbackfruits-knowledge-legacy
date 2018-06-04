@@ -26,14 +26,12 @@ if (require.main === module) {
       apiKey: Config.APOLLO_API_KEY
     });
 
-    engine.listen({
+    if (Config.APOLLO_API_KEY) engine.listen({
       port: PORT,
       httpServer: server,
     });
-
-
+    else server.listen(PORT);
     Logger.log("Server started, listening on", PORT);
-    // server.listen(PORT);
 
     // This needs to happen after the server starts listening
     const subscriptionServer = SubscriptionServer.create(
