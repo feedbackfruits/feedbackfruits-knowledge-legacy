@@ -1,5 +1,6 @@
 {
   "name": "feedbackfruits-knowledge",
+  "stack": "heroku-16",
   "scripts": {},
   "env": {
     "NODE_ENV": {
