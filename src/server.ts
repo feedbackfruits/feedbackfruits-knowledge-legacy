@@ -121,7 +121,6 @@ export async function create() {
   }));
 
   server.all("/", bodyParser.json(), (req, res, next) => {
-    console.log('Bla!', req.body);
     if (typeof req.body === 'object' && Object.keys(req.body).length === 0) return next(new Error('POST body cannot be an empty object.'));
     next();
   }, graphqlExpress(<any>{

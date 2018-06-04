@@ -77,7 +77,6 @@ export function parseQuery(query: Query): string {
 export function groupQueries(queries: Query[]): CompactedQuery[] {
   console.log(`GROUP: Grouping ${queries.length} queries`);
   const simple = <SimpleQuery[]>queries.filter(q => q.type === 'SimpleQuery');
-  // const reverse = <ReverseFilterQuery[]>queries.filter(q => q.type === 'ReverseFilterQuery');
 
   // Group by subject
   const bySubject = simple.reduce<{ [index: string]: { [index: string]: boolean } }>((memo, query) => {
@@ -111,13 +110,6 @@ export function groupQueries(queries: Query[]): CompactedQuery[] {
   // const grouped = queries;
   console.log(`GROUP: Retuning ${compacted.length} queries`);
   return <any[]>compacted;
-}
-
-export function ungroupResults(results: any[], queries: CompactedQuery[]): any[] {
-  // const reduced = queries.reduce(() => {
-  //
-  // });
-  return results;
 }
 
 export async function queryMany(queriesObj: { [index: string]: Query }): Promise<{ [index: string]: any }> {
@@ -176,61 +168,17 @@ export async function queryMany(queriesObj: { [index: string]: Query }): Promise
 
   // console.log('Results by hash:', byHash);
   return byHash;
-
-  // const results = mapped.map((query) => {
-  //   const result = response[encodeQuery(query)];
-  //   return result;
-  // });
-  // console.log('Results:', results);
-  // const ungrouped = ungroupResults(results, grouped);
-  // return results;
 }
 
 export const loader = new DataLoader<Query, any>(async queries => {
   const queriesObj = queries.reduce((memo, query) => {
-    console.log('Reducing queries:', JSON.stringify(query));
-    // if (query.type !== 'SimpleQuery') return memo;
     const hash = encodeQuery(parseQuery(query));
     return { ...memo, [hash]: query };
   }, {});
 
-  // console.log('Awaiting queryMany...');
   const results = await queryMany(<any>queriesObj);
   console.log('Retuning results:', results);
   return Object.values(results);
-  // const grouped = groupQueries(queries);
-  // // console.log('Grouped queries:', grouped);
-  //
-  // const groupedBySubject = grouped.reduce((memo, query) => {
-  //   const { subjects } = query;
-  //   return subjects.reduce((memo, subject) => ({ ...memo, [subject]: query }), memo);
-  // }, {});
-  //
-  // const mapped = queries.map(query => {
-  //   if (query.type !== 'SimpleQuery') return query;
-  //   const { subject, predicate } = query;
-  //   if (subject in groupedBySubject) return groupedBySubject[subject];
-  //   return query;
-  // }).map(parseQuery);
-  //
-  // // console.log('Mapped:', mapped.map(m => ({ q: m, encoded: encodeQuery[m] })));
-  //
-  // const parsed = grouped.map(parseQuery);
-  // const query = `{
-  //   ${parsed.map((query, i) => `
-  //     ${encodeQuery(query)}: ${query}
-  //   `)}
-  // }`;
-  //
-  // const response = await cayley(query);
-  // // console.log('Response:', response);
-  // const results = mapped.map((query) => {
-  //   const result = response[encodeQuery(query)];
-  //   return result;
-  // });
-  // // console.log('Results:', results);
-  // // const ungrouped = ungroupResults(results, grouped);
-  // return results;
 }, {
   maxBatchSize: 1000,
 });
