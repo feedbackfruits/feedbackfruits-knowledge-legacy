@@ -55,6 +55,19 @@ async function normalizeJSONLD(compacted): Promise<object> {
 export async function getSchema() {
   const { classes } = await getClasses(Context.turtle);
 
+  // Hacks to make sure all of the Object Types are available
+  const objectTypes = classes.reduce((memo, c) => {
+    const name = semtools.getLocalName(c.iri);
+    const objectType = graph.getObjectType(c.iri);
+    return {
+      ...memo,
+      [name]: {
+        type: objectType,
+        resolve() { return null; }
+      }
+    };
+  }, {})
+
   // Expose class as a type so things rdfs:Class is queryable
   const fields = ["http://www.w3.org/2000/01/rdf-schema#Class"].concat(classes.map(c => c.iri)).reduce((memo, iri) => {
     const name = semtools.getLocalName(iri);
@@ -66,7 +79,7 @@ export async function getSchema() {
           // page: { type: GraphQLInt, defaultValue: 1 },
           // perPage: { type: GraphQLInt, defaultValue: 10 },
         },
-        type: new GraphQLList(graph.getObjectType(iri)),
+        type: new GraphQLList(graph.getInterfaceType(iri)),
         resolve: async (source, args, context) => {
           console.log(`Resolving top-level ${name}`);
           const { id  } = args;
@@ -88,6 +101,15 @@ export async function getSchema() {
       }
     };
   }, {
+    types: {
+      type: new GraphQLObjectType({
+        name: 'ObjectTypes',
+        fields: objectTypes
+      }),
+      resolve() {
+        return null;
+      }
+    },
     search: {
       args: {
         about: {

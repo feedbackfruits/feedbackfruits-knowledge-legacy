@@ -7,6 +7,7 @@ graph.parse(Context.turtle);
 
 graph['https://knowledge.express/tag'].shouldNeverUseInverseOf = true;
 graph['https://knowledge.express/annotation'].shouldNeverUseInverseOf = true;
+graph['http://schema.org/encoding'].shouldNeverUseInverseOf = true;
 // graph['https://knowledge.express/caption'].shouldNeverUseInverseOf = true;
 
 export default graph;
