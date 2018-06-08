@@ -1,6 +1,7 @@
 require("dotenv").load({ silent: true });
 
 const {
+  NODE_ENV = 'development',
   PORT = 4000,
   CAYLEY_ADDRESS = "http://localhost:64210/",
   ELASTICSEARCH_ADDRESS = "http://localhost:9200",
@@ -12,6 +13,8 @@ const {
   DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql",
   MAG_API_KEY,
   APOLLO_API_KEY,
+
+  HEROKU_APP_NAME = undefined,
 } = process.env;
 
 const SEARCH_ORGANIZATIONS: string[] = 'SEARCH_ORGANIZATIONS' in process.env ? process.env.SEARCH_ORGANIZATIONS.split(',') : [
@@ -28,7 +31,11 @@ const SEARCH_ORGANIZATIONS: string[] = 'SEARCH_ORGANIZATIONS' in process.env ? p
   "https://www.youtube.com/user/YaleCourses", // "YaleCourses"
 ];
 
-const HOST = 'HOST' in process.env ? process.env.HOST : `ws://localhost:${PORT}/`;
+let HOST = 'HOST' in process.env ? process.env.HOST : `ws://localhost:${PORT}/`;
+
+if (NODE_ENV === 'review') {
+  HOST = `wss://${HEROKU_APP_NAME}.herokuapp.com/`;
+}
 
 export {
   PORT,

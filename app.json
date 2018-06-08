@@ -23,7 +23,9 @@
     }
   },
   "formation": {},
-  "addons": [],
+  "addons": [
+    "heroku-redis"
+  ],
   "buildpacks": [
   ]
 }
