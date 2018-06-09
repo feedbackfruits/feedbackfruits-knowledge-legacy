@@ -1,17 +1,20 @@
+defaults: &defaults
+  working_directory: ~/feedbackfruits-knowledge
+  docker:
+    - image: node:8.5.0
+      environment:
+        NODE_ENV: test
+        ELASTICSEARCH_INDEX_NAME: test_knowledge
+    - image: elasticsearch:5-alpine
+      environment:
+        ES_JAVA_OPTS: -Xms512m -Xmx1024m
+    - image: quay.io/cayleygraph/cayley:latest
+    - image: redis
+
 version: 2
 jobs:
   build:
-    working_directory: ~/feedbackfruits-knowledge
-    docker:
-      - image: node:8.5.0
-        environment:
-          NODE_ENV: test
-          ELASTICSEARCH_INDEX_NAME: test_knowledge
-      - image: elasticsearch:5-alpine
-        environment:
-          ES_JAVA_OPTS: -Xms512m -Xmx1024m
-      - image: quay.io/cayleygraph/cayley:latest
-      - image: redis
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
@@ -49,13 +52,61 @@ jobs:
 
       - store_artifacts:
           path: coverage
-
+  deploy-branch:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Prepare deployment
+          command: |
+            # Run credentials script as default user
+            bash .circleci/setup-heroku-credentials.sh
       - deploy:
           name: Deploy to Heroku
           command: |
             ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
-            if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$"; then
-              git push git@heroku.com:feedbackfruits-knowledge.git $CIRCLE_SHA1:refs/heads/master -f
-            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
               git push git@heroku.com:staging-fbf-knowledge.git $CIRCLE_SHA1:refs/heads/master -f
             fi
+  deploy-tag:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Prepare deployment
+          command: |
+            # Run credentials script as default user
+            bash .circleci/setup-heroku-credentials.sh
+      - deploy:
+          name: Deploy to Heroku
+          command: |
+            ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              git push git@heroku.com:feedbackfruits-knowledge.git $CIRCLE_SHA1:refs/heads/master -f
+            fi
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
+      - deploy-branch:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /.*/
+      - deploy-tag:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
