@@ -65,9 +65,7 @@ jobs:
           name: Deploy to Heroku
           command: |
             ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              git push git@heroku.com:staging-fbf-knowledge.git $CIRCLE_SHA1:refs/heads/master -f
-            fi
+            git push git@heroku.com:staging-fbf-knowledge.git $CIRCLE_SHA1:refs/heads/master -f
   deploy-tag:
     <<: *defaults
     steps:
@@ -81,9 +79,7 @@ jobs:
           name: Deploy to Heroku
           command: |
             ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              git push git@heroku.com:feedbackfruits-knowledge.git $CIRCLE_SHA1:refs/heads/master -f
-            fi
+            git push git@heroku.com:feedbackfruits-knowledge.git $CIRCLE_SHA1:refs/heads/master -f
 workflows:
   version: 2
   build-and-deploy:
