@@ -12,7 +12,7 @@ import { Doc, Context } from 'feedbackfruits-knowledge-engine';
 
 import * as Cache from '../cache';
 import * as Config from '../config';
-import Elasticsearch from '../elasticsearch';
+import * as Search from '../search';
 
 import { Observable } from 'rxjs';
 import graph from './semantic-graph';
@@ -125,47 +125,12 @@ export async function getSchema() {
       type: SearchType,
       resolve: async (source, args, context) => {
         const { about: entities = [], page = 1, perPage = 10 } = args;
-        const from = ((page || 0) - 1) * perPage;
-        const size = perPage;
-
-        const query = {
-          from,
-          size,
-          query: {
-            bool: {
-              must: [
-                {
-                  terms : {
-                    sourceOrganization: Config.SEARCH_ORGANIZATIONS
-                  }
-                },
-                {
-                  has_child: {
-                    type: "Tag",
-                    score_mode : "sum",
-                    query: {
-                      terms: {
-                        about: entities
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        };
-
-        const searchResults = await Elasticsearch('resources', 'Resource', JSON.stringify(query), from, size)
-        const totalPages = Math.ceil(searchResults.meta.total / perPage);
-
+        const { meta, results } = await Search.search(entities, page, perPage);
+        const mapped = await Promise.all(results.map(result => normalizeJSONLD(result)));
+        console.log('Done searching:', mapped);
         return {
-          meta: {
-            page,
-            perPage,
-            totalPages,
-            totalResults: searchResults.meta.total
-          },
-          results: searchResults.results.map(result => normalizeJSONLD(result._source))
+          meta,
+          results: mapped
         }
       }
     }

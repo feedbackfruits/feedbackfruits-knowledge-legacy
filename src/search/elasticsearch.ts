@@ -3,7 +3,7 @@ import elasticsearch = require("elasticsearch");
 import {
   ELASTICSEARCH_ADDRESS,
   ELASTICSEARCH_INDEX_NAME
-} from "./config";
+} from "../config";
 
 const client = new elasticsearch.Client( {
   host: ELASTICSEARCH_ADDRESS,
