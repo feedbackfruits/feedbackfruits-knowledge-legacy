@@ -39,13 +39,17 @@ export async function search(entities, page, pageSize) {
         match: {
           name: {
             query: name,
+            operator: 'and',
             boost: 2
           }
         }
       },
       {
         match: {
-          description: name
+          description: {
+            query: name,
+            operator: 'and',
+          }
         }
       }
     ];
