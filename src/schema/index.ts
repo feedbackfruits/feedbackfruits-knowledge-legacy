@@ -32,12 +32,20 @@ async function normalizeJSONLD(compacted): Promise<object> {
   }, {});
 
   const corrected = Object.entries(compacted).reduce((memo, [ key, value ]) => {
+    // HACKS!
+    if (key === 'name' && value instanceof Array) value = value[0];
+
     if (key[0] === '@') return { ...memo, [key]: localized[key] };
     if (!(typeof value === 'object')) return { ...memo, [key]: value };
     if (!(value instanceof Array)) {
-      throw new Error('Not implemented.');
+      // console.log(`Broke on:`, key, value, localized[key]);
+      // throw new Error('Not implemented.');
+      return { ...memo, [key]: value["@id"] }
     }
-    return { ...memo, [key]: localized[key].map(doc => doc["@id"]) };
+    return { ...memo, [key]: localized[key].map(doc => {
+      if (!(typeof doc === 'object')) return doc;
+      return doc["@id"];
+    }) };
   }, {});
 
   const merged: object = {
@@ -88,13 +96,13 @@ export async function getSchema() {
           const cached = await Promise.all(args.id.map(async (id) => {
             // const cached = null;
             const cached = await Cache.getDoc(id);
-            console.log('Cached result:', cached);
+            // console.log('Cached result:', cached);
             const result = cached ? (await normalizeJSONLD(cached)) : { id };
-            console.log('Returning result:', result);
+            // console.log('Returning result:', result);
             return result;
           }));
 
-          console.log(`Returning cached:`, cached);
+          // console.log(`Returning cached:`, cached);
 
           return cached;
         }
@@ -127,7 +135,7 @@ export async function getSchema() {
         const { about: entities = [], page = 1, perPage = 10 } = args;
         const { meta, results } = await Search.search(entities, page, perPage);
         const mapped = await Promise.all(results.map(result => normalizeJSONLD(result)));
-        console.log('Done searching:', mapped);
+        // console.log('Done searching:', mapped);
         return {
           meta,
           results: mapped
