@@ -30,11 +30,28 @@ jobs:
           command: yarn install
 
       - run:
+          name: install dockerize
+          command: |
+            wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+            tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+            rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+
+      - run:
+          name: Wait for ElasticSearch
+          command: dockerize -wait http://localhost:9200 -timeout 1m
+
+      - run:
+          name: Wait for Cayley
+          command: dockerize -wait http://localhost:64210 -timeout 1m
+
+      - run:
           name: Seed Elasticsearch
           command: |
             sleep 10
             curl --retry 2 --retry-delay 2 -H "Content-Type: application/x-ndjson" -XPUT --data-binary @seeds/elasticsearch-mapping-old.json localhost:9200/test_knowledge
-            curl --retry 2 --retry-delay 2 -H "Content-Type: application/x-ndjson" -XPUT --data-binary @seeds/elasticsearch-mapping-resources.json localhost:9200/test_knowledge_resources
+            curl --retry 2 --retry-delay 2 -H "Content-Type: application/x-ndjson" -XPUT --data-binary @seeds/elasticsearch-mapping-resources.json localhost:9200/test_knowledge_resources_search
             curl --retry 2 --retry-delay 2 -H "Content-Type: application/x-ndjson" -XPOST --data-binary @seeds/elasticsearch.ndjson localhost:9200/_bulk
 
       - run:

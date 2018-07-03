@@ -23,7 +23,7 @@ type SearchResults = {
 export async function query(index: string, type: string, queryBody: string, from: number, size: number): Promise<SearchResults> {
   const res = await new Promise<{ hits: { hits: SearchResult[], total: number }}>((resolve, reject) => {
     client.search({
-      index: index === ELASTICSEARCH_INDEX_NAME ? index :`${ELASTICSEARCH_INDEX_NAME}_${index}`,
+      index: index === ELASTICSEARCH_INDEX_NAME ? index :`${ELASTICSEARCH_INDEX_NAME}_${index}_search`,
       type,
       body: queryBody,
       from,

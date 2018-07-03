@@ -34,6 +34,10 @@ async function normalizeJSONLD(compacted): Promise<object> {
   const corrected = Object.entries(compacted).reduce((memo, [ key, value ]) => {
     // HACKS!
     if (key === 'name' && value instanceof Array) value = value[0];
+    if (key === 'annotation') {
+      console.log('ANNOTATION HACKS!!!');
+      return memo;
+    }
 
     if (key[0] === '@') return { ...memo, [key]: localized[key] };
     if (!(typeof value === 'object')) return { ...memo, [key]: value };
@@ -92,6 +96,8 @@ export async function getSchema() {
           console.log(`Resolving top-level ${name}`);
           const { id  } = args;
           if  (!("id" in args)) return null;
+
+          if (!Config.CACHE_ENABLED) return [].concat(id).map(id => ({ id }));
 
           const cached = await Promise.all(args.id.map(async (id) => {
             // const cached = null;

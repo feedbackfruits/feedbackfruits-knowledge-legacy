@@ -2327,24 +2327,24 @@ fast-levenshtein@~2.0.4:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
 
-feedbackfruits-knowledge-context@feedbackfruits/feedbackfruits-knowledge-context#^1.1.7:
-  version "1.1.7"
-  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-context/tar.gz/39dbb713cf6612f2003055517416e4e027d72768"
+feedbackfruits-knowledge-context@feedbackfruits/feedbackfruits-knowledge-context#^1.1.8:
+  version "1.1.8"
+  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-context/tar.gz/e9d62035d6ac662419b8fb5d6b45c7636129f4ef"
   dependencies:
     "@types/node" "^8.0.8"
     recursive-readdir-sync "^1.0.6"
     tslint "^5.5.0"
     typescript "^2.4.1"
 
-"feedbackfruits-knowledge-engine@github:feedbackfruits/feedbackfruits-knowledge-engine#^1.4.1":
-  version "1.4.1"
-  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-engine/tar.gz/0ff55f7111e83e493355f0473ff4c514d330d72e"
+"feedbackfruits-knowledge-engine@github:feedbackfruits/feedbackfruits-knowledge-engine#^1.4.2":
+  version "1.4.2"
+  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-engine/tar.gz/0ed9bc467390d27e0e465bdb121f2da84e9fb629"
   dependencies:
     "@types/n3" "^0.0.3"
     "@types/node" "^8.0.14"
     dotenv "^4.0.0"
     duration-iso-8601 "^1.1.0"
-    feedbackfruits-knowledge-context feedbackfruits/feedbackfruits-knowledge-context#^1.1.7
+    feedbackfruits-knowledge-context feedbackfruits/feedbackfruits-knowledge-context#^1.1.8
     isuri "^2.0.3"
     jsonld "^0.5.18"
     memux "^0.4.5"
@@ -5109,9 +5109,9 @@ sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
-"semantic-graphql@github:knowledge-express/semantic-graphql#^0.6.3":
-  version "0.6.3"
-  resolved "https://codeload.github.com/knowledge-express/semantic-graphql/tar.gz/4bdb00a038f588d8f693122dfedcf72584800ff6"
+"semantic-graphql@github:knowledge-express/semantic-graphql#^0.6.4":
+  version "0.6.4"
+  resolved "https://codeload.github.com/knowledge-express/semantic-graphql/tar.gz/ce5da5398be5d935357e986a79b19fdb0ea728b7"
   dependencies:
     n3 "^0.10.0"
 

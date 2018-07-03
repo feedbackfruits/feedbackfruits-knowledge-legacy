@@ -1,8 +1,10 @@
 require("dotenv").load({ silent: true });
 
 const {
-  NODE_ENV = 'development',
+  NODE_ENV = 'test',
   PORT = 4000,
+  NEPTUNE_SPARQL_ENDPOINT,
+
   CAYLEY_ADDRESS = "http://localhost:64210/",
   ELASTICSEARCH_ADDRESS = "http://localhost:9200",
   ELASTICSEARCH_INDEX_NAME = "knowledge",
@@ -13,6 +15,8 @@ const {
   DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql",
   MAG_API_KEY,
   APOLLO_API_KEY,
+
+  CACHE_ENABLED = false,
 
   HEROKU_APP_NAME = undefined,
 } = process.env;
@@ -31,6 +35,7 @@ const SEARCH_ORGANIZATIONS: string[] = 'SEARCH_ORGANIZATIONS' in process.env ? p
   "https://www.youtube.com/user/YaleCourses", // "YaleCourses"
 ];
 
+const GRAPH = 'GRAPH' in process.env ? process.env.GRAPH : `<https://knowledge.express/graph/${NODE_ENV}>`;
 let HOST = 'HOST' in process.env ? process.env.HOST : `ws://localhost:${PORT}/`;
 
 if (NODE_ENV === 'review') {
@@ -40,6 +45,7 @@ if (NODE_ENV === 'review') {
 export {
   PORT,
   HOST,
+  NEPTUNE_SPARQL_ENDPOINT,
   CAYLEY_ADDRESS,
   ELASTICSEARCH_ADDRESS,
   ELASTICSEARCH_INDEX_NAME,
@@ -50,4 +56,6 @@ export {
   MAG_API_KEY,
   APOLLO_API_KEY,
   SEARCH_ORGANIZATIONS,
+  CACHE_ENABLED,
+  GRAPH,
 };

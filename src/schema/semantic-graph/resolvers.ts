@@ -4,19 +4,23 @@ import { Context } from 'feedbackfruits-knowledge-engine';
 import * as CayleyLoader from './cayley-loader';
 import * as ContextLoader from './context-loader';
 import * as DBPediaLoader from './dbpedia-loader';
+import * as NeptuneLoader from './neptune-loader';
 
 import * as Cache from '../../cache';
+import * as Config from '../../config';
 
 const loaders = {
   Cayley: CayleyLoader,
   Context: ContextLoader,
   DBPedia: DBPediaLoader,
+  Neptune: NeptuneLoader,
 }
 
 const loadersEnabled = {
   Cayley: true,
   Context: true,
   DBPedia: false,
+  // Neptune: true,
 };
 
 export async function resolveSourceId(source) {
@@ -26,6 +30,7 @@ export async function resolveSourceId(source) {
 
 export async function resolveResource(id) {
   // console.log('resolveResource:', id);
+  if (!Config.CACHE_ENABLED) return { id };
   const cached = await Cache.getDoc(id);
   return cached || { id };
 }
@@ -43,9 +48,11 @@ export async function resolveSourcePropertyValue(source, iri) {
   // console.log(`localName ${localName} in source?:`, localName in source);
   if (localName in source) return source[localName];
 
-  // Check Cache second
-  const cached = await Cache.getQuads({ subject: source.id, predicate: iri });
-  if (cached != null) return cached.map(({ object }) => object);
+  if (Config.CACHE_ENABLED) {
+    // Check Cache second
+    const cached = await Cache.getQuads({ subject: source.id, predicate: iri });
+    if (cached != null) return cached.map(({ object }) => object);
+  }
 
   const res = (await Promise.all(Object.keys(loadersEnabled).map(key => {
     if (loadersEnabled[key]) return loaders[key].resolveSourcePropertyValue(source, iri);
@@ -72,7 +79,7 @@ export async function resolveSourcePropertyValue(source, iri) {
 }
 
 export async function resolveSourceTypes(source): Promise<string[]> {
-  // console.log('resolveSourceTypes:', source);
+  console.log('resolveSourceTypes:', source);
 
   // Make everything an instance of rdfs:Class to conform with the rdfs:Resource type attribute
   let res = ["http://www.w3.org/2000/01/rdf-schema#Class"];
