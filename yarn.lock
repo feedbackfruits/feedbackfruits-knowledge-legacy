@@ -5109,9 +5109,9 @@ sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
-semantic-graphql@knowledge-express/semantic-graphql#feature/polymorphic-object-type:
-  version "0.6.2"
-  resolved "https://codeload.github.com/knowledge-express/semantic-graphql/tar.gz/29502352e8248c4fd35a44b44e682fa399a403d1"
+"semantic-graphql@github:knowledge-express/semantic-graphql#^0.6.3":
+  version "0.6.3"
+  resolved "https://codeload.github.com/knowledge-express/semantic-graphql/tar.gz/4bdb00a038f588d8f693122dfedcf72584800ff6"
   dependencies:
     n3 "^0.10.0"
 
