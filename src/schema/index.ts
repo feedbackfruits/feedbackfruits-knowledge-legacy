@@ -64,9 +64,9 @@ export async function getSchema() {
   const { classes } = await getClasses(Context.turtle);
 
   // Hacks to make sure all of the Object Types are available
-  const objectTypes = classes.reduce((memo, c) => {
-    const name = semtools.getLocalName(c.iri);
-    const objectType = graph.getObjectType(c.iri);
+  const objectTypes = ["http://www.w3.org/2000/01/rdf-schema#Class"].concat(classes.map(c => c.iri)).reduce((memo, iri) => {
+    const name = semtools.getLocalName(iri);
+    const objectType = graph.getObjectType(iri);
     return {
       ...memo,
       [name]: {
