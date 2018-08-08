@@ -9,7 +9,7 @@ import * as Config from '../../config'
 export const encodeQuery = query => `_${md5(query)}`;
 
 export async function queryNeptune(query: string): Promise<any> {
-  const url = `${Config.NEPTUNE_SPARQL_ENDPOINT}`;
+  const url = `${Config.NEPTUNE_READER_ENDPOINT}`;
   console.log(`Fetching Neptune entity:`, query);
 
   const response = await fetch(url, {

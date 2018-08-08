@@ -3,7 +3,8 @@ require("dotenv").load({ silent: true });
 const {
   NODE_ENV = 'test',
   PORT = 4000,
-  NEPTUNE_SPARQL_ENDPOINT,
+  NEPTUNE_READER_ENDPOINT,
+  NEPTUNE_WRITER_ENDPOINT,
 
   CAYLEY_ADDRESS = "http://localhost:64210/",
   ELASTICSEARCH_ADDRESS = "http://localhost:9200",
@@ -16,7 +17,7 @@ const {
   MAG_API_KEY,
   APOLLO_API_KEY,
 
-  CACHE_ENABLED = false,
+  CACHE_ENABLED = true,
 
   HEROKU_APP_NAME = undefined,
 } = process.env;
@@ -45,7 +46,10 @@ if (NODE_ENV === 'review') {
 export {
   PORT,
   HOST,
-  NEPTUNE_SPARQL_ENDPOINT,
+
+  NEPTUNE_READER_ENDPOINT,
+  NEPTUNE_WRITER_ENDPOINT,
+
   CAYLEY_ADDRESS,
   ELASTICSEARCH_ADDRESS,
   ELASTICSEARCH_INDEX_NAME,

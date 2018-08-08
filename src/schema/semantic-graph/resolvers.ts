@@ -17,10 +17,10 @@ const loaders = {
 }
 
 const loadersEnabled = {
-  Cayley: true,
+  // Cayley: true,
   Context: true,
   DBPedia: false,
-  // Neptune: true,
+  Neptune: true,
 };
 
 export async function resolveSourceId(source) {

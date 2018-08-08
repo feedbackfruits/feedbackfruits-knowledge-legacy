@@ -62,7 +62,7 @@
     "express": "^4.15.3",
     "express-accepts": "^0.1.0",
     "express-graphql": "^0.6.6",
-    "feedbackfruits-knowledge-engine": "github:feedbackfruits/feedbackfruits-knowledge-engine#^1.4.2",
+    "feedbackfruits-knowledge-engine": "github:feedbackfruits/feedbackfruits-knowledge-engine#^1.4.3",
     "flat": "^2.0.1",
     "graphql": "^0.11.7",
     "graphql-rxjs": "^0.11.7-0",
