@@ -2,6 +2,7 @@ import * as redis from 'redis';
 import * as md5 from 'md5';
 // import * as semtools from 'semantic-toolkit';
 import { Quad, Doc, Context } from 'feedbackfruits-knowledge-engine';
+import { fixJSONLD } from './schema';
 
 import * as Config from './config';
 
@@ -85,7 +86,9 @@ export async function getDoc(id: string): Promise<Doc> {
 
         const [ expanded ] = await Doc.expand(await Doc.fromQuads(quads, Context.context), Context.context);
         const compacted = await Doc.compact(expanded, Context.context);
-        return resolve(compacted);
+        const fixed = fixJSONLD(compacted);
+        // console.log(`Cached result for ${id}:`, compacted);
+        return resolve(fixed);
       } catch(e) {
         console.error(e);
         reject(e);
@@ -95,7 +98,9 @@ export async function getDoc(id: string): Promise<Doc> {
 }
 
 export async function setDoc(doc: Doc) {
-  // console.log(`Setting doc ${doc["@id"]} to cache.`);
-  const quads = await Doc.toQuads(doc);
+  const fixed = fixJSONLD(doc);
+  const [ expanded ] = await Doc.expand(fixed, Context.context);
+  const quads = await Doc.toQuads(expanded);
+  // console.log(`Setting doc ${doc["@id"]} with ${quads.length} quads to cache.`);
   return setQuads(quads);
 }

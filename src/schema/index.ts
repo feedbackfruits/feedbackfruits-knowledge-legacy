@@ -23,21 +23,33 @@ const lowerCaseFirst = (str: string): string => {
   return str[0].toLowerCase() + str.slice(1, str.length);
 };
 
+export function fixJSONLD(compacted: Doc): Doc {
+  const fixed = {
+    ...compacted,
+    ...('name' in compacted ? { name: [].concat(compacted['name'])[0] } : {})
+  };
+
+  delete fixed["annotation"];
+
+  return fixed;
+}
+
 export async function normalizeJSONLD(compacted): Promise<object> {
-  const [ expanded ] = await Doc.expand(compacted, Context.context);
+  const fixed = fixJSONLD(compacted);
+  const [ expanded ] = await Doc.expand(fixed, Context.context);
   const localized = Object.entries(expanded).reduce((memo, [key, value]) => {
     if (key[0] === '@') return { ...memo, [key]: value };
     const localName = semtools.getLocalName(key);
     return { ...memo, [localName]: value };
   }, {});
 
-  const corrected = Object.entries(compacted).reduce((memo, [ key, value ]) => {
-    // HACKS!
-    if (key === 'name' && value instanceof Array) value = value[0];
-    if (key === 'annotation') {
-      console.log('ANNOTATION HACKS!!!');
-      return memo;
-    }
+  const corrected = Object.entries(fixed).reduce((memo, [ key, value ]) => {
+    // // HACKS!
+    // if (key === 'name' && value instanceof Array) value = value[0];
+    // if (key === 'annotation') {
+    //   console.log('ANNOTATION HACKS!!!');
+    //   return memo;
+    // }
 
     if (key[0] === '@') return { ...memo, [key]: localized[key] };
     if (!(typeof value === 'object')) return { ...memo, [key]: value };
@@ -140,7 +152,10 @@ export async function getSchema() {
       resolve: async (source, args, context) => {
         const { about: entities = [], page = 1, perPage = 10 } = args;
         const { meta, results } = await Search.search(entities, page, perPage);
-        const mapped = await Promise.all(results.map(result => normalizeJSONLD(result)));
+        const mapped = await Promise.all(results.map(async result => {
+          await Cache.setDoc(result);
+          return normalizeJSONLD(result);
+        }));
         // console.log('Done searching:', mapped);
         return {
           meta,

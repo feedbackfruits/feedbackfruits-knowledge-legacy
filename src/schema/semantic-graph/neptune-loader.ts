@@ -99,9 +99,9 @@ export function parseQuery(query: Query.Query): { query: string, keys: { [index:
 }
 
 export const loader = new DataLoader<any, any>(async (loadables: Query.SimpleQuery[]) => {
-  const grouped = Query.groupQueries(loadables);
-  const parsed = grouped.map(parseQuery);
-  // const parsed = loadables.map(parseQuery);
+  // const grouped = Query.groupQueries(loadables);
+  // const parsed = grouped.map(parseQuery);
+  const parsed = loadables.map(parseQuery);
   const query = `
   SELECT *
   FROM NAMED ${Config.GRAPH}

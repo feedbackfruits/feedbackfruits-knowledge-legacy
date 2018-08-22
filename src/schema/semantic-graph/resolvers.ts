@@ -81,7 +81,7 @@ export async function resolveSourcePropertyValue(source, iri) {
 }
 
 export async function resolveSourceTypes(source): Promise<string[]> {
-  console.log('resolveSourceTypes:', source);
+  // console.log('resolveSourceTypes:', source);
 
   // Make everything an instance of rdfs:Class to conform with the rdfs:Resource type attribute
   let res = ["http://www.w3.org/2000/01/rdf-schema#Class"];

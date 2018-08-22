@@ -9,7 +9,7 @@ const {
   CAYLEY_ADDRESS = "http://localhost:64210/",
   ELASTICSEARCH_ADDRESS = "http://localhost:9200",
   ELASTICSEARCH_INDEX_NAME = "knowledge",
-  REDIS_URL = undefined,
+  REDIS_URL = "redis://localhost:6379",
 
   MAG_API_ENDPOINT = "https://academic.microsoft.com/api/browse/GetEntityDetails",
   DBPEDIA_ENDPOINT = "http://dbpedia.org/resource/",
