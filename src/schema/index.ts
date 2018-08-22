@@ -23,7 +23,7 @@ const lowerCaseFirst = (str: string): string => {
   return str[0].toLowerCase() + str.slice(1, str.length);
 };
 
-async function normalizeJSONLD(compacted): Promise<object> {
+export async function normalizeJSONLD(compacted): Promise<object> {
   const [ expanded ] = await Doc.expand(compacted, Context.context);
   const localized = Object.entries(expanded).reduce((memo, [key, value]) => {
     if (key[0] === '@') return { ...memo, [key]: value };

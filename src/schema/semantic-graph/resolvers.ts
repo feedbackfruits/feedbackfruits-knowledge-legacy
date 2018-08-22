@@ -9,6 +9,8 @@ import * as NeptuneLoader from './neptune-loader';
 import * as Cache from '../../cache';
 import * as Config from '../../config';
 
+import { normalizeJSONLD } from '..';
+
 const loaders = {
   Cayley: CayleyLoader,
   Context: ContextLoader,
@@ -31,8 +33,8 @@ export async function resolveSourceId(source) {
 export async function resolveResource(id) {
   // console.log('resolveResource:', id);
   if (!Config.CACHE_ENABLED) return { id };
-  const cached = await Cache.getDoc(id);
-  return cached || { id };
+  const cached = await Cache.getDoc(id)
+  return cached ? await normalizeJSONLD(cached) : { id };
 }
 
 export async function resolveResources(ids) {
@@ -86,7 +88,11 @@ export async function resolveSourceTypes(source): Promise<string[]> {
 
   // Check source first
   if ('type' in source) res = [].concat(res, source.type);
-  else {
+  else if (Config.CACHE_ENABLED) {
+    // Check Cache second
+    const cached = await Cache.getQuads({ subject: source.id, predicate: Context.iris.rdf.type });
+    if (cached != null) return cached.map(({ object }) => object);
+  } else {
     res = [].concat(res, (await Promise.all(Object.keys(loadersEnabled).map(key => {
       if (loadersEnabled[key]) return loaders[key].resolveSourceTypes(source);
       return null;
