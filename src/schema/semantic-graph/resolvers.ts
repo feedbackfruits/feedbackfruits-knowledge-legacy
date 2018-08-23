@@ -53,7 +53,7 @@ export async function resolveSourcePropertyValue(source, iri) {
   if (Config.CACHE_ENABLED) {
     // Check Cache second
     const cached = await Cache.getQuads({ subject: source.id, predicate: iri });
-    if (cached != null) return cached.map(({ object }) => object);
+    if (cached.length > 0) return cached.map(({ object }) => object);
   }
 
   const res = (await Promise.all(Object.keys(loadersEnabled).map(key => {
@@ -88,11 +88,14 @@ export async function resolveSourceTypes(source): Promise<string[]> {
 
   // Check source first
   if ('type' in source) res = [].concat(res, source.type);
-  else if (Config.CACHE_ENABLED) {
+
+  let cached = [];
+  if (Config.CACHE_ENABLED) {
     // Check Cache second
-    const cached = await Cache.getQuads({ subject: source.id, predicate: Context.iris.rdf.type });
-    if (cached != null) return cached.map(({ object }) => object);
-  } else {
+    cached = await Cache.getQuads({ subject: source.id, predicate: Context.iris.rdf.type });
+  }
+  if (cached.length > 0) res = [].concat(res, cached.map(({ object }) => object));
+  else {
     res = [].concat(res, (await Promise.all(Object.keys(loadersEnabled).map(key => {
       if (loadersEnabled[key]) return loaders[key].resolveSourceTypes(source);
       return null;
@@ -102,6 +105,16 @@ export async function resolveSourceTypes(source): Promise<string[]> {
       if (memo != null && result == null) return memo;
       if (memo != null && result != null) return [].concat(memo, result);
     }, undefined) || []);
+  }
+
+  // Store result in Cache
+  if (res != null) {
+    const quads = [].concat(res).map(object => ({
+      subject: source.id,
+      predicate: Context.iris.rdf.type,
+      object
+    }));
+    await Cache.setQuads(quads);
   }
 
   // Apply hacks

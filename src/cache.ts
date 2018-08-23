@@ -36,7 +36,7 @@ export async function getQuads({ subject, predicate }): Promise<Quad[]> {
   return new Promise<Quad[]>((resolve, reject) => {
     client.hget(subject, predicate, (err, res: string) => {
       if (err) return reject(err);
-      if (!res) return resolve(null);
+      if (!res) return resolve([]);
       const objects = [].concat(JSON.parse(res));
       return resolve(objects.map(object => ({ subject, predicate, object })));
     });

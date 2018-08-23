@@ -88,20 +88,38 @@ export function parseQuery(query: Query.Query): { query: string, keys: { [index:
     const { subjects, predicates } = query;
     const predicateKeys = predicates.reduce((memo, predicate) => ({ ...memo, [predicate.iri]: md5(`${predicate.iri}`) }), {});
     // console.log('Predicate keys:', JSON.stringify(predicateKeys));
-    return { keys: predicateKeys, query: `
-      SELECT *
-      WHERE {
-        VALUES (?subject) { ${subjects.map(subject => `( <${subject}> )`).join(' ')} }
-        ${predicates.map(predicate => `OPTIONAL { ?subject <${predicate.iri}> ?${predicateKeys[predicate.iri]} . }`).join('\n')}
-      }
-    ` };
+    const parsed = `
+        ${predicates.map(predicate => {
+        const objectKey = predicateKeys[predicate.iri];
+        return `{
+            SELECT *
+            WHERE {
+              VALUES (?subject) { ${subjects.map(subject => `( <${subject}> )`).join(' ')} }
+              { ?subject <${predicate.iri}> ?${objectKey} }
+            }
+          }`
+      }).join(' UNION ')}`;
+
+    return { keys: predicateKeys, query: parsed };
   }
 }
 
+export function dedupQueries(queries: Query.SimpleQuery[]): Query.SimpleQuery[] {
+  return Object.values(queries.reduce((memo, query) => {
+    const { subject, predicate } = query;
+    const objectKey = md5(`<${subject}> <${predicate.iri}>`);
+    return {
+      ...memo,
+      [objectKey]: query
+    }
+  }, {}));
+}
+
 export const loader = new DataLoader<any, any>(async (loadables: Query.SimpleQuery[]) => {
-  // const grouped = Query.groupQueries(loadables);
-  // const parsed = grouped.map(parseQuery);
-  const parsed = loadables.map(parseQuery);
+  const deduped = dedupQueries(loadables);
+  const grouped = Query.groupQueries(deduped);
+  const parsed = grouped.map(parseQuery);
+  // const parsed = deduped.map(parseQuery);
   const query = `
   SELECT *
   FROM NAMED ${Config.GRAPH}
