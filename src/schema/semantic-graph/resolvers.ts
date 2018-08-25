@@ -1,5 +1,5 @@
 import * as semtools from 'semantic-toolkit';
-import { Context } from 'feedbackfruits-knowledge-engine';
+import { Context, Helpers as _Helpers } from 'feedbackfruits-knowledge-engine';
 
 import * as CayleyLoader from './cayley-loader';
 import * as ContextLoader from './context-loader';
@@ -20,7 +20,7 @@ const loaders = {
 
 const loadersEnabled = {
   // Cayley: true,
-  Context: true,
+  Context: false,
   DBPedia: false,
   Neptune: true,
 };
@@ -43,7 +43,7 @@ export async function resolveResources(ids) {
 }
 
 export async function resolveSourcePropertyValue(source, iri) {
-  // console.log('resolveSourcePropertyValue:', source.id, iri);
+  console.log('resolveSourcePropertyValue:', source, iri);
 
   // Check source first
   const localName = semtools.getLocalName(iri);
@@ -53,7 +53,10 @@ export async function resolveSourcePropertyValue(source, iri) {
   if (Config.CACHE_ENABLED) {
     // Check Cache second
     const cached = await Cache.getQuads({ subject: source.id, predicate: iri });
-    if (cached.length > 0) return cached.map(({ object }) => object);
+    if (cached.length > 0) {
+      console.log('Cached:', cached);
+      return cached.map(({ object }) => object);
+    }
   }
 
   const res = (await Promise.all(Object.keys(loadersEnabled).map(key => {
@@ -71,12 +74,12 @@ export async function resolveSourcePropertyValue(source, iri) {
     const quads = [].concat(res).map(object => ({
       subject: source.id,
       predicate: iri,
-      object
+      object: object
     }));
     await Cache.setQuads(quads);
   }
 
-  // console.log('resolveSourcePropertyValue result:', res);
+  console.log('resolveSourcePropertyValue result:', iri, res);
   return res;
 }
 

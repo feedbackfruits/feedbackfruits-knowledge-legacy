@@ -9,8 +9,8 @@ const client = new elasticsearch.Client( {
   apiVersion: "5.x"
 });
 
-type SearchResult = { _score: number, _source: object };
-type SearchResults = {
+export type SearchResult = { _score: number, _source: object };
+export type SearchResults = {
   meta: {
     from: number,
     size: number,

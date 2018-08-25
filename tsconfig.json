@@ -7,7 +7,7 @@
         "jsx": "react",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "declaration": false,
+        "declaration": true,
         "noImplicitAny": false,
         "types": ["node"],
         "noImplicitUseStrict": false,
@@ -26,6 +26,7 @@
       "src/**/*.ts"
     ],
     "exclude": [
+        "dist",
         "node_modules",
         "typings/browser",
         "typings/browser.d.ts"

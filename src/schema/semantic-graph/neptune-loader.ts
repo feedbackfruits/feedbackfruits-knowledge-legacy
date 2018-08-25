@@ -10,8 +10,9 @@ export const encodeQuery = query => `_${md5(query)}`;
 
 export async function queryNeptune(query: string): Promise<any> {
   const url = `${Config.NEPTUNE_READER_ENDPOINT}`;
-  console.log(`Fetching Neptune entity:`, query);
+  // console.log(`Fetching Neptune entity:`, query);
 
+  const now = Date.now();
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/sparql-query"
@@ -24,8 +25,8 @@ export async function queryNeptune(query: string): Promise<any> {
   let json;
   try {
     json = JSON.parse(text);
+    console.log('Neptune query took:' + (Date.now() - now)/1000 + ' seconds');
   } catch(e) {
-    console.log('Neptune reponse:', response.status, text);
     console.error(e);
     throw e;
   }
@@ -130,17 +131,17 @@ export const loader = new DataLoader<any, any>(async (loadables: Query.SimpleQue
   }
   `;
 
-  // console.log('Loading from Neptune:', query);
+  console.log('Loading from Neptune...');
 
   const response = await queryNeptune(query);
-  console.log('Breaking after response:', JSON.stringify(response));
+  // console.log('Breaking after response:', JSON.stringify(response));
   const keyMap = parsed.reduce((memo, { keys }) => ({ ...memo, ...invertObject(keys) }), {});
 
   // console.log(`Using inverted keyMap:`, JSON.stringify(keyMap));
 
   const results = parseCompactedResult(response, keyMap);
 
-  console.log('Breaking after results:', JSON.stringify(results));
+  // console.log('Breaking after results:', JSON.stringify(results));
 
   const mappedResults = loadables.map(l => {
     return l.subject in results
@@ -148,7 +149,7 @@ export const loader = new DataLoader<any, any>(async (loadables: Query.SimpleQue
       : undefined;
   });
 
-  console.log(`Mapped results back to:`, JSON.stringify(mappedResults));
+  // console.log(`Mapped results back to:`, JSON.stringify(mappedResults));
 
   return mappedResults;
 

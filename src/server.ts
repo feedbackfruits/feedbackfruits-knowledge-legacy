@@ -13,6 +13,8 @@ import { prepareSchema } from 'graphql-rxjs';
 import * as Config from './config';
 import { getSchema } from "./schema";
 import * as Search from './search';
+import * as Traverse from './traverse';
+// import traverse from './traverse-graph';
 
 export async function create() {
   const server = express();
@@ -51,7 +53,21 @@ export async function create() {
     }
   });
 
+
   const schema = prepareSchema(await getSchema());
+  server.get('/traverse', async (req, res, next) => {
+    try {
+      const { entities = [], resources = [] } = req.query;
+      console.log('Traversing entities:', entities);
+      const result = await Traverse.traverse(schema as any, resources);
+      console.log('Traversal result:', result);
+      res.json(result).end();
+    } catch(err) {
+      console.error('Traversal broke...');
+      console.error(err);
+      res.status(500).json(err).end();
+    }
+  });
 
   server.all('/', accepts('text/html', 'application/json'));
   server.all('/', accepts.on('text/html'), graphiqlExpress({
