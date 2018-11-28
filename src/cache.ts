@@ -8,6 +8,19 @@ import * as Config from './config';
 
 const client = redis.createClient(Config.REDIS_URL);
 
+function literalize(obj: any) {
+  if (obj instanceof Array) return obj.map(literalize);
+  if (typeof obj === 'string') return obj;
+  if (typeof obj === 'number' && obj % 1 === 0) return `"${obj}"^^<${Context.iris.xsd.integer}>`;
+  if (typeof obj === 'number' && obj % 1 !== 0) return `"${obj}"^^<http://www.w3.org/2001/XMLSchema#double>`;
+
+  throw new Error(`Object ${JSON.stringify(obj)} could not be literalized`);
+}
+
+function dedupArray(arr: string[]) {
+  return Object.keys(arr.reduce((memo, val) => ({ ...memo, [val]: true }), {}));
+}
+
 function quadsBySubject(quads: Quad[]): { [index: string]: string[] } {
   const bySubject = quads.reduce<{ [index: string]: { [index: string]: string | string[] } }>((memo, { subject, predicate, object }) => {
     if (!(subject in memo)) memo[subject] = { [predicate]: object };
@@ -26,7 +39,7 @@ function quadsBySubject(quads: Quad[]): { [index: string]: string[] } {
 
     return {
       ...memo,
-      [key]: values
+      [key]: dedupArray(values)
     }
   }, {});
 }
@@ -77,13 +90,14 @@ export async function getDoc(id: string): Promise<Doc> {
       try {
         // The result is an object with predicate as keys and strings as values
         const quads = Object.entries(res).reduce((memo, [ key, value ]) => {
-          // console.log(`Parsing ${key} ${value}`);
-          const parsed = JSON.parse(value);
+          // console.log(`Parsing ${key} ${value} of type ${typeof value}`);
+          const parsed = literalize(JSON.parse(value));
           if (!(parsed instanceof Array)) return [ ...memo, { subject: id, predicate: key, object: parsed } ];
-          const quads = parsed.map(object => ({ subject: id, predicate: key, object }));
+          const quads = parsed.map(object => ({ subject: id, predicate: key, object: object }));
           return [ ...memo, ...quads ];
         }, []);
 
+        // console.log('Got quads:', quads);
         const [ expanded ] = await Doc.expand(await Doc.fromQuads(quads, Context.context), Context.context);
         const compacted = await Doc.compact(expanded, Context.context);
         const fixed = fixJSONLD(compacted);
@@ -101,6 +115,6 @@ export async function setDoc(doc: Doc) {
   const fixed = fixJSONLD(doc);
   const [ expanded ] = await Doc.expand(fixed, Context.context);
   const quads = await Doc.toQuads(expanded);
-  // console.log(`Setting doc ${doc["@id"]} with ${quads.length} quads to cache.`);
+  // console.log(`Setting doc ${doc["@id"]} with ${quads.length} quads to cache:`, quads);
   return setQuads(quads);
 }
