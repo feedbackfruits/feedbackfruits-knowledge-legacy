@@ -26,10 +26,10 @@ export async function autocomplete(text) {
   return results;
 }
 
-export async function search(entities, page, pageSize) {
+export async function search(entities, page, perPage) {
   console.log('Searching for entities:', entities);
-  const from = ((page || 0) - 1) * pageSize;
-  const size = pageSize;
+  const from = ((page || 0) - 1) * perPage;
+  const size = perPage;
 
   const entityNames = entities.map(uri => uri.replace(/(https:\/\/en\.wikipedia\.org\/wiki\/|http:\/\/dbpedia\.org\/resource\/)/, '').replace(/_/g, ' '));
   const metadataQueries = entityNames.reduce((memo, name) => {
@@ -130,12 +130,12 @@ export async function search(entities, page, pageSize) {
   };
 
   const searchResults = await Elasticsearch('resources', 'Resource', JSON.stringify(query), from, size)
-  const totalPages = Math.ceil(searchResults.meta.total / pageSize);
+  const totalPages = Math.ceil(searchResults.meta.total / perPage);
 
   return {
     meta: {
       page,
-      pageSize,
+      perPage: perPage,
       totalPages,
       totalResults: searchResults.meta.total
     },
