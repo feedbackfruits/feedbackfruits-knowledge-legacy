@@ -17,8 +17,6 @@ const {
   MAG_API_KEY,
   APOLLO_API_KEY,
 
-  CACHE_ENABLED = true,
-
   HEROKU_APP_NAME = undefined,
 } = process.env;
 
@@ -38,6 +36,7 @@ const SEARCH_ORGANIZATIONS: string[] = 'SEARCH_ORGANIZATIONS' in process.env ? p
 
 const GRAPH = 'GRAPH' in process.env ? process.env.GRAPH : `<https://knowledge.express/graph/${NODE_ENV}>`;
 let HOST = 'HOST' in process.env ? process.env.HOST : `ws://localhost:${PORT}/`;
+let CACHE_ENABLED = 'CACHE_ENABLED' in process.env ? !(process.env.CACHE_ENABLED === 'false') : true;
 
 if (NODE_ENV === 'review') {
   HOST = `wss://${HEROKU_APP_NAME}.herokuapp.com/`;
