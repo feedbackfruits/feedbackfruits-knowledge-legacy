@@ -8,7 +8,6 @@ import * as NeptuneLoader from './neptune-loader';
 
 import * as Cache from '../../cache';
 import * as Config from '../../config';
-
 import { normalizeJSONLD } from '..';
 
 const loaders = {
@@ -43,7 +42,7 @@ export async function resolveResources(ids) {
 }
 
 export async function resolveSourcePropertyValue(source, iri) {
-  console.log('resolveSourcePropertyValue:', source, iri);
+  // console.log('resolveSourcePropertyValue:', source, iri);
 
   // Check source first
   const localName = semtools.getLocalName(iri);
@@ -54,7 +53,7 @@ export async function resolveSourcePropertyValue(source, iri) {
     // Check Cache second
     const cached = await Cache.getQuads({ subject: source.id, predicate: iri });
     if (cached.length > 0) {
-      console.log('Cached:', cached);
+      // console.log('Cached:', cached);
       return cached.map(({ object }) => object);
     }
   }
@@ -79,7 +78,7 @@ export async function resolveSourcePropertyValue(source, iri) {
     await Cache.setQuads(quads);
   }
 
-  console.log('resolveSourcePropertyValue result:', iri, res);
+  // console.log('resolveSourcePropertyValue result:', iri, res);
   return res;
 }
 

@@ -114,7 +114,7 @@ export async function getSchema() {
           const cached = await Promise.all(args.id.map(async (id) => {
             // const cached = null;
             const cached = await Cache.getDoc(id);
-            console.log('Cached result:', cached);
+            // console.log('Cached result:', cached);
             const result = cached ? (await normalizeJSONLD(cached)) : { id };
             // console.log('Returning result:', result);
             return result;

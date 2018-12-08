@@ -11,27 +11,23 @@ export type TraversalOptions = {
   threshold?: number
 };
 
-
 const lowerCaseFirst = (str: string): string => {
   return str[0].toLowerCase() + str.slice(1, str.length);
 };
 
 export async function _traverse(schema: GraphQLSchema, startingPoints: Result.TraversalResult[], done: { [index: string]: boolean }): Promise<Result.TraversalResult[]> {
-  const query = Query.generateQuery(startingPoints);
-  const queryKey = lowerCaseFirst(semtools.getLocalName(type));
-  const result = await Query.query(schema, query);
+  const byType = Query.groupByType(startingPoints)
+  const query = Query.generateQuery(byType);
+  // const queryKey = lowerCaseFirst(semtools.getLocalName(type));
+  const results = await Query.query(schema, query);
+  const parsed = Result.parseResults(results, byType);
 
-  console.log('Got query result:', JSON.stringify(result));
-
-  const results: Query.QueryResult[] = [].concat(result[queryKey] || []);
-  const { baseScore = 1, threshold = 0.7 } = options;
-
-  const parsed = await Result.parseResults(results, baseScore, basePaths);
+  const threshold = 0.7;
   const { finished, unfinished } = parsed.reduce((memo, result) => {
     let { finished, unfinished } = memo;
 
-    if (result.score <= threshold || result.id in done) finished = [].concat(finished, result);
-    if (result.score > threshold) unfinished = [].concat(unfinished, result);
+    if ((result.score <= threshold) || (result.id in done)) finished = [].concat(finished, result);
+    if ((result.score > threshold) && !(result.id in done)) unfinished = [].concat(unfinished, result);
 
     return {
       finished,
@@ -41,81 +37,33 @@ export async function _traverse(schema: GraphQLSchema, startingPoints: Result.Tr
 
   const newDone = {
     ...done,
-    ...(finished.reduce((memo, result) => ({ [result.id]: true }), {}))
+    ...(finished.reduce((memo, result) => ({ ...memo, [result.id]: true }), {})),
+    ...(unfinished.reduce((memo, result) => ({ ...memo, [result.id]: true }), {}))
   };
 
-  const grouped: { [key: string]: Result.TraversalResult[] } = unfinished.reduce((memo, result) => {
-    const { id } = result;
-    return {
-      ...memo,
-      [id]: (id in memo ? [].concat(memo[id], result) : [ result ])
-    }
-  }, {});
+  console.log(`Entering recursion with ${unfinished.length} starting points, done ${Object.keys(newDone).length}.`);
 
-  const deduplicated: Result.TraversalResult[] = Object.entries(grouped).map(([ id, results ]) => {
-    const newScore = results.reduce((memo, result) => memo + result.score, 0) / results.length;
-    const types = Object.keys(results.reduce((memo, result) => ({ ...memo, ...([].concat(result.type).reduce((memo, type) => ({ ...memo, [type]: true}), {}))}), {}));
-    const paths = results.reduce((memo, result) => [ ...memo, ...result.paths ], []);
-
-    return {
-      id,
-      type: types,
-      score: newScore,
-      paths
-    }
-  });
-
-  const recursed = await Object.entries(deduplicated).reduce(async (memo, [ id, results ]) => {
-    const _results = await _traverse(schema, id, type, { baseScore: score }, paths, newDone);
-    return results.map((result) => {
-      const { id, type, score, paths } = result;
-
-
-      return [
-        ...await memo,
-      ];
-    });
-  }, Promise.resolve([] as Result.TraversalResult[]));
-
-  const recursed = await unfinished.reduce(async (memo, result) => {
-    const { id, type, score, paths } = result;
-    const newDone = {
-      ...done,
-      ...(finished.reduce((memo, result) => ({ [result.id]: true }), {}))
-    };
-    const results = await _traverse(schema, id, type, { baseScore: score }, paths, newDone);
-    return [
-      ...await memo,
-      ...results
-    ];
-  }, Promise.resolve([] as Result.TraversalResult[]));
+  const recursed = (unfinished.length > 0) ? await _traverse(schema, unfinished, newDone) : [];
 
   return [
     ...finished,
-    ...unfinished,
     ...recursed
-  ]
+  ];
 }
 
 export type Traversal = Result.TraversalResult[];
 export async function traverse(schema: GraphQLSchema, resources: string[]): Promise<Traversal> {
+  const resourceIndex = resources.reduce((memo, id) => ({ ...memo, [id]: true }), {});
   const startingPoints = resources.map(id => {
     const type = Context.iris.$.Resource;
     const baseScore = Edges.EdgesFactors[type].factor;
-    return { id, type, score: baseScore, paths: [] };
+    return { id, type, score: baseScore, paths: [ [] ], attributes: {} };
   });
-  // TODO: Batch?
 
-  const results: Result.TraversalResult[] = await _traverse(schema, startingPoints, {});
-  // const results = await startingPoints.reduce(async (memo, { id, type, score }) => {
-  //   return [
-  //     ...await memo,
-  //     ...results
-  //   ]
-  // }, Promise.resolve([] as Result.TraversalResult[]));
+  const results: Result.TraversalResult[] = await _traverse(schema, startingPoints, resourceIndex);
 
-  const deduplicated = Result.deduplicateResults(results);
-  return deduplicated;
+  // return results;
+  return Result.filterResults(results, resourceIndex);
 }
 
 export * from './edges';

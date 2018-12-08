@@ -58,9 +58,9 @@ export async function create() {
   server.get('/traverse', async (req, res, next) => {
     try {
       const { entities = [], resources = [] } = req.query;
-      console.log('Traversing entities:', entities);
+      // console.log('Traversing entities:', entities);
       const result = await Traverse.traverse(schema as any, resources);
-      console.log('Traversal result:', result);
+      // console.log('Traversal result:', result);
       res.json(result).end();
     } catch(err) {
       console.error('Traversal broke...');

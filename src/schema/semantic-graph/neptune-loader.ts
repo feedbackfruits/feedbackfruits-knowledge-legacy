@@ -10,7 +10,7 @@ export const encodeQuery = query => `_${md5(query)}`;
 
 export async function queryNeptune(query: string): Promise<any> {
   const url = `${Config.NEPTUNE_READER_ENDPOINT}`;
-  // console.log(`Fetching Neptune entity:`, query);
+  console.log(`Fetching Neptune entity:`, query);
 
   const now = Date.now();
   const response = await fetch(url, {
