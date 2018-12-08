@@ -4,7 +4,8 @@ defaults: &defaults
     - image: node:8.5.0
       environment:
         NODE_ENV: test
-        ELASTICSEARCH_INDEX_NAME: test_knowledge
+        ELASTICSEARCH_AUTOCOMPLETE_INDEX: test_knowledge
+        ELASTICSEARCH_SEARCH_INDEX: test_knowledge_resources_search
     - image: elasticsearch:5-alpine
       environment:
         ES_JAVA_OPTS: -Xms512m -Xmx1024m

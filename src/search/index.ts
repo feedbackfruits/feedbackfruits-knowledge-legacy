@@ -22,7 +22,7 @@ export async function autocomplete(text) {
 
   // console.log('Autocomplete query:', JSON.stringify(query));
 
-  const results = await Elasticsearch(Config.ELASTICSEARCH_INDEX_NAME, 'entity', JSON.stringify(query), 0, 5);
+  const results = await Elasticsearch(Config.ELASTICSEARCH_AUTOCOMPLETE_INDEX, 'entity', JSON.stringify(query), 0, 5);
   return results;
 }
 
@@ -128,8 +128,7 @@ export async function search(entities, page, perPage) {
       }
     }
   };
-
-  const searchResults = await Elasticsearch('resources', 'Resource', JSON.stringify(query), from, size)
+  const searchResults = await Elasticsearch(Config.ELASTICSEARCH_SEARCH_INDEX, 'Resource', JSON.stringify(query), from, size)
   const totalPages = Math.ceil(searchResults.meta.total / perPage);
 
   return {

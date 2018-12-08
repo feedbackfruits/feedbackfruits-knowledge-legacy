@@ -8,7 +8,8 @@ const {
 
   CAYLEY_ADDRESS = "http://localhost:64210/",
   ELASTICSEARCH_ADDRESS = "http://localhost:9200",
-  ELASTICSEARCH_INDEX_NAME = "knowledge",
+  ELASTICSEARCH_AUTOCOMPLETE_INDEX = "knowledge_autocomplete_search",
+  ELASTICSEARCH_SEARCH_INDEX = "knowledge_resources_search",
   REDIS_URL = "redis://localhost:6379",
 
   MAG_API_ENDPOINT = "https://academic.microsoft.com/api/browse/GetEntityDetails",
@@ -51,7 +52,9 @@ export {
 
   CAYLEY_ADDRESS,
   ELASTICSEARCH_ADDRESS,
-  ELASTICSEARCH_INDEX_NAME,
+  ELASTICSEARCH_AUTOCOMPLETE_INDEX,
+  ELASTICSEARCH_SEARCH_INDEX,
+
   REDIS_URL,
   MAG_API_ENDPOINT,
   DBPEDIA_ENDPOINT,
