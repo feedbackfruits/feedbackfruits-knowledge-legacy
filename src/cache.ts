@@ -17,33 +17,6 @@ function literalize(obj: any) {
   throw new Error(`Object ${JSON.stringify(obj)} could not be literalized`);
 }
 
-function dedupArray(arr: string[]) {
-  return Object.keys(arr.reduce((memo, val) => ({ ...memo, [val]: true }), {}));
-}
-
-function quadsBySubject(quads: Quad[]): { [index: string]: string[] } {
-  const bySubject = quads.reduce<{ [index: string]: { [index: string]: string | string[] } }>((memo, { subject, predicate, object }) => {
-    if (!(subject in memo)) memo[subject] = { [predicate]: object };
-    else if (!(predicate in memo[subject])) memo[subject] = { ...memo[subject], [predicate]: object};
-    else memo[subject] = { ...memo[subject], [predicate]: [].concat(memo[subject][predicate], object) };
-
-    // memo[subject] = subject in memo ? { ...memo[subject], [predicate]: object} : { [predicate]: object };
-    return memo;
-  }, {});
-
-  // return bySubject;
-  return Object.entries(bySubject).reduce((memo, [ key, value ]) => {
-    const values = Object.entries(value).reduce((memo, [ key, value ]) => {
-      return [].concat(memo, key, JSON.stringify(value));
-    }, []);
-
-    return {
-      ...memo,
-      [key]: dedupArray(values)
-    }
-  }, {});
-}
-
 export async function getQuads({ subject, predicate }): Promise<Quad[]> {
   // console.log(`Getting quad for <${subject}> <${predicate}> ?...?`);
   return new Promise<Quad[]>((resolve, reject) => {
@@ -58,8 +31,17 @@ export async function getQuads({ subject, predicate }): Promise<Quad[]> {
 
 export async function setQuad({ subject, predicate, object }) {
   // console.log(`Setting quad <${subject}> <${predicate}> ?...?`);
+  const previousObjects = await new Promise<string[]>((resolve, reject) => {
+    client.hget(subject, predicate, (err, res: string) => {
+      if (err) return reject(err);
+      if (!res) return resolve([]);
+      const objects = [].concat(JSON.parse(res));
+      resolve(object);
+    })
+  });
+
   return new Promise((resolve, reject) => {
-    client.hset(subject, predicate, JSON.stringify(object), (err, res) => {
+    client.hset(subject, predicate, JSON.stringify([].concat(previousObjects, object)), (err, res) => {
       if (err) return reject(err);
       return resolve(res);
       // return resolve({ subject, predicate, object: res });
@@ -68,16 +50,8 @@ export async function setQuad({ subject, predicate, object }) {
 }
 
 export async function setQuads(quads: Quad[]) {
-  const bySubject = quadsBySubject(quads);
-
-  return Promise.all(Object.entries(bySubject).map(([ key, values ]) => {
-    return new Promise((resolve, reject) => {
-      // console.log(`Caching ${values.length} values under ${key}:`, values);
-      client.hmset(key, values, (err, res) => {
-        if (err) return reject(err);
-        return resolve(res);
-      });
-    });
+  return Promise.all(quads.map(async quad => {
+    return setQuad(quad);
   }));
 }
 
