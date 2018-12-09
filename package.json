@@ -98,10 +98,5 @@
     "supertest": "^3.0.0",
     "tap": "^5.7.0"
   },
-  "engines": {
-    "node": "8.5.0",
-    "npm": "5.7.1",
-    "yarn": "1.6.0"
-  },
   "repository": "git@github.com:feedbackfruits/feedbackfruits-knowledge.git"
 }
