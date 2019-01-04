@@ -4,7 +4,7 @@ defaults: &defaults
     - image: node:8.5.0
       environment:
         NODE_ENV: test
-        ELASTICSEARCH_AUTOCOMPLETE_INDEX: test_knowledge
+        ELASTICSEARCH_AUTOCOMPLETE_INDEX: test_knowledge_autocomplete_search
         ELASTICSEARCH_SEARCH_INDEX: test_knowledge_resources_search
     - image: elasticsearch:5-alpine
       environment:
@@ -51,7 +51,7 @@ jobs:
           name: Seed Elasticsearch
           command: |
             sleep 10
-            curl --retry 2 --retry-delay 2 -H "Content-Type: application/x-ndjson" -XPUT --data-binary @seeds/elasticsearch-mapping-old.json localhost:9200/test_knowledge
+            curl --retry 2 --retry-delay 2 -H "Content-Type: application/x-ndjson" -XPUT --data-binary @seeds/elasticsearch-mapping-autocomplete.json localhost:9200/test_knowledge_autocomplete_search
             curl --retry 2 --retry-delay 2 -H "Content-Type: application/x-ndjson" -XPUT --data-binary @seeds/elasticsearch-mapping-resources.json localhost:9200/test_knowledge_resources_search
             curl --retry 2 --retry-delay 2 -H "Content-Type: application/x-ndjson" -XPOST --data-binary @seeds/elasticsearch.ndjson localhost:9200/_bulk
 

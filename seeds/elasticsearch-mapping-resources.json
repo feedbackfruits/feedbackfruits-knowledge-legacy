@@ -2,47 +2,25 @@
   "mappings": {
     "Resource": {
       "properties": {
-        "@id": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "@type": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "annotation": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "annotations": {
-          "type": "keyword"
-        },
-        "caption": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
+        "about": {
+          "type": "nested",
+          "properties": {
+            "explicitlyMentioned": {
+              "type": "boolean"
+            },
+            "id": {
+              "type": "keyword"
+            },
+            "score": {
+              "type": "float"
             }
           }
         },
         "description": {
           "type": "text"
+        },
+        "encoding": {
+          "type": "keyword"
         },
         "id": {
           "type": "keyword"
@@ -59,150 +37,8 @@
         "sourceOrganization": {
           "type": "keyword"
         },
-        "tag": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "tags": {
-          "type": "keyword"
-        },
-        "topic": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
         "type": {
           "type": "keyword"
-        }
-      }
-    },
-    "Tag": {
-      "_parent": {
-        "type": "Resource"
-      },
-      "_routing": {
-        "required": true
-      },
-      "properties": {
-        "@id": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "@type": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "about": {
-          "type": "keyword"
-        },
-        "https://knowledge": {
-          "properties": {
-            "express/about": {
-              "type": "text",
-              "fields": {
-                "keyword": {
-                  "type": "keyword",
-                  "ignore_above": 256
-                }
-              }
-            }
-          }
-        },
-        "score": {
-          "type": "double"
-        },
-        "tagOf": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        }
-      }
-    },
-    "Annotation": {
-      "_parent": {
-        "type": "Resource"
-      },
-      "_routing": {
-        "required": true
-      },
-      "properties": {
-        "@id": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "@type": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "about": {
-          "type": "keyword"
-        },
-        "confidence": {
-          "type": "double"
-        },
-        "detectedAs": {
-          "type": "text"
-        },
-        "https://knowledge": {
-          "properties": {
-            "express/about": {
-              "type": "text",
-              "fields": {
-                "keyword": {
-                  "type": "keyword",
-                  "ignore_above": 256
-                }
-              }
-            }
-          }
-        },
-        "score": {
-          "type": "double"
-        },
-        "startPosition": {
-          "type": "integer"
-        },
-        "tagOf": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
         }
       }
     }

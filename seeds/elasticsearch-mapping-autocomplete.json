@@ -1,0 +1,43 @@
+{
+  "settings": {
+      "analysis": {
+         "filter": {
+            "edge_ngram_filter": {
+               "type": "edge_ngram",
+               "min_gram": 2,
+               "max_gram": 20
+            }
+         },
+         "analyzer": {
+            "edge_ngram_analyzer": {
+               "type": "custom",
+               "tokenizer": "standard",
+               "filter": [
+                  "lowercase",
+                  "edge_ngram_filter"
+               ]
+            }
+         }
+      }
+   },
+  "mappings": {
+    "Entity": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "text",
+          "analyzer": "edge_ngram_analyzer",
+          "search_analyzer": "english"
+        },
+        "resourceCount": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}

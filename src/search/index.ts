@@ -2,28 +2,33 @@ import * as Config from '../config';
 import Elasticsearch from './elasticsearch';
 
 export async function autocomplete(text) {
-  const query = {
-    size: 5,
-    _source: 'name',
-    query: {
-       function_score: {
-        query: {
-          multi_match: {
-            query: text,
-            fields: [ 'name' ]
+  try {
+    const query = {
+      size: 5,
+      _source: 'name',
+      query: {
+        function_score: {
+            query: {
+              multi_match: {
+                query: text,
+                fields: [ 'name' ]
+              }
+            },
+          field_value_factor: {
+            field: 'resourceCount'
           }
-        },
-        field_value_factor: {
-          field: 'count'
         }
       }
-    }
-  };
+    };
 
-  // console.log('Autocomplete query:', JSON.stringify(query));
+    // console.log('Autocomplete query:', JSON.stringify(query));
 
-  const results = await Elasticsearch(Config.ELASTICSEARCH_AUTOCOMPLETE_INDEX, 'entity', JSON.stringify(query), 0, 5);
-  return results;
+    const results = await Elasticsearch(Config.ELASTICSEARCH_AUTOCOMPLETE_INDEX, 'Entity', JSON.stringify(query), 0, 5);
+    return results;
+  } catch(e) {
+    console.error(e);
+    throw e;
+  }
 }
 
 export async function search(entities, page, perPage) {
@@ -70,55 +75,26 @@ export async function search(entities, page, perPage) {
           {
             bool: {
               should: [
-                // This finds resources by tags and annotations. Some notes:
-                // - Tags and annotations are treated equally at the moment
-                // - Tags and annotations are scored linearly weighed by their score from LTE/NER
-                // - Scoring is based on the average of the child scores, so as to not bias longer resources vs shorter ones
-                {
-                  has_child: {
-                    type: "Tag",
-                    score_mode : "avg",
-                    query: {
-                       function_score: {
-                        query: {
-                          terms: {
-                            about: entities
-                          }
-                        },
-                        field_value_factor: {
-                          field: 'score'
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  has_child: {
-                    type: "Annotation",
-                    score_mode : "avg",
-                    query: {
-                       function_score: {
-                        query: {
-                          terms: {
-                            about: entities
-                          }
-                        },
-                        field_value_factor: {
-                          field: 'score'
-                        }
-                      }
-                    }
-                  }
-                },
 
-                // This allows resources to be found if the entityName occurs in the title or description of the resource
                 {
-                  bool: {
-                    should: metadataQueries,
-                    boost: 0.2
+                  nested: {
+                    path: "about",
+                    query: {
+                      function_score: {
+                        query: {
+                          terms: {
+                            "about.id": entities
+                          }
+                        },
+                        field_value_factor: {
+                          field: 'about.score',
+                        },
+                        score_mode: 'sum'
+                      }
+                    },
+                    score_mode: "sum"
                   }
                 }
-
               ]
             }
           },

@@ -153,8 +153,13 @@ export async function getSchema() {
         const { about: entities = [], page = 1, perPage = 10 } = args;
         const { meta, results } = await Search.search(entities, page, perPage);
         const mapped = await Promise.all(results.map(async result => {
-          await Cache.setDoc(result);
-          return normalizeJSONLD(result);
+          const doc = {
+            ...result,
+            '@id': result["id"],
+            '@type': result["type"]
+          }
+          await Cache.setDoc(doc);
+          return normalizeJSONLD(doc);
         }));
         // console.log('Done searching:', mapped);
         return {
