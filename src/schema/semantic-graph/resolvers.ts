@@ -1,4 +1,4 @@
-import * as semtools from 'semantic-toolkit';
+import semtools from 'semantic-toolkit';
 import { Context, Helpers as _Helpers } from 'feedbackfruits-knowledge-engine';
 
 import * as CayleyLoader from './cayley-loader';

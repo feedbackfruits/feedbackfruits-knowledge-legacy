@@ -1,8 +1,8 @@
-import * as DataLoader from 'dataloader';
+import DataLoader from 'dataloader';
 import { Context } from 'feedbackfruits-knowledge-engine';
 import fetch from 'node-fetch';
-import * as qs from 'qs';
-import * as md5 from 'md5';
+import qs from 'qs';
+import md5 from 'md5';
 import * as Query from './query';
 import * as Config from '../../config'
 

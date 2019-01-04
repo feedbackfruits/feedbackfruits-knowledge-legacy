@@ -3,13 +3,6 @@ import Server from "./server";
 import * as Config from "./config";
 import * as Logger from "./utils/logger";
 import { ApolloEngine } from 'apollo-engine';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
-import {
-  prepareSchema,
-  specifiedRules,
-  executeReactive,
-  subscribe
-} from 'graphql-rxjs';
 import { getSchema } from './schema';
 
 // Start the server when executed directly
@@ -20,7 +13,8 @@ if (require.main === module) {
   (async () => {
     // Create http server
     const server = await Server.create();
-    const schema = prepareSchema(await getSchema());
+    const schema = await getSchema();
+    // const schema = prepareSchema(await getSchema());
 
     const engine = new ApolloEngine({
       apiKey: Config.APOLLO_API_KEY
@@ -32,20 +26,6 @@ if (require.main === module) {
     });
     else server.listen(PORT);
     Logger.log("Server started, listening on", PORT);
-
-    // This needs to happen after the server starts listening
-    const subscriptionServer = SubscriptionServer.create(
-      <any>{
-        schema,
-        execute: executeReactive,
-        subscribe,
-        validationRules: specifiedRules,
-      },
-      {
-        server: server,
-        path: '/',
-      },
-    );
   })()
 
   // Export globally

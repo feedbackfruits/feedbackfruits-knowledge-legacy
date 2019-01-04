@@ -1,6 +1,5 @@
-import * as redis from 'redis';
-import * as md5 from 'md5';
-// import * as semtools from 'semantic-toolkit';
+import redis from 'redis';
+import md5 from 'md5';
 import { Quad, Doc, Context } from 'feedbackfruits-knowledge-engine';
 import { fixJSONLD } from './schema';
 

@@ -4,10 +4,10 @@ import {
   GraphQLSchema,
   GraphQLList,
   GraphQLString
-} from 'graphql-rxjs';
-// import { connectionArgs, connectionFromPromisedArray, globalIdField } from 'graphql-relay';
+} from 'graphql';
+
 import { getClasses } from 'rdf-tools';
-import * as semtools from 'semantic-toolkit';
+import semtools from 'semantic-toolkit';
 import { Doc, Context } from 'feedbackfruits-knowledge-engine';
 
 import * as Cache from '../cache';

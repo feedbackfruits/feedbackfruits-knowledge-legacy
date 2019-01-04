@@ -1,6 +1,6 @@
 import { graphql, GraphQLSchema } from 'graphql';
 import { Edges, EdgesFactors, Attributes } from './edges';
-import * as semtools from 'semantic-toolkit';
+import semtools from 'semantic-toolkit';
 
 export type Query = string;
 export type Queryable = {

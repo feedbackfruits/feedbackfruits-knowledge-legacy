@@ -1,10 +1,10 @@
-import * as DataLoader from 'dataloader';
+import DataLoader from 'dataloader';
 import fetch from 'node-fetch';
-import * as qs from 'qs';
-import * as md5 from 'md5';
+import qs from 'qs';
+import md5 from 'md5';
 
 import { DBPEDIA_SPARQL_ENDPOINT } from '../../config';
-import * as DBPedia from "../../dbpedia";
+import DBPedia from "../../dbpedia";
 
 export const encodeQuery = query => `_${md5(query)}`;
 

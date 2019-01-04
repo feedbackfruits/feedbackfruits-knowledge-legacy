@@ -1,4 +1,4 @@
-import * as DataLoader from 'dataloader';
+import DataLoader from 'dataloader';
 import md5 = require('md5');
 
 import cayley from "../../cayley";

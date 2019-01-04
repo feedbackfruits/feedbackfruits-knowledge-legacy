@@ -1,8 +1,5 @@
 import { Context } from 'feedbackfruits-knowledge-engine';
-import * as rdfTools from 'rdf-tools';
-
-import * as CayleyLoader from './cayley-loader';
-
+import rdfTools from 'rdf-tools';
 
 let _graph = null;
 async function _getGraph() {

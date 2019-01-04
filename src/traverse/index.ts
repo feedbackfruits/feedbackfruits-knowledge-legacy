@@ -1,6 +1,6 @@
 import { GraphQLSchema } from 'graphql';
 import { Context } from 'feedbackfruits-knowledge-engine';
-import * as semtools from 'semantic-toolkit';
+import semtools from 'semantic-toolkit';
 
 import * as Edges from './edges';
 import * as Query from './query';

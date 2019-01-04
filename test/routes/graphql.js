@@ -6,21 +6,9 @@ let server = Server.create();
 
 const log = console.log.bind(console); // eslint-disable-line no-console
 
-test('/ - GraphIQL  - Basic response', async t => {
+
+test('/ - GraphQL - Empty query body', async t => {
   const server = await Server.create();
-
-  return request(server)
-    .get('/')
-    .set('Accept', 'text/html')
-    .expect(200)
-    .then((res) => {
-      log('Passed test with', res.status, res.body);
-      return t.pass();
-    }, t.error);
-});
-
-  test('/ - GraphQL - Empty query body', async t => {
-    const server = await Server.create();
 
   return request(server)
     .post('/')

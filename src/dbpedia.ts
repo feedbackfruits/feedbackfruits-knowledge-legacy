@@ -1,4 +1,4 @@
-import * as qs from 'qs';
+import qs from 'qs';
 import fetch from 'node-fetch';
 
 import { DBPEDIA_SPARQL_ENDPOINT } from './config';
