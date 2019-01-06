@@ -17,6 +17,10 @@ function literalize(obj: any) {
   throw new Error(`Object ${JSON.stringify(obj)} could not be literalized`);
 }
 
+export function dedupArray(arr: string[]) {
+  return Object.keys(arr.reduce((memo, val) => ({ ...memo, [val]: true }), {}));
+}
+
 export async function getQuads({ subject, predicate }): Promise<Quad[]> {
   // console.log(`Getting quad for <${subject}> <${predicate}> ?...?`);
   return new Promise<Quad[]>((resolve, reject) => {
@@ -36,12 +40,12 @@ export async function setQuad({ subject, predicate, object }) {
       if (err) return reject(err);
       if (!res) return resolve([]);
       const objects = [].concat(JSON.parse(res));
-      resolve(object);
+      resolve(objects);
     })
   });
 
   return new Promise((resolve, reject) => {
-    client.hset(subject, predicate, JSON.stringify([].concat(previousObjects, object)), (err, res) => {
+    client.hset(subject, predicate, JSON.stringify(dedupArray([].concat(previousObjects, object))), (err, res) => {
       if (err) return reject(err);
       return resolve(res);
       // return resolve({ subject, predicate, object: res });
@@ -50,9 +54,11 @@ export async function setQuad({ subject, predicate, object }) {
 }
 
 export async function setQuads(quads: Quad[]) {
-  return Promise.all(quads.map(async quad => {
-    return setQuad(quad);
-  }));
+  return quads.reduce(async (memo, quad) => {
+    await memo;
+    await setQuad(quad);
+    return;
+  }, Promise.resolve());
 }
 
 export async function getDoc(id: string): Promise<Doc> {
