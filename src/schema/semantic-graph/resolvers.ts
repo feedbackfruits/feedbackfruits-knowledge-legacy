@@ -75,7 +75,10 @@ export async function resolveSourcePropertyValue(source, iri) {
       predicate: iri,
       object: object
     }));
-    await Cache.setQuads(quads);
+
+    if (Config.CACHE_ENABLED) {
+      await Cache.setQuads(quads);
+    }
   }
 
   // console.log('resolveSourcePropertyValue result:', iri, res);
@@ -116,7 +119,10 @@ export async function resolveSourceTypes(source): Promise<string[]> {
       predicate: Context.iris.rdf.type,
       object
     }));
-    await Cache.setQuads(quads);
+
+    if (Config.CACHE_ENABLED) {
+      await Cache.setQuads(quads);
+    }
   }
 
   // Apply hacks
