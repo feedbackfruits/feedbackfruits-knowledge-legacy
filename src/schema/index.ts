@@ -39,6 +39,7 @@ export async function normalizeJSONLD(compacted): Promise<object> {
   const [ expanded ] = await Doc.expand(fixed, Context.context);
   const localized = Object.entries(expanded).reduce((memo, [key, value]) => {
     if (key[0] === '@') return { ...memo, [key]: value };
+
     const localName = semtools.getLocalName(key);
     return { ...memo, [localName]: value };
   }, {});
@@ -58,6 +59,12 @@ export async function normalizeJSONLD(compacted): Promise<object> {
       // throw new Error('Not implemented.');
       return { ...memo, [key]: value["@id"] }
     }
+
+    if (localized[key] == null) {
+      console.log(`Key ${key} is undefined in localized object: `, JSON.stringify(localized));
+      return memo;
+    }
+
     return { ...memo, [key]: localized[key].map(doc => {
       if (!(typeof doc === 'object')) return doc;
       return doc["@id"];
