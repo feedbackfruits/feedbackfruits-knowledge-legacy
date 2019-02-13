@@ -20,7 +20,7 @@ export type SearchResults = {
 }
 
 export async function query(index: string, type: string, queryBody: string, from: number, size: number): Promise<SearchResults> {
-  const res = await new Promise<{ hits: { hits: SearchResult[], total: number }}>((resolve, reject) => {
+  const res = await new Promise<{ hits: { hits: SearchResult[], total: number }, took: number}>((resolve, reject) => {
     client.search({
       index,
       type,
@@ -37,6 +37,9 @@ export async function query(index: string, type: string, queryBody: string, from
 
   const results = res.hits.hits;
   const total = res.hits.total;
+  const time = res.took;
+
+  console.log('ES query took:', time);
 
   return {
     meta: {

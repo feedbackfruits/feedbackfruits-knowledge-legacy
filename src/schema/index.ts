@@ -60,10 +60,10 @@ export async function normalizeJSONLD(compacted): Promise<object> {
       return { ...memo, [key]: value["@id"] }
     }
 
-    if (localized[key] == null) {
-      console.log(`Key ${key} is undefined in localized object: `, JSON.stringify(localized));
-      return memo;
-    }
+    // if (localized[key] == null) {
+    //   // console.log(`Key ${key} is undefined in localized object: `, JSON.stringify(localized));
+    //   return memo;
+    // }
 
     return { ...memo, [key]: localized[key].map(doc => {
       if (!(typeof doc === 'object')) return doc;
@@ -112,7 +112,7 @@ export async function getSchema() {
         },
         type: new GraphQLList(graph.getInterfaceType(iri)),
         resolve: async (source, args, context) => {
-          console.log(`Resolving top-level ${name}`);
+          // console.log(`Resolving top-level ${name}`);
           const { id  } = args;
           if  (!("id" in args)) return null;
 
@@ -164,8 +164,14 @@ export async function getSchema() {
             ...result,
             '@id': result["id"],
             '@type': result["type"]
+          };
+          delete doc["id"];
+          delete doc["type"];
+          delete doc["about"];
+
+          if (Config.CACHE_ENABLED){
+            await Cache.setDoc(doc);
           }
-          await Cache.setDoc(doc);
           return normalizeJSONLD(doc);
         }));
         // console.log('Done searching:', mapped);

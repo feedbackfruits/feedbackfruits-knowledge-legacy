@@ -46,8 +46,15 @@ export async function resolveSourcePropertyValue(source, iri) {
 
   // Check source first
   const localName = semtools.getLocalName(iri);
-  // console.log(`localName ${localName} in source?:`, localName in source);
+  console.log(`localName ${localName} in source && null?:`, localName in source && source[localName] == null);
   if (localName in source) return source[localName];
+
+  if (iri === Context.iris.$.tag) {
+    const waitingPromise = new Promise((resolve, reject) => {
+      setTimeout(() => resolve(), 5000);
+    });
+    await waitingPromise;
+  }
 
   if (Config.CACHE_ENABLED) {
     // Check Cache second
@@ -86,13 +93,21 @@ export async function resolveSourcePropertyValue(source, iri) {
 }
 
 export async function resolveSourceTypes(source): Promise<string[]> {
-  // console.log('resolveSourceTypes:', source);
+  console.log('resolveSourceTypes:', source);
 
   // Make everything an instance of rdfs:Class to conform with the rdfs:Resource type attribute
   let res = ["http://www.w3.org/2000/01/rdf-schema#Class"];
 
   // Check source first
-  if ('type' in source) res = [].concat(res, source.type);
+  if ('type' in source) return [].concat(res, source.type);
+  if ('@type' in source) return [].concat(res, source["@type"]);
+  if (Context.iris.rdf.type in source) return [].concat(res, source[Context.iris.rdf.type]);
+
+  const contextResult = await ContextLoader.resolveSourceTypes(source);
+  console.log('Context result for: ', source.id, contextResult);
+  if (contextResult != null) {
+    return contextResult;
+  }
 
   let cached = [];
   if (Config.CACHE_ENABLED) {

@@ -62,7 +62,7 @@ type DBPediaResponse = {
 
 export async function query(text: string, mapping = DEFAULT_MAPPING) {
   const url = `${DBPEDIA_SPARQL_ENDPOINT}?${qs.stringify({ query: text, output: 'json' })}`;
-  console.log(`Fetching DBPedia entity:`, text);
+  // console.log(`Fetching DBPedia entity:`, text);
   return fetch(url)
     .then(response => response.json<DBPediaResponse>())
     .then(result => result);

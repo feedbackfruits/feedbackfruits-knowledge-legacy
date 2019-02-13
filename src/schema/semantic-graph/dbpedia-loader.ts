@@ -22,7 +22,7 @@ export type DBPediaResponse = {
 
 export async function queryDBPedia(text: string): Promise<DBPediaResponse> {
   const url = `${DBPEDIA_SPARQL_ENDPOINT}?${qs.stringify({ query: text, output: 'json' })}`;
-  console.log(`Fetching DBPedia entity:`, text);
+  // console.log(`Fetching DBPedia entity:`, text);
   return fetch(url, {
     method: 'POST',
   })

@@ -1,14 +1,14 @@
 import { Context } from 'feedbackfruits-knowledge-engine';
-import rdfTools from 'rdf-tools';
+import { getRDFGraph, getClasses } from 'rdf-tools';
 
 let _graph = null;
 async function _getGraph() {
-  return _graph = _graph || await rdfTools.getRDFGraph(Context.turtle);
+  return _graph = _graph || await getRDFGraph(Context.turtle);
 }
 
 let _classIris = null;
 async function _getClasses() {
-  return _classIris = _classIris || (await rdfTools.getClasses(Context.turtle)).classes.reduce((memo, c) => [ c.iri, ...c.subClasses, ...c.superClasses , ...memo ], []).reduce((memo, iri) => ({ ...memo, [iri]: true }),{});
+  return _classIris = _classIris || (await getClasses(Context.turtle)).classes.reduce((memo, c) => [ c.iri, ...c.subClasses, ...c.superClasses , ...memo ], []).reduce((memo, iri) => ({ ...memo, [iri]: true }),{});
 }
 
 export async function resolveSourcePropertyValue(source, iri): Promise<string | Array<string>> {

@@ -75,7 +75,7 @@ export function parseQuery(query: Query): string {
 }
 
 export function groupQueries(queries: Query[]): CompactedQuery[] {
-  console.log(`GROUP: Grouping ${queries.length} queries`);
+  // console.log(`GROUP: Grouping ${queries.length} queries`);
   const simple = <SimpleQuery[]>queries.filter(q => q.type === 'SimpleQuery');
 
   // Group by subject
@@ -108,7 +108,7 @@ export function groupQueries(queries: Query[]): CompactedQuery[] {
   });
 
   // const grouped = queries;
-  console.log(`GROUP: Retuning ${compacted.length} queries`);
+  // console.log(`GROUP: Retuning ${compacted.length} queries`);
   return <any[]>compacted;
 }
 
@@ -177,7 +177,7 @@ export const loader = new DataLoader<Query, any>(async queries => {
   }, {});
 
   const results = await queryMany(<any>queriesObj);
-  console.log('Retuning results:', results);
+  // console.log('Retuning results:', results);
   return Object.values(results);
 }, {
   maxBatchSize: 1000,
@@ -195,7 +195,7 @@ export async function simpleQuery(subject: string, iri: string): Promise<any> {
 
   const result = await loader.load(query);
 
-  console.log('Checking res:', result);
+  // console.log('Checking res:', result);
 
   try {
     if (result == null) return result;
@@ -203,7 +203,7 @@ export async function simpleQuery(subject: string, iri: string): Promise<any> {
     if (result[predicate.iri] instanceof Array) return result[predicate.iri].map(res => res != null ? res.id : res);
     return result[predicate.iri] != null ? result[predicate.iri].id : result[predicate.iri];
   } catch(e) {
-    console.log('Broke on res:', result);
+    // console.log('Broke on res:', result);
     throw e;
   }
 }
