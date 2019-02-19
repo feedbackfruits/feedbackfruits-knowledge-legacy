@@ -70,10 +70,9 @@ export async function create() {
     });
 
     server.all("/", bodyParser.json(), (req, res, next) => {
-      if (typeof req.body === 'object' && Object.keys(req.body).length === 0) return next(new Error('POST body cannot be an empty object.'));
+      if (req.method.toUpperCase() === 'POST' && typeof req.body === 'object' && Object.keys(req.body).length === 0) return next(new Error('POST body cannot be an empty object.'));
       next();
     });
-
 
     const apolloServer = new ApolloServer({ schema: schema });
 

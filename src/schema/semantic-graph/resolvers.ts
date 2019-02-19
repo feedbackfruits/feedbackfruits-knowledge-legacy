@@ -41,20 +41,33 @@ export async function resolveResources(ids) {
   return ids.map(id => ({ id }));
 }
 
+const skippableIris = {
+  [Context.iris.schema.name]: true,
+  [Context.iris.schema.description]: true,
+  [Context.iris.schema.image]: true,
+  // [Context.iris.$.topic]: true,
+}
 export async function resolveSourcePropertyValue(source, iri) {
   // console.log('resolveSourcePropertyValue:', source, iri);
 
   // Check source first
   const localName = semtools.getLocalName(iri);
-  console.log(`localName ${localName} in source && null?:`, localName in source && source[localName] == null);
-  if (localName in source) return source[localName];
+  // console.log(`localName ${localName} in source && null?:`, localName in source && source[localName] == null);
 
-  if (iri === Context.iris.$.tag) {
-    const waitingPromise = new Promise((resolve, reject) => {
-      setTimeout(() => resolve(), 5000);
-    });
-    await waitingPromise;
+  const keys = Object.keys(source);
+  if (localName in source) return source[localName];
+  else if (keys.length > 1) {
+    if (iri in skippableIris && skippableIris[iri]) return null;
   }
+
+
+
+  // if (iri === Context.iris.$.tag) {
+  //   const waitingPromise = new Promise((resolve, reject) => {
+  //     setTimeout(() => resolve(), 5000);
+  //   });
+  //   await waitingPromise;
+  // }
 
   if (Config.CACHE_ENABLED) {
     // Check Cache second
@@ -93,7 +106,7 @@ export async function resolveSourcePropertyValue(source, iri) {
 }
 
 export async function resolveSourceTypes(source): Promise<string[]> {
-  console.log('resolveSourceTypes:', source);
+  // console.log('resolveSourceTypes:', source);
 
   // Make everything an instance of rdfs:Class to conform with the rdfs:Resource type attribute
   let res = ["http://www.w3.org/2000/01/rdf-schema#Class"];
@@ -104,7 +117,7 @@ export async function resolveSourceTypes(source): Promise<string[]> {
   if (Context.iris.rdf.type in source) return [].concat(res, source[Context.iris.rdf.type]);
 
   const contextResult = await ContextLoader.resolveSourceTypes(source);
-  console.log('Context result for: ', source.id, contextResult);
+  // console.log('Context result for: ', source.id, contextResult);
   if (contextResult != null) {
     return contextResult;
   }
