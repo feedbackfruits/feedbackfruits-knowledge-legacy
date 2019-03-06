@@ -7,16 +7,40 @@ export async function autocomplete(text) {
       size: 5,
       _source: 'name',
       query: {
-        function_score: {
-            query: {
-              multi_match: {
-                query: text,
-                fields: [ 'name' ]
+        bool: {
+          must: [
+            {
+              function_score: {
+                  query: {
+                    multi_match: {
+                      query: text,
+                      fields: [ 'name' ],
+                      operator: 'and',
+                      analyzer: 'edge_ngram_analyzer'
+                    },
+                  },
               }
-            },
-          field_value_factor: {
-            field: 'resourceCount'
-          }
+            }
+          ],
+          should: [
+            {
+              function_score: {
+                query: {
+                  match: {
+                    name: {
+                      query: text,
+                      operator: 'and'
+                    }
+                  },
+                },
+                field_value_factor: {
+                  field: 'resourceCount',
+                  factor: '0.5',
+                  modifier: 'ln1p'
+                }
+              }
+            }
+          ]
         }
       }
     };
