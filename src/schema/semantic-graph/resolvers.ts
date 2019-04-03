@@ -31,6 +31,10 @@ export async function resolveSourceId(source) {
 
 export async function resolveResource(id) {
   // console.log('resolveResource:', id);
+
+  // FIXME: This is a hacky workaround to make use of the search result properties
+  if (typeof id === 'object') return id;
+
   if (!Config.CACHE_ENABLED) return { id };
   const cached = await Cache.getDoc(id)
   return cached ? await normalizeJSONLD(cached) : { id };
@@ -53,6 +57,7 @@ export async function resolveSourcePropertyValue(source, iri) {
   // Check source first
   const localName = semtools.getLocalName(iri);
   // console.log(`localName ${localName} in source && null?:`, localName in source && source[localName] == null);
+  // console.log(source[localName]);
 
   const keys = Object.keys(source);
   if (localName in source) return source[localName];

@@ -85,7 +85,7 @@ export async function normalizeJSONLD(compacted): Promise<object> {
 
   const merged: object = {
     ...corrected,
-    id: corrected["@id"],
+    id: "@id" in corrected ? corrected["@id"] : corrected["id"],
     ...("@type" in corrected ? { type: [].concat(corrected["@type"]) } : {}),
   };
 
@@ -184,8 +184,10 @@ export async function getSchema() {
           if (Config.CACHE_ENABLED){
             await Cache.setDoc(doc);
           }
-          return normalizeJSONLD(doc);
+
+          return await normalizeJSONLD(doc);
         }));
+
         // console.log('Done searching:', mapped);
         return {
           meta,

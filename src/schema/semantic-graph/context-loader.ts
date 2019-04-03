@@ -34,6 +34,8 @@ export async function resolveSourceTypes(source): Promise<string[]> {
   //   const subjects = graph.match(null, "http://www.w3.org/2000/01/rdf-schema#subClassOf", source.id).map(t => t.subject);
   //   return subjects.length ? subjects : null;
   // }
+  if (source.id == null || !(typeof source.id === 'string')) return null;
+
   if (source.id in await _getClasses()) {
     return [ "http://www.w3.org/2000/01/rdf-schema#Class" ];
   }

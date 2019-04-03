@@ -47,9 +47,15 @@ export const SearchType = new GraphQLObjectType({
       }
     },
     results: {
-      type: new GraphQLList(graph.getInterfaceType(Context.iris.$.Resource)),
+      type: new GraphQLList(graph.getInterfaceType(Context.iris.$.SearchResult)),
       resolve: async (source, args, context) => {
-        return source.results;
+        // console.log('Source results:', source.results);
+        return source.results.map(result => {
+          return {
+            score: result.score,
+            result: result
+          }
+        });
       }
     },
   }
