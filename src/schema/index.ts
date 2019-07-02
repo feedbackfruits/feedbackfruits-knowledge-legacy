@@ -23,10 +23,22 @@ const lowerCaseFirst = (str: string): string => {
   return str[0].toLowerCase() + str.slice(1, str.length);
 };
 
+export function selectName(names: string[]): String {
+  console.log("Selecting name from:" + names);
+  return names.reduce((memo, name) => {
+    if (memo == null) return name;
+
+    const numSpaces = ([] || name.match(/ /)).length;
+    const numSpacesMemo = ([] || memo.match(/ /)).length;
+    if (numSpaces > numSpacesMemo) return name;
+    return name;
+  }, null as String);
+}
+
 export function fixJSONLD(compacted: Doc): Doc {
   const fixed = {
     ...compacted,
-    ...('name' in compacted ? { name: [].concat(compacted['name'])[0] } : {})
+    ...('name' in compacted ? { name: selectName([].concat(compacted['name'])) } : {})
   };
 
   delete fixed["annotation"];
