@@ -2528,7 +2528,7 @@ fast-levenshtein@~2.0.4:
 
 feedbackfruits-knowledge-context@feedbackfruits/feedbackfruits-knowledge-context#feature/more-things:
   version "1.1.13"
-  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-context/tar.gz/710a0f3d7da0052cf365da9b78cf9e8ee9df6097"
+  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-context/tar.gz/4edaebda77166481da181e2710e6dc61a387990d"
   dependencies:
     "@types/node" "^8.0.8"
     recursive-readdir-sync "^1.0.6"
@@ -2537,7 +2537,7 @@ feedbackfruits-knowledge-context@feedbackfruits/feedbackfruits-knowledge-context
 
 "feedbackfruits-knowledge-engine@github:feedbackfruits/feedbackfruits-knowledge-engine#feature/semantic-search-results":
   version "1.4.4"
-  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-engine/tar.gz/7c5fb8bd8b5ae8a7fe59748ead1429d62938f0fe"
+  resolved "https://codeload.github.com/feedbackfruits/feedbackfruits-knowledge-engine/tar.gz/163fb1222c53a1433c89d35b32019e8f65a8ef6f"
   dependencies:
     "@types/n3" "^0.0.3"
     "@types/node" "^8.0.14"
