@@ -26,7 +26,7 @@ export async function queryDBPedia(text: string): Promise<DBPediaResponse> {
   return fetch(url, {
     method: 'POST',
   })
-    .then(response => response.json<DBPediaResponse>())
+    .then(response => response.json())
     .then(result => result);
 }
 

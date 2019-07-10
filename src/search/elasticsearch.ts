@@ -6,7 +6,7 @@ import {
 
 const client = new elasticsearch.Client( {
   host: ELASTICSEARCH_ADDRESS,
-  apiVersion: "5.x"
+  apiVersion: "6.8"
 });
 
 export type SearchResult = { _score: number, _source: object };

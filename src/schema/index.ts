@@ -14,7 +14,6 @@ import * as Cache from '../cache';
 import * as Config from '../config';
 import * as Search from '../search';
 
-import { Observable } from 'rxjs';
 import graph from './semantic-graph';
 
 import SearchType from './search';
@@ -201,6 +200,6 @@ export async function getSchema() {
     query: new GraphQLObjectType({
       name: 'Query',
       fields: fields
-    })
+    } as any)
   });
 }

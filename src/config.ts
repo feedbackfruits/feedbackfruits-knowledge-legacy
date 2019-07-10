@@ -1,4 +1,4 @@
-require("dotenv").load({ silent: true });
+require("dotenv").config();
 
 const {
   NODE_ENV = 'test',
@@ -23,6 +23,7 @@ const {
 
 const SEARCH_ORGANIZATIONS: string[] = 'SEARCH_ORGANIZATIONS' in process.env ? process.env.SEARCH_ORGANIZATIONS.split(',') : [
   "https://www.khanacademy.org/",
+  "http://repository.tudelft.nl",
   "https://www.youtube.com/user/MIT",
   "https://www.youtube.com/channel/UCOoVmLA0M1IS1JU7ZTUk8jA", // "Dynamics TU Delft",
   "https://www.youtube.com/user/METUOpenCourseWare", // "METUOpenCourseWare",

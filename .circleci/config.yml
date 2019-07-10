@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/feedbackfruits-knowledge
   docker:
-    - image: node:8.5.0
+    - image: node:10
       environment:
         NODE_ENV: test
         ELASTICSEARCH_AUTOCOMPLETE_INDEX: test_knowledge_autocomplete_search
