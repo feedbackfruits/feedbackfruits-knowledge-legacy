@@ -30,7 +30,7 @@ export function selectName(names: string[]): String {
     const numSpaces = ([] || name.match(/ /)).length;
     const numSpacesMemo = ([] || memo.match(/ /)).length;
     if (numSpaces > numSpacesMemo) return name;
-    return name;
+    return memo;
   }, null as String);
 }
 
