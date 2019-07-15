@@ -4,7 +4,7 @@ import Elasticsearch from './elasticsearch';
 export async function autocomplete(text) {
   try {
     const query = {
-      size: 5,
+      size: 10,
       _source: 'name',
       query: {
         bool: {
@@ -47,8 +47,27 @@ export async function autocomplete(text) {
 
     // console.log('Autocomplete query:', JSON.stringify(query));
 
-    const results = await Elasticsearch(Config.ELASTICSEARCH_AUTOCOMPLETE_INDEX, 'Entity', JSON.stringify(query), 0, 5);
-    return results;
+    const results = await Elasticsearch(Config.ELASTICSEARCH_AUTOCOMPLETE_INDEX, 'Entity', JSON.stringify(query), 0, 10);
+    const deduplicated = Object.values(results.results.reduce((memo, suggestion) => {
+      const key = suggestion._source["name"];
+
+      if (key in memo) memo[key] = {
+        ...memo[key],
+        _score: memo[key]._score + suggestion._score
+      }
+      else memo[key] = {
+        ...suggestion
+      };
+
+      return memo;
+    },{})).sort((a, b) => {
+      return b["_score"] - a["_score"];
+    }).slice(0, 5);
+
+    return {
+      ...results,
+      results: deduplicated
+    };
   } catch(e) {
     console.error(e);
     throw e;

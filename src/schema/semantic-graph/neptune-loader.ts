@@ -51,6 +51,7 @@ export function parseBindingValue(bindingValue) {
 }
 
 export function parseCompactedResult(result: any, predicateMap) {
+  // console.log(result);
   let { head: { vars }, results: { bindings } } = result;
   if (!bindings.length) return {};
 
@@ -121,20 +122,22 @@ export const loader = new DataLoader<any, any>(async (loadables: Query.SimpleQue
   const grouped = Query.groupQueries(deduped);
   const parsed = grouped.map(parseQuery);
   // const parsed = deduped.map(parseQuery);
+  const graphs = Config.GRAPH.split(',');
+
   const query = `
   SELECT *
-  FROM NAMED ${Config.GRAPH}
+  ${graphs.map(g => `  FROM NAMED ${g}`).join('\n')}
   WHERE {
-      GRAPH ${Config.GRAPH} {
+      GRAPH ?graph {
         ${parsed.map(({ query }) => `{ ${query} }`).join(' UNION ')}
       }
   }
   `;
 
-  // console.log('Loading from Neptune...');
+  console.log('Loading from Neptune...', query);
 
   const response = await queryNeptune(query);
-  // console.log('Breaking after response:', JSON.stringify(response));
+  console.log('Breaking after response:', JSON.stringify(response));
   const keyMap = parsed.reduce((memo, { keys }) => ({ ...memo, ...invertObject(keys) }), {});
 
   // console.log(`Using inverted keyMap:`, JSON.stringify(keyMap));
