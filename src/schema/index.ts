@@ -27,8 +27,8 @@ export function selectName(names: string[]): String {
   return names.reduce((memo, name) => {
     if (memo == null) return name;
 
-    const numSpaces = ([] || name.match(/ /)).length;
-    const numSpacesMemo = ([] || memo.match(/ /)).length;
+    const numSpaces = (name.match(/ /g) || []).length;
+    const numSpacesMemo = (memo.match(/ /g) || []).length;
     if (numSpaces > numSpacesMemo) return name;
     return memo;
   }, null as String);
