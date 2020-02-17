@@ -34,7 +34,7 @@
     "dotenv": "^8.1.0",
     "elasticsearch": "^16.3.0",
     "express": "^4.17.1",
-    "feedbackfruits-knowledge-engine": "github:feedbackfruits/feedbackfruits-knowledge-engine#v1.4.5",
+    "feedbackfruits-knowledge-engine": "github:feedbackfruits/feedbackfruits-knowledge-engine#v1.4.6",
     "graphql": "14.4.2",
     "jsonld": "^1.6.2",
     "md5": "^2.2.1",
